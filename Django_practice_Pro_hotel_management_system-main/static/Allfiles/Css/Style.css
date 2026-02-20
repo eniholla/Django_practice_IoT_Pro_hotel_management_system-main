@@ -1936,3 +1936,25 @@ Counter Part CSS
     color: var(--maincolor);
 }
 
+.hero-section {
+    background: url("../Photo/hotel-hero.jpg") center/cover no-repeat;
+    color: white;
+    text-align: center;
+    padding: 5rem 0; /* vertical padding */
+}
+
+.hero-section h1 {
+    font-size: 3rem;
+    font-weight: 700;
+}
+
+.hero-section p {
+    font-size: 1.25rem;
+    margin-bottom: 2rem;
+}
+
+.hero-section .btn-primary {
+    padding: 0.75rem 1.5rem;
+    font-size: 1.1rem;
+    border-radius: 50px;
+}
