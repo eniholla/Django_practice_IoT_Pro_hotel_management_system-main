@@ -31,6 +31,24 @@
 /*************************
     General
 *************************/
+:root {
+    --primary: #2c3e50;      /* dark blue */
+    --accent: #d4af37;        /* gold for luxury */
+}
+
+.navbar {
+    background-color: var(--primary) !important;
+}
+
+.btn-primary {
+    background-color: var(--accent);
+    border-color: var(--accent);
+}
+
+.card {
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
 :root{
     --titlecolor:#000;
     --imgbg:#323232;
