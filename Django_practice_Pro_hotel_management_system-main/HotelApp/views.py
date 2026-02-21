@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate,logout,login
 from .import models
 from .forms import Online_Booking_form,offline_Booking_form,Add_Employee_form,Add_Room_form,Add_salary_form
 from django.http import HttpResponse
+from django.contrib import messages
 
 # Create your views here.
 def Home(request):
@@ -37,27 +38,23 @@ def OnlineBooking(request):
         MyData.save()
         return HttpResponse('Booking Successfully')
     return render(request,'online_booking_page.html')
-def Aothur_login(request):
-    # conn = mysql.connector.connect(host='localhost', user='root', password='', database='Hotel_Management_System')
+def author_login(request):
     if request.method == 'POST':
-        User_email = request.POST.get('Email')
-        User_password = request.POST.get('Password')
-        # cur = conn.cursor()
-        # quer1 = "select Email,Password from Authority_reg where Email=%s"
-        # val = (User_email,)
-        # cur.execute(quer1, val)
-        # data = cur.fetchall()
-        # print(data, User_email)
-        # if User_email == data[0][0] and User_password == data[0][1]:
-        if models.Authorregis.objects.filter(Email=User_email, Password=User_password):
-            return redirect("Adminpage")
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            messages.success(request, 'Login successful! Welcome back.')
+            return redirect('Adminpage')  # or 'Home'
         else:
-            return HttpResponse('user name and password not matching')
-    return render(request,'Athur_login_page.html')
+            messages.error(request, 'Invalid credentials. Please try again.')
+    
+    return render(request, 'author_login.html')  # ← MUST be this exact string
 def auth_logout(request):
     logout(request)
     return redirect('Home')
-def Aothur_Reg(request):
+def author_register(request):
     if request.method == 'POST':
         Data = models.Authorregis()
         Data.Fname = request.POST.get('Fname')
@@ -68,11 +65,11 @@ def Aothur_Reg(request):
         Con_password = request.POST.get('Con_password')
         if Data.Password == Con_password:
             Data.save()
-            return redirect('Aothur_login')
+            return redirect('author_login')
         else:
            return HttpResponse('password and confirm password not matching')
     return render(request,'Athur_Register_Page.html')
-def Aothur_Fotpass(request):
+def author_forgot_password(request):
     return render(request,'Author_forgetpass_page.html')
 def all_admin(request):
     return render(request,'admin/AdminAllinclude.html')
