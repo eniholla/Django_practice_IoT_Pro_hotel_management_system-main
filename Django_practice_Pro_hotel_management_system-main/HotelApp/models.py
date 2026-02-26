@@ -1,120 +1,163 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+
+# =========================
+# CUSTOM USER MODEL
+# =========================
+from django.contrib.auth.models import AbstractUser, BaseUserManager
+from django.db import models
+
+
+class CustomUserManager(BaseUserManager):
+    def create_user(self, email, password=None, **extra_fields):
+        if not email:
+            raise ValueError("Email must be provided")
+
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, email, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('is_active', True)
+
+        return self.create_user(email, password, **extra_fields)
+
 class Authorregis(AbstractUser):
-    Phone_Number = models.CharField(max_length=20, blank=True, null=True)
-    # Optional: override first/last name if needed
-    first_name = models.CharField(max_length=150, blank=True)
-    last_name = models.CharField(max_length=150, blank=True)
+    username = None  # remove username
+    email = models.EmailField(unique=True)
+    phone_number = models.CharField(max_length=15, blank=True, null=True)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []  # correct when email is the username
+    REQUIRED_FIELDS = []
 
-    email = models.EmailField(unique=True)  # this fixes auth.E003
+    objects = CustomUserManager()   # 👈 VERY IMPORTANT
 
     def __str__(self):
-        return self.email or self.username or f"User {self.id}"
+        return self.email
 
-# All other models below (Online_Booking, Offline_Booking, etc.)
-# ...
 
-class Online_Booking(models.Model):
-    Id = models.AutoField(primary_key=True)
-    Check_in = models.CharField(max_length=255)
-    Check_out = models.CharField(max_length=255)
-    ADULT = models.CharField(max_length=255)
-    CHILDREN = models.CharField(max_length=255)
-    Name = models.CharField(max_length=255)
-    Surname = models.CharField(max_length=255)
-    Email = models.CharField(max_length=255)
-    Phone_Number = models.IntegerField()
-    City = models.CharField(max_length=255)
-    Country = models.CharField(max_length=255)
-    Nid_No = models.CharField(max_length=255)
-    Img = models.ImageField(upload_to='')
-    Address = models.CharField(max_length=255)
-    Date = models.DateField(auto_now_add=True)
-    Time = models.TimeField(auto_now_add=True)
+# =========================
+# ROOM MODEL
+# =========================
+
+class Room(models.Model):
+    ROOM_STATUS = [
+        ('available', 'Available'),
+        ('occupied', 'Occupied'),
+        ('maintenance', 'Maintenance'),
+    ]
+
+    room_number = models.CharField(max_length=50, unique=True)
+    room_type = models.CharField(max_length=100)
+    floor = models.IntegerField()
+    facility = models.TextField()
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    image = models.ImageField(upload_to='rooms/')
+    status = models.CharField(max_length=20, choices=ROOM_STATUS, default='available')
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
     def __str__(self):
-        return self.Name
-    class Meta:
-        db_table = 'Online_Booking_table'
+        return self.room_number
 
-class Offline_Booking(models.Model):
-    Customer_Id = models.AutoField(primary_key=True)
-    Check_in = models.CharField(max_length=255)
-    Check_out = models.CharField(max_length=255)
-    First_Name = models.CharField(max_length=255)
-    Last_Name = models.CharField(max_length=255)
-    Email = models.CharField(max_length=255)
-    Mobile_Number = models.IntegerField()
-    ADULT = models.CharField(max_length=255)
-    CHILDREN = models.CharField(max_length=255)
-    Total_Person = models.IntegerField()
-    Select_Room = models.CharField(max_length=255)
-    Room_Number = models.CharField(max_length=255)
-    Gender = models.CharField(max_length=255)
-    Personal_Identity = models.CharField(max_length=255)
-    Upload_Image = models.ImageField(upload_to='')
-    Country = models.CharField(max_length=255)
-    Address = models.CharField(max_length=255)
-    Date = models.DateField(auto_now_add=True)
-    Time = models.TimeField(auto_now_add=True)
+
+# =========================
+# ONLINE BOOKING
+# =========================
+
+class OnlineBooking(models.Model):
+    user = models.ForeignKey(Authorregis, on_delete=models.CASCADE)
+    room = models.ForeignKey(Room, on_delete=models.CASCADE)
+
+    check_in = models.DateField()
+    check_out = models.DateField()
+
+    adults = models.IntegerField()
+    children = models.IntegerField()
+
+    city = models.CharField(max_length=100)
+    country = models.CharField(max_length=100)
+    address = models.CharField(max_length=255)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
     def __str__(self):
-        return self.First_Name
-    class Meta:
-        db_table = 'Offline_Booking_Customer'
+        return f"{self.user.email} - {self.room.room_number}"
 
 
-class Add_Employee(models.Model):
-    Employee_Id = models.CharField(max_length=255,primary_key=True)
-    First_Name = models.CharField(max_length=255)
-    Last_Name = models.CharField(max_length=255)
-    Email = models.CharField(max_length=255,unique=True)
-    Mobile_Number = models.IntegerField(unique=True)
-    Joining_Date = models.CharField(max_length=255)
-    Dateof_Birth = models.CharField(max_length=255)
-    Departments = models.CharField(max_length=255)
-    Gender = models.CharField(max_length=255)
-    Blood_Group = models.CharField(max_length=255)
-    Education = models.CharField(max_length=255)
-    Personal_Identity = models.CharField(max_length=255,unique=True)
-    Guardian = models.CharField(max_length=255)
-    Guardian_Number = models.IntegerField()
-    Upload_Image = models.ImageField(upload_to='')
-    Address = models.CharField(max_length=255)
-    Date = models.DateField(auto_now_add=True)
-    Time = models.TimeField(auto_now_add=True)
+# =========================
+# OFFLINE BOOKING
+# =========================
+
+class OfflineBooking(models.Model):
+    room = models.ForeignKey(Room, on_delete=models.CASCADE)
+
+    first_name = models.CharField(max_length=150)
+    last_name = models.CharField(max_length=150)
+    email = models.EmailField()
+    mobile_number = models.CharField(max_length=15)
+
+    check_in = models.DateField()
+    check_out = models.DateField()
+
+    adults = models.IntegerField()
+    children = models.IntegerField()
+
+    country = models.CharField(max_length=100)
+    address = models.CharField(max_length=255)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
     def __str__(self):
-        return self.First_Name
-    class Meta:
-        db_table = 'Add_Employees'
+        return f"{self.first_name} {self.last_name}"
 
-class Add_Room(models.Model):
-    Id = models.AutoField(primary_key=True)
-    Room_Number = models.CharField(max_length=255,unique=True)
-    Room_Type = models.CharField(max_length=255)
-    Room_Floor = models.CharField(max_length=255)
-    Room_Facility = models.CharField(max_length=500)
-    Room_Price = models.CharField(max_length=255)
-    Room_Image = models.ImageField(upload_to='')
-    Date = models.DateField(auto_now_add=True)
-    Time = models.TimeField(auto_now_add=True)
-    def __str__(self):
-        return self.Room_Number
-    class Meta:
-        db_table = 'Add_Room'
 
-class Add_Salarys(models.Model):
-    Employee_Id = models.ForeignKey(Add_Employee,on_delete=models.CASCADE)
-    Employee_Name = models.CharField(max_length=255)
-    Mobile_Number = models.CharField(max_length=255)
-    Email = models.CharField(max_length=500)
-    Departments = models.CharField(max_length=255)
-    Salary = models.CharField(max_length=255)
-    Date = models.DateField(auto_now_add=True)
-    Time = models.TimeField(auto_now_add=True)
+# =========================
+# EMPLOYEE
+# =========================
+
+class Employee(models.Model):
+    employee_id = models.CharField(max_length=50, primary_key=True)
+
+    first_name = models.CharField(max_length=150)
+    last_name = models.CharField(max_length=150)
+    email = models.EmailField(unique=True)
+    mobile_number = models.CharField(max_length=15, unique=True)
+
+    joining_date = models.DateField()
+    date_of_birth = models.DateField()
+
+    department = models.CharField(max_length=100)
+    gender = models.CharField(max_length=20)
+    blood_group = models.CharField(max_length=10)
+    education = models.CharField(max_length=100)
+
+    guardian = models.CharField(max_length=150)
+    guardian_number = models.CharField(max_length=15)
+
+    image = models.ImageField(upload_to='employees/')
+    address = models.CharField(max_length=255)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
     def __str__(self):
-        return self.Employee_Id
-    class Meta:
-        db_table = 'Add_Employee_salarys'
+        return f"{self.first_name} {self.last_name}"
+
+
+# =========================
+# SALARY
+# =========================
+
+class Salary(models.Model):
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    salary = models.DecimalField(max_digits=10, decimal_places=2)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.employee.first_name} Salary"

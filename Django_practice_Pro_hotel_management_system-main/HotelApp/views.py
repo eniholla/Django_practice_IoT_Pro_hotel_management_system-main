@@ -1,492 +1,246 @@
-from django.shortcuts import render,redirect
-import sqlite3
-from django.contrib.auth import authenticate,logout,login
-from .import models
-from .forms import Online_Booking_form,offline_Booking_form,Add_Employee_form,Add_Room_form,Add_salary_form
-from django.http import HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+from django.http import HttpResponse
+from .models import Room, OnlineBooking
 
-# Create your views here.
-def Home(request):
-    return render(request,'Home.html')
-def all(request):
-    return render(request,'allinclude.html')
-def OnlineBooking(request):
-    if request.method == 'POST':
-        upload_image = request.FILES.get('Img')
-        # fname = upload_image.name
-        # with open('E:/Project2/HotelManagementSystem/static/Allfiles/Media/' + fname, 'wb+') as location:
-        #     for ch in upload_image.chunks():
-        #         location.write(ch)
-        MyData = models.Online_Booking()
-        MyData.Id = request.POST.get('Id')
-        MyData.Check_in = request.POST.get('Check_in')
-        MyData.Check_out = request.POST.get('Check_out')
-        MyData.ADULT = request.POST.get('ADULT')
-        MyData.CHILDREN = request.POST.get('CHILDREN')
-        MyData.Name = request.POST.get('Name')
-        MyData.Surname = request.POST.get('Surname')
-        MyData.Email = request.POST.get('Email')
-        MyData.Phone_Number = request.POST.get('Phone_Number')
-        MyData.Nid_No = request.POST.get('Nid_No')
-        MyData.City = request.POST.get('City')
-        MyData.Country = request.POST.get('Country')
-        MyData.Img =  upload_image
-        MyData.Address = request.POST.get('Address')
-        MyData.Date = request.POST.get('Date')
-        MyData.Time = request.POST.get('Time')
-        MyData.save()
-        return HttpResponse('Booking Successfully')
-    return render(request,'online_booking_page.html')
-def author_login(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            messages.success(request, 'Login successful! Welcome back.')
-            return redirect('Adminpage')  # or 'Home'
-        else:
-            messages.error(request, 'Invalid credentials. Please try again.')
-    
-    return render(request, 'author_login.html')  # ← MUST be this exact string
-def auth_logout(request):
-    logout(request)
-    return redirect('Home')
+from .models import (
+    OnlineBooking,
+    OfflineBooking,
+    Employee,
+    Room,
+    Salary,
+    Authorregis
+)
+
+from .forms import (
+    OnlineBookingForm,
+    OfflineBookingForm,
+    EmployeeForm,
+    RoomForm,
+    SalaryForm
+)
+
+
+# =========================
+# BASIC PAGES
+# =========================
+
+
+def home(request):
+    rooms = Room.objects.all().order_by('-id')[:6]  # Show latest 6 rooms
+    return render(request, "Home.html", {"rooms": rooms})
+
+
+
+# =========================
+# AUTH SYSTEM
+# =========================
+
+@login_required
+def dashboard(request):
+    rooms = Room.objects.filter(status='available')[:6]
+    return render(request, "dashboard.html", {"rooms": rooms})
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def user_home(request):
+    rooms = Room.objects.all()
+    user_bookings = OnlineBooking.objects.filter(user=request.user)
+
+    return render(request, "user_home.html", {
+        "rooms": rooms,
+        "user_bookings": user_bookings
+    })
+
 def author_register(request):
-    if request.method == 'POST':
-        Data = models.Authorregis()
-        Data.Fname = request.POST.get('Fname')
-        Data.Lname = request.POST.get('Lname')
-        Data.Email = request.POST.get('Email')
-        Data.Phone_Number = request.POST.get('Phone_Number')
-        Data.Password = request.POST.get('Password')
-        Con_password = request.POST.get('Con_password')
-        if Data.Password == Con_password:
-            Data.save()
-            return redirect('author_login')
+    if request.method == "POST":
+        first_name = request.POST.get("first_name")  # match your form fields
+        last_name = request.POST.get("last_name")
+        email = request.POST.get("email")
+        phone = request.POST.get("phone_number")
+        password1 = request.POST.get("password1")
+        password2 = request.POST.get("password2")
+
+        if password1 != password2:
+            messages.error(request, "Passwords do not match.")
+            return redirect("author_register")
+
+        if Authorregis.objects.filter(email=email).exists():
+            messages.error(request, "Email already registered.")
+            return redirect("author_register")
+
+        user = Authorregis.objects.create_user(
+            email=email,
+            password=password1,
+            first_name=first_name,
+            last_name=last_name
+        )
+        user.phone_number = phone
+        user.save()
+
+        messages.success(request, "Registration successful!")
+        return redirect("author_login")
+
+    return render(request, "author_register.html")
+
+def author_login(request):
+    if request.method == "POST":
+        email = request.POST.get("username")  # your form input is named "username"
+        password = request.POST.get("password")
+
+        user = authenticate(request, email=email, password=password)
+
+        if user:
+            login(request, user)
+            messages.success(request, "Login successful!")
+            return redirect("user_home")
         else:
-           return HttpResponse('password and confirm password not matching')
-    return render(request,'Athur_Register_Page.html')
+            messages.error(request, "Invalid credentials.")
+
+    return render(request, "author_login.html")
+
 def author_forgot_password(request):
-    return render(request,'Author_forgetpass_page.html')
-def all_admin(request):
-    return render(request,'admin/AdminAllinclude.html')
-def Admin(request):
-    data = models.Online_Booking.objects.all().order_by('-Id')
-    return render(request,'admin/Admin.html',{'data':data})
-def Addemployee(request):
-    if request.method == 'POST':
-        upload_image = request.FILES.get('Upload_Image')
-        # fname = upload_image.name
-        # with open('E:/Project2/HotelManagementSystem/static/Allfiles/Media/' + fname, 'wb+') as location:
-        #     for ch in upload_image.chunks():
-        #         location.write(ch)
-        if request.method == 'POST':
-            Data = models.Add_Employee()
-            Data.Employee_Id = request.POST.get('Employee_Id')
-            Data.First_Name = request.POST.get('First_Name')
-            Data.Last_Name = request.POST.get('Last_Name')
-            Data.Email = request.POST.get('Email')
-            Data.Mobile_Number = request.POST.get('Mobile_Number')
-            Data.Joining_Date = request.POST.get('Joining_Date')
-            Data.Dateof_Birth = request.POST.get('Dateof_Birth')
-            Data.Departments = request.POST.get('Departments')
-            Data.Gender = request.POST.get('Gender')
-            Data.Blood_Group = request.POST.get('Blood_Group')
-            Data.Education = request.POST.get('Education')
-            Data.Personal_Identity = request.POST.get('Personal_Identity')
-            Data.Guardian = request.POST.get('Guardian')
-            Data.Guardian_Number = request.POST.get('Guardian_Number')
-            Data.Upload_Image = upload_image
-            Data.Address = request.POST.get('Address')
-            Data.Date = request.POST.get('Date')
-            Data.Time = request.POST.get('Time')
-            Data.save()
-            return redirect('Addemployee')
-        else:
-            return HttpResponse("Failed")
+    # You can add actual reset logic later
+    return render(request, "author_forgot_password.html")
 
-    data = models.Add_Employee.objects.all().order_by('-Employee_Id')
-    return render(request,'admin/addemployee.html',{'data':data})
-def Editemployee(request,id):
-    data = models.Add_Employee.objects.get(Employee_Id=id)
-    if request.method == 'POST':
-        data = Add_Employee_form(request.POST, request.FILES, instance=data)
-        if data.is_valid():
-            # upload_image = request.FILES.get('Upload_Image')
-            # fname = upload_image.name
-            # with open('E:/Project2/HotelManagementSystem/static/Allfiles/Media/' + fname, 'wb+') as location:
-            #     for ch in upload_image.chunks():
-            #         location.write(ch)
-            data.save()
-            return redirect('Allemployee')
-        else:
-            return HttpResponse("Failed")
 
-    select = data.Departments
-    if select == 'Departments':
-        select = 1
-    elif select == 'Housekeeping':
-        select = 2
-    elif select == 'Manager':
-        select = 3
-    elif select == 'Chef':
-        select = 4
-    elif select == 'Food and Beverage':
-        select = 5
-    elif select == 'Kitchen':
-        select = 6
-    elif select == 'Security':
-        select = 7
+def author_logout(request):
+    logout(request)
+    return redirect("home")
+
+
+# =========================
+# ONLINE BOOKING
+# =========================
+
+def online_booking(request):
+    if request.method == "POST":
+        form = OnlineBookingForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Booking successful!")
+            return redirect("online_booking")
     else:
-        select = 8
+        form = OnlineBookingForm()
 
-    select = data.Gender
-    if select == 'Gender':
-        select = 1
-    elif select == 'MALE':
-        select = 2
+    return render(request, "online_booking_page.html", {"form": form})
+
+
+def online_booking_list(request):
+    bookings = OnlineBooking.objects.all().order_by("-id")
+    return render(request, "admin/Online_Booking.html", {"data": bookings})
+
+
+def delete_online_booking(request, id):
+    booking = get_object_or_404(OnlineBooking, pk=id)
+    booking.delete()
+    return redirect("online_booking_list")
+
+
+# =========================
+# OFFLINE BOOKING
+# =========================
+
+def add_customer(request):
+    if request.method == "POST":
+        form = OfflineBookingForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Customer added successfully!")
+            return redirect("add_customer")
     else:
-        select = 3
+        form = OfflineBookingForm()
 
-    return render(request,'admin/Editemployee.html',{'data': data,"select": select})
-def Allemployee(request):
-    if request.method == 'POST':
-        Serch = request.POST.get('search')
-        print(Serch)
-        data = models.Add_Employee.objects.filter(Employee_Id=Serch) or models.Add_Employee.objects.filter(First_Name=Serch)
-        return render(request, 'admin/allemployee.html', {"data": data})
-    data = models.Add_Employee.objects.all().order_by('-Employee_Id')
-    return render(request,'admin/allemployee.html',{'data': data})
-def online_Booking_info(request):
-    if request.method == 'POST':
-        Serch = request.POST.get('search')
-        print(Serch)
-        show = models.Online_Booking.objects.filter(Country =Serch) or models.Online_Booking.objects.filter(Name=Serch)
-        return render(request,'admin/Online_Booking.html',{"data":show})
+    customers = OfflineBooking.objects.all().order_by("-id")
+    return render(request, "admin/AddCustomer.html", {
+        "form": form,
+        "data": customers
+    })
 
-    data = models.Online_Booking.objects.all().order_by('-Id')
-    return render(request,'admin/Online_Booking.html',{'data':data})
-def Edit_online_Booking(request,id):
-    data = models.Online_Booking.objects.get(Id=id)
-    if request.method == 'POST':
-        data = Online_Booking_form(request.POST, request.FILES, instance=data)
-        if data.is_valid():
-            # upload_image = request.FILES.get('Img')
-            # fname = upload_image.name
-            # with open('E:/Project2/HotelManagementSystem/static/Allfiles/Media/' + fname, 'wb+') as location:
-            #     for ch in upload_image.chunks():
-            #         location.write(ch)
-            data.save()
-            return redirect('online_Booking_info')
-        else:
-            return HttpResponse("Failed")
 
-    select = data.ADULT
-    if select == 'ADULT':
-        select = 1
-    elif select == '1 ADULT':
-        select = 2
-    elif select == '2 ADULT':
-        select = 3
-    elif select == '3 ADULT':
-        select = 4
+def delete_customer(request, id):
+    customer = get_object_or_404(OfflineBooking, pk=id)
+    customer.delete()
+    return redirect("add_customer")
+
+
+# =========================
+# EMPLOYEE
+# =========================
+
+def add_employee(request):
+    if request.method == "POST":
+        form = EmployeeForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Employee added successfully!")
+            return redirect("add_employee")
     else:
-        select = 5
+        form = EmployeeForm()
 
-    select = data.CHILDREN
-    if select == 'CHILDREN':
-        select = 1
-    elif select == '1 CHILDREN':
-        select = 2
-    elif select == '2 CHILDREN':
-        select = 3
-    elif select == '3 CHILDREN':
-        select = 4
+    employees = Employee.objects.all().order_by("-employee_id")
+    return render(request, "admin/addemployee.html", {
+        "form": form,
+        "data": employees
+    })
+
+
+def delete_employee(request, id):
+    employee = get_object_or_404(Employee, pk=id)
+    employee.delete()
+    return redirect("add_employee")
+
+
+# =========================
+# ROOM
+# =========================
+
+# ROOM LIST PAGE
+def room_list(request):
+    rooms = Room.objects.all().order_by('room_number')
+    return render(request, "rooms.html", {"rooms": rooms})
+
+def add_room(request):
+    if request.method == "POST":
+        form = RoomForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Room added successfully!")
+            return redirect("add_room")
     else:
-        select = 5
-    return render(request,'admin/EditonlineBooking.html',{'data': data,"select":select})
-def AddCustomer(request):
-    if request.method == 'POST':
-        upload_image = request.FILES.get('Upload_Image')
-        # fname = upload_image.name
-        # with open('E:/Project2/HotelManagementSystem/static/Allfiles/Media/' + fname, 'wb+') as location:
-        #     for ch in upload_image.chunks():
-        #         location.write(ch)
-        if request.method == 'POST':
-            Data = models.Offline_Booking()
-            Data.Customer_Id = request.POST.get('Customer_Id')
-            Data.Check_in = request.POST.get('Check_in')
-            Data.Check_out = request.POST.get('Check_out')
-            Data.First_Name = request.POST.get('First_Name')
-            Data.Last_Name = request.POST.get('Last_Name')
-            Data.Email = request.POST.get('Email')
-            Data.Mobile_Number = request.POST.get('Mobile_Number')
-            Data.ADULT = request.POST.get('ADULT')
-            Data.CHILDREN = request.POST.get('CHILDREN')
-            Data.Total_Person = request.POST.get('Total_Person')
-            Data.Select_Room = request.POST.get('Select_Room')
-            Data.Room_Number = request.POST.get('Room_Number')
-            Data.Gender = request.POST.get('Gender')
-            Data.Personal_Identity = request.POST.get('Personal_Identity')
-            Data.Upload_Image = upload_image
-            Data.Country = request.POST.get('Country')
-            Data.Address = request.POST.get('Address')
-            Data.Date = request.POST.get('Date')
-            Data.Time = request.POST.get('Time')
-            Data.save()
-            return redirect('AddCustomer')
-        else:
-            return HttpResponse("Failed")
+        form = RoomForm()
 
-    data = models.Offline_Booking.objects.all().order_by('-Customer_Id')
-    return render(request,'admin/AddCustomer.html',{'data': data})
-def AllCustomer(request):
-    if request.method == 'POST':
-        Serch = request.POST.get('search')
-        print(Serch)
-        data = models.Offline_Booking.objects.filter(First_Name=Serch) or models.Offline_Booking.objects.filter( Email=Serch)
-        return render(request, 'admin/AllCustomer.html', {"data": data})
-    data = models.Offline_Booking.objects.all().order_by('-Customer_Id')
-    return render(request,'admin/AllCustomer.html',{'data': data})
-def EditCustomer(request,id):
-    data = models.Offline_Booking.objects.get(Customer_Id=id)
-    if request.method == 'POST':
-        data = offline_Booking_form(request.POST, request.FILES, instance=data)
-        if data.is_valid():
-            # upload_image = request.FILES.get('Upload_Image')
-            # fname = upload_image.name
-            # with open('E:/Project2/HotelManagementSystem/static/Allfiles/Media/' + fname, 'wb+') as location:
-            #     for ch in upload_image.chunks():
-            #         location.write(ch)
-            data.save()
-            return redirect('AllCustomer')
-        else:
-            return HttpResponse("Failed")
+    rooms = Room.objects.all().order_by("-id")
+    return render(request, "admin/AddRoom.html", {
+        "form": form,
+        "data": rooms
+    })
 
-    select = data.ADULT
-    if select == 'ADULT':
-        select = 1
-    elif select == '1 ADULT':
-        select = 2
-    elif select == '2 ADULT':
-        select = 3
-    elif select == '3 ADULT':
-        select = 4
+
+def delete_room(request, id):
+    room = get_object_or_404(Room, pk=id)
+    room.delete()
+    return redirect("add_room")
+
+
+# =========================
+# SALARY
+# =========================
+
+def add_salary(request):
+    if request.method == "POST":
+        form = SalaryForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Salary added successfully!")
+            return redirect("add_salary")
     else:
-        select = 5
+        form = SalaryForm()
 
-    select = data.CHILDREN
-    if select == 'CHILDREN':
-        select = 0
-    elif select == '1 CHILDREN':
-        select = 1
-    elif select == '2 CHILDREN':
-        select = 2
-    elif select == '3 CHILDREN':
-        select = 3
-    else:
-        select = 4
-
-    select = data.Select_Room
-    if select == 'Select Room':
-        select = 1
-    elif select == 'Delux':
-        select = 2
-    elif select == 'Super Delux':
-        select = 3
-    elif select == 'Single':
-        select = 4
-    else:
-        select = 5
-
-    select = data.Room_Number
-    if select == 'Room Number':
-        select = 1
-    elif select == 'Room101':
-        select = 2
-    elif select == 'Room102':
-        select = 3
-    elif select == 'Room103':
-        select = 4
-    else:
-        select = 5
-
-    select = data.Gender
-    if select == 'Gender':
-        select = 1
-    elif select == 'MALE':
-        select = 2
-    else:
-        select = 3
-
-    return render(request,'admin/EditCustomer.html',{'data': data,"select": select})
-def Delete(request,id):
-    data = models.Online_Booking.objects.get(Id=id)
-    data.delete()
-    return redirect('online_Booking_info')
-
-def Search(request):
-    if request.method == 'POST':
-        Serch = request.POST.get('serch')
-        print(Serch)
-        data = models.Offline_Booking.objects.filter(First_Name=Serch) or models.Offline_Booking.objects.filter(Email=Serch)
-        return render(request, 'admin/AddCustomer.html', {"data": data})
-
-def AddCustpage_Delete(request,id):
-    data = models.Offline_Booking.objects.get(Customer_Id=id)
-    data.delete()
-    return redirect('AddCustomer')
-def AllCustpage_Delete(request,id):
-    data = models.Offline_Booking.objects.get(Customer_Id=id)
-    data.delete()
-    return redirect('AllCustomer')
-
-def AddEmplopage_Delete(request,id):
-    data = models.Add_Employee.objects.get(Employee_Id=id)
-    data.delete()
-    return redirect('Addemployee')
-
-def Add_Employee_Search(request):
-    if request.method == 'POST':
-        Serch = request.POST.get('serch')
-        print(Serch)
-        data = models.Add_Employee.objects.filter(Employee_Id=Serch) or models.Add_Employee.objects.filter(First_Name=Serch)
-        return render(request,'admin/addemployee.html', {"data": data})
-
-def AllEmployee_Delete(request,id):
-    data = models.Add_Employee.objects.get(Employee_Id=id)
-    data.delete()
-    return redirect('Allemployee')
-
-
-def Add_room(request):
-    if request.method == 'POST':
-        upload_image = request.FILES.get('Room_Image')
-        # fname = upload_image.name
-        # with open('E:/Project2/HotelManagementSystem/static/Allfiles/Media/' + fname, 'wb+') as location:
-        #     for ch in upload_image.chunks():
-        #         location.write(ch)
-        if request.method == 'POST':
-            Data = models.Add_Room()
-            Data.Room_Number = request.POST.get('Room_Number')
-            Data.Room_Type = request.POST.get('Room_Type')
-            Data.Room_Floor = request.POST.get('Room_Floor')
-            Data.Room_Facility = request.POST.get('Room_Facility')
-            Data.Room_Price = request.POST.get('Room_Price')
-            Data.Room_Image = upload_image
-            Data.Date = request.POST.get('Date')
-            Data.Time = request.POST.get('Time')
-            Data.save()
-            return redirect('Add_room')
-        else:
-            return HttpResponse("Failed")
-
-    data = models.Add_Room.objects.all().order_by('-Room_Number')
-    return render(request, 'admin/AddRoom.html',{'data': data})
-
-def Add_Room_Search(request):
-    if request.method == 'POST':
-        Serch = request.POST.get('serch')
-        print(Serch)
-        data = models.Add_Room.objects.filter(Room_Number=Serch) or models.Add_Rooms.objects.filter(Room_Type=Serch)
-        return render(request, 'admin/AddRoom.html',{"data": data})
-
-def AddRooms_Delete(request,id):
-    data = models.Add_Room.objects.get(Id=id)
-    data.delete()
-    return redirect('Add_room')
-
-def EditRooms(request,id):
-    data = models.Add_Room.objects.get(Id=id)
-    if request.method == 'POST':
-        data = Add_Room_form(request.POST, request.FILES, instance=data)
-        if data.is_valid():
-            # upload_image = request.FILES.get('Room_Image')
-            # fname = upload_image.name
-            # with open('E:/Project2/HotelManagementSystem/static/Allfiles/Media/' + fname, 'wb+') as location:
-            #     for ch in upload_image.chunks():
-            #         location.write(ch)
-            data.save()
-            return redirect('All_Room')
-        else:
-            return HttpResponse("Failed")
-
-
-    select = data.Room_Type
-    if select == 'Select Room':
-        select = 1
-    elif select == 'Delux':
-        select = 2
-    elif select == 'Super Delux':
-        select = 3
-    elif select == 'Single':
-        select = 4
-    else:
-        select = 5
-
-    select = data.Room_Number
-    if select == 'Room Number':
-        select = 1
-    elif select == 'Room101':
-        select = 2
-    elif select == 'Room102':
-        select = 3
-    elif select == 'Room103':
-        select = 4
-    else:
-        select = 5
-
-    select = data.Room_Floor
-    if select == 'Room Floor':
-        select = 1
-    elif select == 'Floor_G':
-        select = 2
-    elif select == 'Floor_First':
-        select = 3
-    elif select == 'Floor_Second':
-        select = 4
-    else:
-        select = 5
-
-    return render(request,'admin/EditRooms.html',{'data': data,"select": select})
-
-def All_Room(request):
-    if request.method == 'POST':
-        Serch = request.POST.get('search')
-        print(Serch)
-        data = models.Add_Room.objects.filter(Room_Number=Serch) or models.Add_Room.objects.filter(Room_Type=Serch)
-        return render(request, 'admin/AllRooms.html',{"data": data})
-
-    data = models.Add_Room.objects.all().order_by('-Id')
-    return render(request, 'admin/AllRooms.html',{'data': data})
-
-def AllRooms_Delete(request,id):
-    data = models.Add_Room.objects.get(Id=id)
-    data.delete()
-    return redirect('All_Room')
-
-def AddEmployeeSalary(request):
-    if request.method == 'POST':
-        if request.method == 'POST':
-            Data = models.Add_Salarys()
-            Data.Employee_Id = request.POST.get('Employee_Id')
-            Data.Employee_Name = request.POST.get('Employee_Name')
-            Data.Email = request.POST.get('Email ')
-            Data.Mobile_Number = request.POST.get('Mobile_Number')
-            Data.Departments = request.POST.get('Departments')
-            Data.Salary = request.POST.get('Salary')
-            Data.Date = request.POST.get('Date')
-            Data.Time = request.POST.get('Time')
-            Data.save()
-            return redirect('AddEmployeeSalary')
-        else:
-            return HttpResponse("Failed")
-
-    return render(request, 'admin/AddEmployeeSalary.html')
-
-def EmployeeShow(request):
-
-    return render(request, 'admin/EmployeeShow.html')
+    salaries = Salary.objects.all().order_by("-id")
+    return render(request, "admin/AddEmployeeSalary.html", {
+        "form": form,
+        "data": salaries
+    })
