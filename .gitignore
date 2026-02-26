@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual Environment
+venv/
+.env/
+
+# SQLite Database
+*.sqlite3
+db.sqlite3
+
+# macOS
+.DS_Store
+
+# Static collected files
+staticfiles/

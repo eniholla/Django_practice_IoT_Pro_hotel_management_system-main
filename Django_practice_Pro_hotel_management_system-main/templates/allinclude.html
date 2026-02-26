@@ -21,6 +21,11 @@
       rel="stylesheet"
     />
 
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&family=Poppins:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
     <!-- Font Awesome 6 -->
     <link
       rel="stylesheet"
@@ -28,6 +33,9 @@
     />
 
     <!-- Your plugins (keep if used, remove if not) -->
+     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/user_home.css' %}" />
+    <!-- user HOME PAGE CSS-->
     <link rel="stylesheet" href="{% static 'Allfiles/css/animate.css' %}" />
     <link rel="stylesheet" href="{% static 'Allfiles/css/slick.css' %}" />
     <link
@@ -204,18 +212,13 @@
             <a href="https://www.instagram.com/" class="text-dark me-2"
               ><i class="fab fa-instagram"></i
             ></a>
-            <a
-              href="{% url 'author_login' %}"
-              class="btn btn-outline-primary btn-sm"
-              >Login</a
-            >
           </div>
         </div>
       </div>
 
       <nav class="navbar navbar-expand-lg modern-navbar">
         <div class="container">
-          <a class="navbar-brand fw-bold text-white" href="{% url 'Home' %}"
+          <a class="navbar-brand fw-bold text-white" href="{% url 'home' %}"
             >RoseGold Hotel</a
           >
           <button
@@ -229,13 +232,15 @@
           <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto align-items-center">
               <li class="nav-item">
-                <a class="nav-link active" href="{% url 'Home' %}">Home</a>
+                <a class="nav-link active" href="{% url 'home' %}">Home</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#rooms">Rooms</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'OnlineBooking' %}">Booking</a>
+                <a class="nav-link" href="{% url 'online_booking' %}"
+                  >Booking</a
+                >
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#">Contact</a>
@@ -257,7 +262,7 @@
               </li>
               <li class="nav-item ms-3">
                 <a
-                  href="{% url 'OnlineBooking' %}"
+                  href="{% url 'online_booking' %}"
                   class="btn btn-primary btn-md px-4 py-2 fw-bold"
                   >Book Now</a
                 >
@@ -307,7 +312,11 @@
                 <p class="card-text text-muted">
                   Spacious king-size bed, modern amenities, city view.
                 </p>
-                <a href="#" class="btn btn-primary mt-3">Book Now</a>
+                <a
+                  href="{% url 'online_booking' %}"
+                  class="btn btn-primary mt-3"
+                  >Book Now</a
+                >
               </div>
             </div>
           </div>
@@ -326,7 +335,11 @@
                 <p class="card-text text-muted">
                   Comfortable room with modern amenities and workspace.
                 </p>
-                <a href="#" class="btn btn-primary mt-3">Book Now</a>
+                <a
+                  href="{% url 'online_booking' %}"
+                  class="btn btn-primary mt-3"
+                  >Book Now</a
+                >
               </div>
             </div>
           </div>
@@ -346,7 +359,9 @@
                   Premium suite with private lounge, kitchenette, and ocean
                   view.
                 </p>
-                <a href="#" class="btn btn-primary">Book Now</a>
+                <a href="{% url 'online_booking' %}" class="btn btn-primary"
+                  >Book Now</a
+                >
               </div>
             </div>
           </div>
@@ -361,10 +376,47 @@
         <p class="lead mb-4">
           Book your perfect room now and enjoy a luxury experience.
         </p>
-        <a href="#rooms" class="btn btn-light btn-lg">Explore Rooms</a>
+        <a href="{% url 'room_list' %}" class="btn btn-light btn-lg"
+          >Explore Rooms</a
+        >
       </div>
     </section>
-    {% endblock content %}
+    {% block extra_js %}
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.min.js"
+      integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+      crossorigin="anonymous"
+    ></script>
+
+    <script>
+      $(document).ready(function () {
+        console.log("jQuery is working — Services tab script loaded");
+
+        // Hide all images except first
+        $(".Service_img").hide();
+        $("#swim").show();
+
+        // Click handler
+        $(".Service_menu .tabs li").on("click", function (e) {
+          e.preventDefault();
+
+          $(".Service_menu .tabs li").removeClass("active");
+          $(this).addClass("active");
+
+          var target = $(this).attr("rel");
+          $(".Service_img").fadeOut(200);
+          $(target).fadeIn(400);
+
+          console.log("Clicked: " + target); // check console
+        });
+
+        // Activate first tab
+        $(".Service_menu .tabs li:first-child")
+          .addClass("active")
+          .trigger("click");
+      });
+    </script>
+    {% endblock %} {% endblock content %}
 
     <!-- Footer -->
     <footer id="footer">
@@ -384,5 +436,6 @@
     <script src="{% static 'Allfiles/js/jquery.magnific-popup.min.js' %}"></script>
     <script src="{% static 'Allfiles/js/jquery.counterup.min.js' %}"></script>
     <script src="{% static 'Allfiles/js/Script.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   </body>
 </html>

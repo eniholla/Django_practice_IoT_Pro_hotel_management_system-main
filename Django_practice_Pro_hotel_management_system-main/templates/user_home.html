@@ -1,85 +1,80 @@
 {% extends 'allinclude.html' %}
-{% block title %}
-    Hotel & Resort
-{% endblock %}
-
-{% block contant %}
 {% load static %}
 
+{% block title %}
+Hotel & Resort
+{% endblock %}
+
+{% block content %}
+
 <!--================Slider Start=================-->
-<section id="slider">
-    <div class="slider_pic">
-        <div class="container">
-            <div class="row justify-content-center text-center">
-                <div class="col-md-10">
-                    <div class="slide_text">
-                        <h1>welcome <span class="late">to RoseGold Hotel and suites</span></h1>
-                        <p>Welcome to Hotel rose Booking Management, your one-stop solution for hassle-free hotel reservations. Quickly find the perfect hotel for your next stay. Use our search tool to browse and book hotels in the area.</p>
-                        <div class="slider-btn">
-                            <a class="default-btn" href="#">explore</a>
-                        </div>
-                    </div>
-                </div>
+<section id="slider" class="position-relative">
+  <div class="slider_pic" style="background: url('{% static 'Allfiles/Photo/slider-3.jpg' %}') center/cover no-repeat fixed;">
+  <!-- your content -->
+
+    <div class="container position-relative z-1">
+      <div class="row justify-content-center text-center">
+        <div class="col-lg-9 col-xl-8">
+          <div class="slide_text">
+            <h1 class="display-4 fw-bold mb-4 text-white">
+              Welcome {{ request.user.first_name|default:request.user.username }},
+              <span class="late text-gold">to RoseGold Hotel & Suites</span>
+            </h1>
+            <p class="lead fs-5 mb-5 text-white opacity-90">
+              Welcome to Hotel rose Booking Management, your one-stop solution for hassle-free hotel reservations...
+            </p>
+            <div class="slider-btn">
+              <a href="{% url 'online_booking' %}" class="btn btn-lg px-5 py-3 modern-btn">
+                Booking Now
+              </a>
             </div>
-            <div class="pre_btn"><span><i class="fas fa-angle-left
-"></i></span>
-                </div>
-               <div class="next_btn">
-               <span><i class="fas fa-angle-right"></i></span>
-               </div>
-            </div>
-         </div>
-   </section>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  <!-- arrows if you still use them -->
+  <button class="pre_btn position-absolute top-50 start-0 translate-middle-y btn btn-link text-white fs-1" type="button"><i class="fas fa-angle-left"></i></button>
+  <button class="next_btn position-absolute top-50 end-0 translate-middle-y btn btn-link text-white fs-1" type="button"><i class="fas fa-angle-right"></i></button>
+</section>
 
 
     <!--================Book A Table Area =================-->
-    <section id="Book_Table">
-       <div class="container">
-          <div class="row">
-             <div class="col-lg-12">
-               <form>
-                  <div class="Book_info">
-                     <div class="Table_item">
-                        <input type="text" placeholder="Check in" class="Check_in" >
-                        <span class="open"><i class="far fa-calendar-alt"></i></span>
-                     </div>
-                      <div class="Table_item" >
-                        <input type="text" placeholder="Check out" class="Check_out" >
-                        <span class="open1"><i class="far fa-calendar-alt"></i></span>
-                     </div>
-                     <div class="Table_item">
-                         <select name="adults">
-                            <option>ADULTS</option>
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
-                            <option>6</option>
-                         </select>
-                     </div>
-                     <div class="Table_item">
-                           <select name="children">
-                              <option>CHILDREN</option>
-                              <option>0</option>
-                              <option>1</option>
-                              <option>2</option>
-                              <option>3</option>
-                              <option>4</option>
-                              <option>5</option>
-                           </select>
-                      </div>
-                      <div class="Table_item">
-                         <div class="book_btn">
-                           <a href="#">Check Availability</a>
-                         </div>
-                    </div>
-                  </div>
-               </form>
-             </div>
-          </div>
-       </div>
-    </section>
+  <section id="Book_Table" class="py-5 bg-light">
+  <div class="container">
+    <form method="GET" class="modern-booking d-flex flex-wrap justify-content-center align-items-end gap-4">
+      <div>
+        <label>Check-in</label>
+        <input type="date" name="check_in" class="form-control" required>
+      </div>
+      <div>
+        <label>Check-out</label>
+        <input type="date" name="check_out" class="form-control" required>
+      </div>
+      <div>
+        <label>Adults</label>
+        <select name="adults" class="form-select">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+        </select>
+      </div>
+      <div>
+        <label>Children</label>
+        <select name="children" class="form-select">
+          <option value="0">0</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+        </select>
+      </div>
+      <div>
+        <button type="submit" class="modern-btn mt-4 mt-md-0">Check Availability</button>
+      </div>
+    </form>
+  </div>
+</section>
 
      <!--================About Part=================-->
      <section id="about">
@@ -94,7 +89,7 @@
                <div class="col-lg-4">
                  <div class="About_info">
                    <h2 class="about-title">About Us</h2>
-                      <p>Welcome to Hotel Booking Management, your one-stop solution for hassle-free hotel reservations.Quickly find the perfect hotel for your next stay. Use our search tool to browse and book hotels in the area.</p>
+                      <p>Welcome to Hotel Booking Management, your one-stop solution for hassle-free hotel reservations.Quickly find the perfect hotel for your next stay. Use our search tool to browse and book an hotel.</p>
                       <p>This is such a great place to connect and spend your free time in peace.</p>
                       <p>Hope you enjoy our services.</p>
                      <div class="about_btn">
@@ -126,13 +121,13 @@
                        <img src="{%static 'Allfiles/Photo/room-1.jpg'%}" alt="img">
                        <div class="btn ">
                           <div class="room_btn">
-                            <a href="#">Booking Now</a>
+                            <a href="{% url 'online_booking' %}">Booking Now</a>
                           </div>
                        </div>
                      </div>
                      <div class="ROOMS_text text-center justify-content-center">
                          <h3> Couple Room </h3>
-                         <span><i class="fas fa-naira-sign"></i>300</span>
+                         <span><i class="fas fa-naira-sign"></i>30000</span>
                          <p>Best room to consider for newly weds. Feels like a luxorious suite. Ratings: 4.6/5</p>
                           <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
                      </div>
@@ -144,13 +139,13 @@
                        <img src=" {%static 'Allfiles/Photo/room-2.jpg'%}" alt="img">
                        <div class="btn ">
                           <div class="room_btn">
-                            <a href="#">Booking Now</a>
+                            <a href="{% url 'online_booking' %}">Booking Now</a>
                           </div>
                        </div>
                      </div>
                      <div class="ROOMS_text text-center justify-content-center">
                          <h3> Single Room </h3>
-                         <span><i class="fas fa-dollar-sign"></i>250</span>
+                         <span><i class="fas fa-naira-sign"></i>25000</span>
                          <p>One of the best rooms that provide valuable alone time, also comes with a lot of features. Ratings: 4.5/5</p>
                           <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
                      </div>
@@ -162,13 +157,13 @@
                        <img src="{%static 'Allfiles/Photo/room-3.jpg'%}" alt="img">
                        <div class="btn ">
                           <div class="room_btn">
-                            <a href="#">Booking Now</a>
+                            <a href="{% url 'online_booking' %}">Booking Now</a>
                           </div>
                        </div>
                      </div>
                      <div class="ROOMS_text text-center justify-content-center">
                          <h3> Double Room </h3>
-                         <span><i class="fas fa-dollar-sign"></i>310</span>
+                         <span><i class="fas fa-naira-sign"></i>45000</span>
                          <p>Comes with an extra balcony and child space. Best for adults & children. Rating: 4.5/5</p>
                           <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
                      </div>
@@ -180,13 +175,13 @@
                        <img src="{%static 'Allfiles/Photo/room-4.jpg'%}" alt="img">
                        <div class="btn ">
                           <div class="room_btn">
-                            <a href="#">Booking Now</a>
+                            <a href="{% url 'online_booking' %}">Booking Now</a>
                           </div>
                        </div>
                      </div>
                      <div class="ROOMS_text text-center justify-content-center">
                          <h3> Luxury Room </h3>
-                         <span><i class="fas fa-dollar-sign"></i>350</span>
+                         <span><i class="fas fa-naira-sign"></i>135000</span>
                          <p>One of our top rated stay. Availlable at discount price 25% and with a free spa coupon. Ratings: 4.8/5</p>
                           <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
                      </div>
@@ -198,13 +193,13 @@
                        <img src="{%static 'Allfiles/Photo/room-5.jpg'%}" alt="img">
                        <div class="btn ">
                           <div class="room_btn">
-                            <a href="#">Booking Now</a>
+                            <a href="{% url 'online_booking' %}">Booking Now</a>
                           </div>
                        </div>
                      </div>
                      <div class="ROOMS_text text-center justify-content-center">
                          <h3>Family Room </h3>
-                         <span><i class="fas fa-dollar-sign"></i>400</span>
+                         <span><i class="fas fa-naira-sign"></i>175000</span>
                          <p>Highly recommended to parents with toddlers and babies.Offers available. Ratins: 4.6/5</p>
                           <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
                      </div>
@@ -216,13 +211,13 @@
                        <img src="{%static 'Allfiles/Photo/room-6.jpg'%}" alt="img">
                        <div class="btn ">
                           <div class="room_btn">
-                            <a href="#">Booking Now</a>
+                            <a href="{% url 'online_booking' %}">Booking Now</a>
                           </div>
                        </div>
                      </div>
                      <div class="ROOMS_text text-center justify-content-center">
                          <h3> Presidential Room </h3>
-                         <span><i class="fas fa-dollar-sign"></i>300</span>
+                         <span><i class="fas fa-naira-sign"></i>300000</span>
                          <p>Our top uxury room. Only availabe for VIP's with verified identity. Ratings: 4.7/5</p>
                           <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
                      </div>
@@ -266,7 +261,7 @@
                  <div class="col-lg-5">
                      <div class="Service_menu">
                         <ul class="tabs" id="example">
-                             <li class="Service_items" rel="#swim">
+                             <li class="Service_items active" rel="#swim">...
                                  <a href="#swim">
                                     <span class="service-icon">
 
@@ -313,93 +308,8 @@
     </section>
 
 
-<!--================OUR GALLERY=================-->
-<section id="GALLERY">
-   <div class="container">
-       <div class="row text-center justify-content-center">
-          <div class="col-lg-8">
-              <div class="GALLERY_title">
-                <h2>OUR GALLERY</h2>
-                <p>This is your one-stop solution for hassle-free hotel reservations.Quickly find the perfect hotel for your next stay. Use our search tool to browse and book hotels in the area.</p>
-               </div>
-          </div>
-       </div>
-       <div class="GALLERY_view">
-          <div class="row GALLERY_slider">
-             <div class="col-lg-3">
-                 <div class="GALLERY_info" >
-                    <div class="GALLERY_pic">
-                       <img src="{%static 'Allfiles/Photo/gallery-1.jpg'%}" alt="img">
-                     </div>
-                     <div class="gallary_overly text-center justify-content-center"  href="{%static 'Allfiles/photo/gallery-1-pop.jpg'%}">
-                       <i class="fas fa-search-plus"></i>
-                     </div>
-                  </div>
-             </div>
-             <div class="col-lg-3">
-                 <div class="GALLERY_info">
-                    <div class="GALLERY_pic">
-                       <img src=" {%static 'Allfiles/Photo/gallery-2.jpg'%}" alt="img">
-                     </div>
-                      <div class="gallary_overly text-center justify-content-center"  href="{%static 'Allfiles/photo/gallery-2-pop.jpg'%}">
-                       <i class="fas fa-search-plus"></i>
-                     </div>
-                  </div>
-             </div>
-             <div class="col-lg-3">
-                 <div class="GALLERY_info">
-                    <div class="GALLERY_pic">
-                       <img src=" {%static 'Allfiles/Photo/gallery-3.jpg'%}" alt="img">
-                     </div>
-                      <div class="gallary_overly text-center justify-content-center"  href="{%static 'Allfiles/photo/gallery-3-pop.jpg'%}">
-                       <i class="fas fa-search-plus"></i>
-                     </div>
-                  </div>
-             </div>
-             <div class="col-lg-3">
-                 <div class="GALLERY_info">
-                    <div class="GALLERY_pic">
-                       <img src=" {%static 'Allfiles/Photo/gallery-3.jpg'%}" alt="img">
-                     </div>
-                      <div class="gallary_overly text-center justify-content-center" href="{%static 'Allfiles/photo/gallery-3-pop.jpg'%}">
-                       <i class="fas fa-search-plus"></i>
-                     </div>
-                  </div>
-             </div>
-             <div class="col-lg-3">
-                 <div class="GALLERY_info" href="{%static 'Allfiles/photo/gallery-1-pop.jpg'%}">
-                    <div class="GALLERY_pic">
-                       <img src=" {%static 'Allfiles/Photo/gallery-1.jpg'%}" alt="img">
-                     </div>
-                      <div class="gallary_overly text-center justify-content-center">
-                       <i class="fas fa-search-plus"></i>
-                     </div>
-                  </div>
-             </div>
-             <div class="col-lg-3">
-                 <div class="GALLERY_info" href="{%static 'Allfiles/photo/gallery-2-pop.jpg'%}">
-                    <div class="GALLERY_pic">
-                       <img src=" {%static 'Allfiles/Photo/gallery-2.jpg'%}" alt="img">
-                     </div>
-                      <div class="gallary_overly text-center justify-content-center">
-                       <i class="fas fa-search-plus"></i>
-                     </div>
-                  </div>
-             </div>
-             <div class="col-lg-3">
-                 <div class="GALLERY_info" href="{%static 'Allfiles/photo/gallery-3-pop.jpg'%}">
-                    <div class="GALLERY_pic">
-                       <img src="{%static 'Allfiles/Photo/gallery-3.jpg'%}" alt="img">
-                     </div>
-                      <div class="gallary_overly text-center justify-content-center">
-                       <i class="fas fa-search-plus"></i>
-                     </div>
-                  </div>
-             </div>
-         </div>
-       </div>
-   </div>
-</section>
+
+
     <!--================Counter Part Start=================-->
 
     <section class="counterstart">
@@ -531,28 +441,32 @@
                          </div>
                      </div>
              </div>
-              <div class="col-lg-3 Staff_info">
-                    <div class="Staff_pic">
-                       <img src="{%static 'Allfiles/Photo/team5.jpg'%}" alt="img">
-                     </div>
-                     <div class="Staff_overly">
-                         <div class="Staff_part1 text-center">
-                            <h5>Shirley Gibson</h5>
-                            <h6>Manager</h6>
-                         </div>
-                         <div class="Staff_part2 text-center">
-                            <ul>
-                                <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
-                                <li><a href="#"><i class="fab fa-twitter"></i></a></i></a></li>
-                                <li><a href="#"><i class="fab fa-google-plus-g"></i></a></li>
-                                <li><a href="#"><i class="fab fa-instagram"></i></a></li>
-                            </ul>
-                         </div>
-                     </div>
-             </div>
+             
+        
          </div>
        </div>
    </div>
 </section>
     <!--================Our Special Staff Part end =================-->
+  {% block extra_js %}
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('.Service_img').hide();
+    $('#swim').show().addClass('active');
+
+    $('.Service_menu .tabs li').click(function(e) {
+        e.preventDefault();
+        $('.Service_menu .tabs li').removeClass('active');
+        $(this).addClass('active');
+
+        $('.Service_img').removeClass('active').hide();
+        var target = $(this).attr('rel');
+        $(target).addClass('active').fadeIn(400);
+    });
+
+    $('.Service_menu .tabs li:first').addClass('active').click(); // auto-trigger first
+});
+</script>
+{% endblock %}
  {% endblock %}

@@ -27,9 +27,9 @@ SECRET_KEY = 'django-insecure-dev&h09slzzbp!j(f^_lsen+afmt_&cnl96uus15mqnjc68)60
 DEBUG = True
 
 ALLOWED_HOSTS = []
+AUTH_USER_MODEL = 'HotelApp.Authorregis'
 
-
-# Application definition
+# Application definitionAUTH_USER_MODEL = 'yourapp.Authorregis'
 
 INSTALLED_APPS = [
     'django.contrib.admin',

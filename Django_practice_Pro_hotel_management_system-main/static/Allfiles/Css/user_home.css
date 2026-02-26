@@ -223,6 +223,9 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 3.5rem;
 }
 
+.Staff_overly {
+    background: rgba(26,26,46,0.7);
+}
 
 .modern-booking {
     background: white;
@@ -252,136 +255,6 @@ h1, h2, h3, h4, h5, h6 {
 
 @media (max-width: 991px) {
     body { padding-top: 120px; }
-}
-/* Consistent section spacing for cleaner layout */
-section {
-    padding-top: 80px;
-    padding-bottom: 80px;
-}
-
-section:first-child {          /* hero/slider usually needs less top padding */
-    padding-top: 0;
-}
-
-section:not(:last-child) {
-    margin-bottom: 40px;       /* extra breathing room between sections */
-}
-
-/* Optional: tighter spacing on smaller screens */
-@media (max-width: 992px) {
-    section {
-        padding-top: 60px;
-        padding-bottom: 60px;
-    }
-    section:not(:last-child) {
-        margin-bottom: 30px;
-    }
-}
-
-/* Special cases - adjust if needed */
-#slider {
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
-    margin-bottom: 60px;       /* space after hero */
-}
-
-#Book_Table,
-.user-summary {
-    padding-top: 60px;
-    padding-bottom: 60px;
-}
-/*STAFF STYLING*/
-/* Staff Section - hover socials only */
-.Staff_info {
-    position: relative;
-    overflow: hidden;
-    border-radius: 12px;
-    background: white;           /* fallback if image fails */
-    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-    transition: transform 0.4s ease, box-shadow 0.4s ease;
-}
-
-.Staff_pic {
-    display: block;
-    height: 320px;               /* adjust to your preference */
-    overflow: hidden;
-}
-
-.Staff_pic img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.5s ease;
-}
-
-.Staff_overly {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to bottom, rgba(26,26,46,0.1), rgba(26,26,46,0.85));
-    opacity: 0;
-    transition: opacity 0.4s ease;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    align-items: center;
-    padding: 0 20px 30px;
-    color: white;
-    text-align: center;
-}
-
-.Staff_info:hover .Staff_overly {
-    opacity: 1;
-}
-
-.Staff_info:hover .Staff_pic img {
-    transform: scale(1.08);      /* subtle zoom on hover */
-}
-
-.Staff_info:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 15px 35px rgba(183,110,121,0.18);
-}
-
-/* Name & position */
-.Staff_part1 {
-    margin-bottom: 15px;
-}
-
-.Staff_part1 h5 {
-    font-size: 1.4rem;
-    margin-bottom: 4px;
-    color: white;
-}
-
-.Staff_part1 h6 {
-    font-size: 1rem;
-    opacity: 0.9;
-    color: rgba(255,255,255,0.9);
-}
-
-/* Social icons - only appear on hover (already handled by overlay) */
-.Staff_part2 ul {
-    display: flex;
-    gap: 14px;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-}
-
-.Staff_part2 a {
-    color: white;
-    font-size: 1.3rem;
-    width: 38px;
-    height: 38px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.15);
-    transition: all 0.3s ease;
-}
-
-.Staff_part2 a:hover {
-    background: var(--accent);   /* rose-gold on hover */
-    transform: translateY(-3px);
-}
+.container{
+    padding-bottom: 20px;
+}}

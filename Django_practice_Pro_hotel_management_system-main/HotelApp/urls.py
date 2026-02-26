@@ -1,41 +1,36 @@
 from django.urls import path
-from .import views
+from . import views
 
 urlpatterns = [
-   path('', views.Home, name='Home'),
-    path('all/', views.all, name='all'),
-    path('booking/', views.OnlineBooking, name='OnlineBooking'),
-   # Fixed auth paths (clean names) user features (login,logout etc)
+    # BASIC PAGES
+    path('', views.home, name='home'),
+    path('rooms/', views.room_list, name='room_list'),
+    path('dashboard/', views.dashboard, name='dashboard'),
+    path('home/', views.user_home, name='user_home'),
+
+    # AUTH SYSTEM
     path('login/', views.author_login, name='author_login'),
-    path('logout/', views.auth_logout, name='auth_logout'),
+    path('logout/', views.author_logout, name='auth_logout'),
     path('register/', views.author_register, name='author_register'),
-    path('forgot-password/', views.author_forgot_password, name='author_forgot_password'),
-    # Admin & other paths (employee)
-    path('admin-all/', views.all_admin, name='all_admin'),
-    path('admin/', views.Admin, name='Adminpage'),
-    path('add-employee/', views.Addemployee, name='Addemployee'),
-    path('Editemployee/<id>', views.Editemployee, name='Editemployee'),
-    path('Allemployee', views.Allemployee, name='Allemployee'),
-    path('AddEmplopage_Delete/<id>', views.AddEmplopage_Delete, name='AddEmplopage_Delete'),
-    path('Add_Employee_Search', views.Add_Employee_Search, name='Add_Employee_Search'),
-    path('AllEmployee_Delete/<id>', views.AllEmployee_Delete, name='AllEmployee_Delete'),
-    # Admin & other paths (edit customer)
-    path('online_Booking_info', views.online_Booking_info, name='online_Booking_info'),
-    path('Edit_online_Booking/<id>', views.Edit_online_Booking, name='Edit_online_Booking'),
-    path('AddCustomer', views.AddCustomer, name='AddCustomer'),
-    path('AllCustomer', views.AllCustomer, name='AllCustomer'),
-    path('EditCustomer/<id>', views.EditCustomer, name='EditCustomer'),
-    path('delete/<id>', views.Delete, name='delete'),
-    path('Search', views.Search, name='Search'),
-    path('AddCustpage_Delete/<id>', views.AddCustpage_Delete, name='AddCustpage_Delete'),
-    path('AllCustpage_Delete/<id>', views.AllCustpage_Delete, name='AllCustpage_Delete'),
-    # Admin (edit rooms)
-    path('Add_room', views.Add_room, name='Add_room'),
-    path('Add_Room_Search', views.Add_Room_Search, name='Add_Room_Search'),
-    path('AddRooms_Delete/<id>', views.AddRooms_Delete, name='AddRooms_Delete'),
-    path('EditRooms/<id>', views.EditRooms, name='EditRooms'),
-    path('All_Room', views.All_Room, name='All_Room'),
-    path('AllRooms_Delete/<id>', views.AllRooms_Delete, name='AllRooms_Delete'),
-    path('AddEmployeeSalary', views.AddEmployeeSalary, name='AddEmployeeSalary'),
-    path('EmployeeShow', views.EmployeeShow, name='EmployeeShow')
+    path('forgotpassword/', views.author_forgot_password, name='author_forgot_password'),
+
+    # ONLINE BOOKING
+    path('online-booking/', views.online_booking, name='online_booking'),
+    path('online-booking/list/', views.online_booking_list, name='online_booking_list'),
+    path('online-booking/delete/<int:id>/', views.delete_online_booking, name='delete_online_booking'),
+
+    # OFFLINE BOOKING
+    path('offline-booking/', views.add_customer, name='add_customer'),
+    path('offline-booking/delete/<int:id>/', views.delete_customer, name='delete_customer'),
+
+    # EMPLOYEE MANAGEMENT
+    path('employee/add/', views.add_employee, name='add_employee'),
+    path('employee/delete/<int:id>/', views.delete_employee, name='delete_employee'),
+
+    # ROOM MANAGEMENT
+    path('room/add/', views.add_room, name='add_room'),
+    path('room/delete/<int:id>/', views.delete_room, name='delete_room'),
+
+    # SALARY MANAGEMENT
+    path('salary/add/', views.add_salary, name='add_salary'),
 ]
