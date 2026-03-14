@@ -230,7 +230,7 @@
     padding: 20px;
   }
   .modal-overlay.open { display: flex; }
-  .modal {
+  .booking-modal {
     background: #fff;
     border-radius: 16px;
     padding: 36px;
@@ -243,15 +243,15 @@
     from { opacity: 0; transform: scale(0.95); }
     to   { opacity: 1; transform: scale(1); }
   }
-  .modal h3 {
+  .booking-modal h3 {
     font-family: 'Cormorant Garamond', serif;
     font-size: 1.4rem;
     color: var(--ink);
     margin-bottom: 20px;
   }
-  .modal .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
-  .modal .form-group label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
-  .modal .form-group input {
+  .booking-modal .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+  .booking-modal .form-group label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+  .booking-modal .form-group input {
     padding: 11px 14px;
     border: 1.5px solid var(--cream-dark);
     border-radius: 8px;
@@ -260,7 +260,7 @@
     outline: none;
     transition: border-color 0.2s;
   }
-  .modal .form-group input:focus { border-color: var(--gold); }
+  .booking-modal .form-group input:focus { border-color: var(--gold); }
   .modal-actions { display: flex; gap: 10px; margin-top: 8px; }
   .modal-actions .btn-confirm {
     flex: 1;
@@ -311,7 +311,7 @@
 
 <!-- MODIFY MODAL -->
 <div class="modal-overlay" id="modify-modal">
-  <div class="modal">
+  <div class="booking-modal">
     <h3>Modify Booking</h3>
     <form method="POST" id="modify-form">
       {% csrf_token %}
@@ -335,7 +335,7 @@
 
 <!-- CANCEL MODAL -->
 <div class="modal-overlay cancel-modal" id="cancel-modal">
-  <div class="modal">
+  <div class="booking-modal">
     <h3>Cancel Booking</h3>
     <form method="POST" id="cancel-form">
       {% csrf_token %}
@@ -423,12 +423,20 @@
       </div>
 
       <div class="booking-actions">
-        <button type="button" class="btn-modify"
-          onclick="openModify({{ booking.id }}, '{{ booking.check_in }}', '{{ booking.check_out }}')">
+        <button
+          type="button"
+          class="btn-modify"
+          data-booking-id="{{ booking.id }}"
+          data-check-in="{{ booking.check_in|date:'Y-m-d' }}"
+          data-check-out="{{ booking.check_out|date:'Y-m-d' }}"
+        >
           Modify
         </button>
-        <button type="button" class="btn-cancel"
-          onclick="openCancel({{ booking.id }})">
+        <button
+          type="button"
+          class="btn-cancel"
+          data-booking-id="{{ booking.id }}"
+        >
           Cancel
         </button>
       </div>
@@ -449,38 +457,59 @@
 </div>
 
 <script>
-  const today = new Date().toISOString().split('T')[0];
+  document.addEventListener('DOMContentLoaded', () => {
+    const today = new Date().toISOString().split('T')[0];
+    const modifyModal = document.getElementById('modify-modal');
+    const cancelModal = document.getElementById('cancel-modal');
 
-  function openModify(id, checkIn, checkOut) {
-    document.getElementById('modify-booking-id').value = id;
-    document.getElementById('modify-checkin').value  = checkIn;
-    document.getElementById('modify-checkout').value = checkOut;
-    document.getElementById('modify-checkin').min    = today;
-    document.getElementById('modify-checkout').min   = today;
-    document.getElementById('modify-modal').classList.add('open');
-  }
-
-  function openCancel(id) {
-    document.getElementById('cancel-booking-id').value = id;
-    document.getElementById('cancel-modal').classList.add('open');
-  }
-
-  function closeModal(id) {
-    document.getElementById(id).classList.remove('open');
-  }
-
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') {
-      closeModal('modify-modal');
-      closeModal('cancel-modal');
+    function openModify(id, checkIn, checkOut) {
+      document.getElementById('modify-booking-id').value = id;
+      document.getElementById('modify-checkin').value  = checkIn;
+      document.getElementById('modify-checkout').value = checkOut;
+      document.getElementById('modify-checkin').min    = today;
+      document.getElementById('modify-checkout').min   = today;
+      modifyModal.classList.add('open');
     }
-  });
 
-  // Close on backdrop click
-  ['modify-modal', 'cancel-modal'].forEach(id => {
-    document.getElementById(id).addEventListener('click', function(e) {
-      if (e.target === this) closeModal(id);
+    function openCancel(id) {
+      document.getElementById('cancel-booking-id').value = id;
+      cancelModal.classList.add('open');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('open');
+    }
+
+    document.querySelectorAll('.btn-modify').forEach(btn => {
+      btn.addEventListener('click', () => {
+        openModify(
+          btn.dataset.bookingId,
+          btn.dataset.checkIn,
+          btn.dataset.checkOut
+        );
+      });
     });
+
+    document.querySelectorAll('.btn-cancel').forEach(btn => {
+      btn.addEventListener('click', () => {
+        openCancel(btn.dataset.bookingId);
+      });
+    });
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        closeModal('modify-modal');
+        closeModal('cancel-modal');
+      }
+    });
+
+    [modifyModal, cancelModal].forEach(modal => {
+      modal.addEventListener('click', function (e) {
+        if (e.target === this) closeModal(this.id);
+      });
+    });
+
+    window.closeModal = closeModal;
   });
 </script>
 
