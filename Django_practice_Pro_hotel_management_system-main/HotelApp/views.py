@@ -439,6 +439,45 @@ def delete_employee(request, id):
     employee.delete()
     return redirect("add_employee")
 
+# =========================
+# CONTACT PAGE
+# =========================
+def contact(request):
+    return render(request, "contact.html")
+
+
+# =========================
+# THEME API
+# =========================
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+from django.http import JsonResponse
+import json
+
+
+@csrf_exempt
+def set_theme(request):
+    if request.method == "GET":
+        if request.user.is_authenticated:
+            return JsonResponse({"theme": request.user.theme})
+        return JsonResponse({"theme": None})
+
+    if request.method == "POST":
+        if not request.user.is_authenticated:
+            return JsonResponse({"error": "auth required"}, status=401)
+        try:
+            data = json.loads(request.body.decode())
+            theme = data.get("theme")
+            if theme not in ["light", "dark"]:
+                return JsonResponse({"error": "invalid theme"}, status=400)
+            request.user.theme = theme
+            request.user.save(update_fields=["theme"])
+            return JsonResponse({"theme": theme})
+        except Exception:
+            return JsonResponse({"error": "bad request"}, status=400)
+
+    return JsonResponse({"error": "method not allowed"}, status=405)
+
 
 # =========================
 # ROOM

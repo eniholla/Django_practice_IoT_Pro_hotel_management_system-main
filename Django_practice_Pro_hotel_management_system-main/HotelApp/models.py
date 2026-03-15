@@ -31,6 +31,7 @@ class Authorregis(AbstractUser):
     username = None  # remove username
     email = models.EmailField(unique=True)
     phone_number = models.CharField(max_length=15, blank=True, null=True)
+    theme = models.CharField(max_length=10, choices=[('light', 'Light'), ('dark', 'Dark')], default='light')
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
