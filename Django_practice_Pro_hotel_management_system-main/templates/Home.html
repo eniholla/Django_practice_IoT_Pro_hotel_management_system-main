@@ -390,6 +390,54 @@
       padding: 0 10px;
    }
 
+   #OUR_ROOMS .ROOMS_pic .btn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
+      padding: 0;
+      border: none;
+      background: transparent;
+      box-shadow: none;
+   }
+
+   #OUR_ROOMS .room_btn a {
+      min-width: 152px;
+      white-space: nowrap;
+   }
+
+   #OUR_ROOMS .room_slide .slick-dots {
+      display: flex !important;
+      justify-content: center;
+      gap: 10px;
+      list-style: none;
+      margin: 18px 0 0;
+      padding: 0;
+   }
+
+   #OUR_ROOMS .room_slide .slick-dots li {
+      width: auto;
+      height: auto;
+      margin: 0;
+   }
+
+   #OUR_ROOMS .room_slide .slick-dots li button {
+      width: 10px;
+      height: 10px;
+      padding: 0;
+      border: 0;
+      border-radius: 999px;
+      background: rgba(45, 33, 22, 0.25);
+      font-size: 0;
+      line-height: 0;
+      color: transparent;
+      text-indent: -9999px;
+   }
+
+   #OUR_ROOMS .room_slide .slick-dots li.slick-active button {
+      background: var(--lux-gold);
+   }
+
    #GALLERY .GALLERY_slider.slick-slider .slick-slide,
    #Staff .Staff_slider.slick-slider .slick-slide {
       padding: 0 10px;
@@ -435,6 +483,91 @@
       #Staff .Staff_slider:not(.slick-initialized) {
          grid-template-columns: 1fr;
       }
+   }
+
+   html.dark {
+      --lux-ink: var(--text-main);
+      --lux-subtle: var(--text-soft);
+      --lux-gold: var(--accent);
+      --lux-gold-deep: #f0ca86;
+      --lux-card: var(--surface);
+      --lux-shadow: 0 18px 36px rgba(5, 9, 14, 0.45);
+      --lux-border: var(--outline);
+   }
+
+   html.dark #about,
+   html.dark #OUR_ROOMS,
+   html.dark #Service,
+   html.dark #GALLERY,
+   html.dark #Staff {
+      background: transparent;
+   }
+
+   html.dark .counterstart {
+      background: var(--surface-elevated);
+   }
+
+   html.dark #about .about_video img,
+   html.dark #about .About_info,
+   html.dark #OUR_ROOMS .rooms-view,
+   html.dark #Service .Service_img,
+   html.dark #Service .Service_menu ul li,
+   html.dark #GALLERY .GALLERY_info,
+   html.dark #Staff .Staff_info,
+   html.dark .counterstart .Counter_info1 {
+      background: var(--surface);
+      border-color: var(--outline);
+      box-shadow: 0 18px 36px rgba(5, 9, 14, 0.45);
+   }
+
+   html.dark #Staff .Staff_part1 {
+      background: var(--surface-elevated);
+      border-top-color: var(--outline);
+   }
+
+   html.dark #about .about-title,
+   html.dark #OUR_ROOMS .ROOMS_Title h2,
+   html.dark #Service .Service_title h2,
+   html.dark #GALLERY .GALLERY_title h2,
+   html.dark #Staff .Staff_title h2,
+   html.dark .counterstart .counter_heading h2,
+   html.dark #OUR_ROOMS .ROOMS_text h3,
+   html.dark #Service .service-menu-title,
+   html.dark #Staff .Staff_part1 h5 {
+      color: #f3e8d8;
+   }
+
+   html.dark #about .About_info p,
+   html.dark #OUR_ROOMS .ROOMS_Title p,
+   html.dark #Service .Service_title p,
+   html.dark #GALLERY .GALLERY_title p,
+   html.dark #Staff .Staff_title p,
+   html.dark #OUR_ROOMS .ROOMS_text p,
+   html.dark #Service .Service_menu .text,
+   html.dark #Staff .Staff_part1 h6,
+   html.dark .counterstart .counter_heading p {
+      color: #d6c6ad;
+   }
+
+   html.dark #OUR_ROOMS .ROOMS_text span {
+      color: #f0ca86;
+   }
+
+   html.dark #Service .Service_menu ul li:hover,
+   html.dark #Service .Service_menu ul li.active,
+   html.dark #OUR_ROOMS .rooms-view:hover,
+   html.dark #GALLERY .GALLERY_info:hover,
+   html.dark #Staff .Staff_info:hover {
+      border-color: var(--accent);
+      box-shadow: 0 24px 40px rgba(0, 0, 0, 0.52);
+   }
+
+   html.dark #OUR_ROOMS .room_slide .slick-dots li button {
+      background: rgba(233, 238, 244, 0.35);
+   }
+
+   html.dark #OUR_ROOMS .room_slide .slick-dots li.slick-active button {
+      background: var(--accent);
    }
 </style>
 
