@@ -86,7 +86,7 @@ WSGI_APPLICATION = 'HotelManagementSystem.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default='sqlite:///Project_hotel',
+        default=f'sqlite:///{BASE_DIR / "Project_hotel"}',
         conn_max_age=600,
     )
 }
@@ -138,6 +138,9 @@ MEDIA_URL = '/media/'
 
 if not DEBUG:
     STORAGES = {
+        "default": {
+            "BACKEND": "django.core.files.storage.FileSystemStorage",
+        },
         "staticfiles": {
             "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
         },
