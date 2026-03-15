@@ -9,8 +9,9 @@ services:
     name: hotel-management-system
     runtime: python
     plan: free
-    buildCommand: "./build.sh"
-    startCommand: "gunicorn HotelManagementSystem.wsgi:application"
+    rootDir: Django_practice_Pro_hotel_management_system-main
+    buildCommand: "bash build.sh"
+    startCommand: "gunicorn HotelManagementSystem.wsgi:application --bind 0.0.0.0:$PORT"
     envVars:
       - key: DATABASE_URL
         fromDatabase:

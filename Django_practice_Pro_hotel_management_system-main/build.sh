@@ -2,12 +2,15 @@
 # Render build script for Hotel Management System
 set -o errexit
 
+# Ensure we run from the script's own directory
+cd "$(dirname "$0")"
+
 pip install --upgrade pip
 pip install -r requirements.txt
 
 # Build the React frontend
 cd frontend
-npm install
+npm ci
 npm run build
 cd ..
 
