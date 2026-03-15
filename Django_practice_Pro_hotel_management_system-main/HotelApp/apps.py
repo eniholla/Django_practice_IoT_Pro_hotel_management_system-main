@@ -6,4 +6,4 @@ class HotelappConfig(AppConfig):
     name = 'HotelApp'
 
     def ready(self):
-        import HotelApp.signals  # noqa: F401
+        from . import signals  # noqa: F401

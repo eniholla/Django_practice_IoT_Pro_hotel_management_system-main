@@ -3,8 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.http import HttpResponse, JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_POST, require_http_methods
 from datetime import datetime, timedelta
 import json
 
@@ -453,28 +452,25 @@ def contact(request):
 # =========================
 
 
-@csrf_exempt
+@require_http_methods(["GET", "POST"])
 def set_theme(request):
     if request.method == "GET":
         if request.user.is_authenticated:
             return JsonResponse({"theme": request.user.theme})
         return JsonResponse({"theme": None})
 
-    if request.method == "POST":
-        if not request.user.is_authenticated:
-            return JsonResponse({"error": "auth required"}, status=401)
-        try:
-            data = json.loads(request.body.decode())
-            theme = data.get("theme")
-            if theme not in ["light", "dark"]:
-                return JsonResponse({"error": "invalid theme"}, status=400)
-            request.user.theme = theme
-            request.user.save(update_fields=["theme"])
-            return JsonResponse({"theme": theme})
-        except Exception:
-            return JsonResponse({"error": "bad request"}, status=400)
-
-    return JsonResponse({"error": "method not allowed"}, status=405)
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "auth required"}, status=401)
+    try:
+        data = json.loads(request.body.decode())
+        theme = data.get("theme")
+        if theme not in ["light", "dark"]:
+            return JsonResponse({"error": "invalid theme"}, status=400)
+        request.user.theme = theme
+        request.user.save(update_fields=["theme"])
+        return JsonResponse({"theme": theme})
+    except Exception:
+        return JsonResponse({"error": "bad request"}, status=400)
 
 
 # =========================

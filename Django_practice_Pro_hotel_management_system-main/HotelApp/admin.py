@@ -21,6 +21,7 @@ class RoomAdmin(admin.ModelAdmin):
 @admin.register(OnlineBooking)
 class OnlineBookingAdmin(admin.ModelAdmin):
     list_display = ('user', 'room', 'check_in', 'check_out', 'adults', 'children', 'created_at')
+    list_select_related = ('user', 'room')
     search_fields = ('user__email', 'room__room_number')
     list_filter = ('check_in', 'check_out')
     ordering = ('-created_at',)
@@ -29,6 +30,7 @@ class OnlineBookingAdmin(admin.ModelAdmin):
 @admin.register(OfflineBooking)
 class OfflineBookingAdmin(admin.ModelAdmin):
     list_display = ('first_name', 'last_name', 'email', 'room', 'check_in', 'check_out', 'created_at')
+    list_select_related = ('room',)
     search_fields = ('first_name', 'last_name', 'email', 'room__room_number')
     list_filter = ('check_in', 'check_out')
     ordering = ('-created_at',)
@@ -45,5 +47,6 @@ class EmployeeAdmin(admin.ModelAdmin):
 @admin.register(Salary)
 class SalaryAdmin(admin.ModelAdmin):
     list_display = ('employee', 'salary', 'created_at')
+    list_select_related = ('employee',)
     search_fields = ('employee__first_name', 'employee__last_name')
     ordering = ('-created_at',)
