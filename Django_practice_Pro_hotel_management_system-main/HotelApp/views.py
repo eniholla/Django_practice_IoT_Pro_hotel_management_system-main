@@ -2,10 +2,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from django.http import HttpResponse
-from .models import Room, OnlineBooking
-from django.shortcuts import get_object_or_404, redirect
+from django.http import HttpResponse, JsonResponse
+from django.views.decorators.http import require_POST, require_http_methods
 from datetime import datetime, timedelta
+import json
 
 from .models import (
     OnlineBooking,
@@ -44,12 +44,10 @@ def home(request):
 def dashboard(request):
     rooms = Room.objects.filter(status='available')[:6]
     return render(request, "dashboard.html", {"rooms": rooms})
-from django.contrib.auth.decorators import login_required
-
 @login_required
 def user_home(request):
     rooms = Room.objects.all()
-    user_bookings = OnlineBooking.objects.filter(user=request.user)
+    user_bookings = OnlineBooking.objects.filter(user=request.user).select_related('room')
 
     return render(request, "user_home.html", {
         "rooms": rooms,
@@ -201,7 +199,7 @@ def my_bookings(request):
             messages.success(request, "Booking updated successfully.")
             return redirect("my_bookings")
 
-    bookings = list(OnlineBooking.objects.filter(user=request.user).order_by("-created_at"))
+    bookings = list(OnlineBooking.objects.filter(user=request.user).select_related('room').order_by("-created_at"))
     today = datetime.now().date()
     for b in bookings:
         b.nights = (b.check_out - b.check_in).days
@@ -376,10 +374,11 @@ def online_booking(request):
 
 
 def online_booking_list(request):
-    bookings = OnlineBooking.objects.all().order_by("-id")
+    bookings = OnlineBooking.objects.all().select_related('user', 'room').order_by("-id")
     return render(request, "admin/Online_Booking.html", {"data": bookings})
 
 
+@require_POST
 def delete_online_booking(request, id):
     booking = get_object_or_404(OnlineBooking, pk=id)
     booking.delete()
@@ -400,13 +399,14 @@ def add_customer(request):
     else:
         form = OfflineBookingForm()
 
-    customers = OfflineBooking.objects.all().order_by("-id")
+    customers = OfflineBooking.objects.all().select_related('room').order_by("-id")
     return render(request, "admin/AddCustomer.html", {
         "form": form,
         "data": customers
     })
 
 
+@require_POST
 def delete_customer(request, id):
     customer = get_object_or_404(OfflineBooking, pk=id)
     customer.delete()
@@ -434,6 +434,7 @@ def add_employee(request):
     })
 
 
+@require_POST
 def delete_employee(request, id):
     employee = get_object_or_404(Employee, pk=id)
     employee.delete()
@@ -449,34 +450,27 @@ def contact(request):
 # =========================
 # THEME API
 # =========================
-from django.views.decorators.csrf import csrf_exempt
-from django.utils.decorators import method_decorator
-from django.http import JsonResponse
-import json
 
 
-@csrf_exempt
+@require_http_methods(["GET", "POST"])
 def set_theme(request):
     if request.method == "GET":
         if request.user.is_authenticated:
             return JsonResponse({"theme": request.user.theme})
         return JsonResponse({"theme": None})
 
-    if request.method == "POST":
-        if not request.user.is_authenticated:
-            return JsonResponse({"error": "auth required"}, status=401)
-        try:
-            data = json.loads(request.body.decode())
-            theme = data.get("theme")
-            if theme not in ["light", "dark"]:
-                return JsonResponse({"error": "invalid theme"}, status=400)
-            request.user.theme = theme
-            request.user.save(update_fields=["theme"])
-            return JsonResponse({"theme": theme})
-        except Exception:
-            return JsonResponse({"error": "bad request"}, status=400)
-
-    return JsonResponse({"error": "method not allowed"}, status=405)
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "auth required"}, status=401)
+    try:
+        data = json.loads(request.body.decode())
+        theme = data.get("theme")
+        if theme not in ["light", "dark"]:
+            return JsonResponse({"error": "invalid theme"}, status=400)
+        request.user.theme = theme
+        request.user.save(update_fields=["theme"])
+        return JsonResponse({"theme": theme})
+    except Exception:
+        return JsonResponse({"error": "bad request"}, status=400)
 
 
 # =========================
@@ -505,6 +499,7 @@ def add_room(request):
     })
 
 
+@require_POST
 def delete_room(request, id):
     room = get_object_or_404(Room, pk=id)
     room.delete()
@@ -525,7 +520,7 @@ def add_salary(request):
     else:
         form = SalaryForm()
 
-    salaries = Salary.objects.all().order_by("-id")
+    salaries = Salary.objects.all().select_related('employee').order_by("-id")
     return render(request, "admin/AddEmployeeSalary.html", {
         "form": form,
         "data": salaries

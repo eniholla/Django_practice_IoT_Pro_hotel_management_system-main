@@ -29,7 +29,7 @@ DEBUG = True
 ALLOWED_HOSTS = []
 AUTH_USER_MODEL = 'HotelApp.Authorregis'
 
-# Application definitionAUTH_USER_MODEL = 'yourapp.Authorregis'
+# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'HotelApp'
     #'alerts' #would be later implemented
 ]
+
+LOGIN_URL = '/login/'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -125,9 +127,8 @@ STATICFILES_DIRS =[
   os.path.join (BASE_DIR / 'static')
 ]
 STATIC_ROOT = os.path.join (BASE_DIR,'assets')
-MEDIA_ROOT = os.path.join (BASE_DIR,'static/Media')
-MEDIA_URL = '/Media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = '/media/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
