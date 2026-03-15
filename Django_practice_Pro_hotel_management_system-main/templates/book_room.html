@@ -1,4 +1,25 @@
 {% extends "allinclude.html" %} {% block content %}
+<style>
+  .booking-helper {
+    font-size: 0.85rem;
+    color: #6c757d;
+  }
+  .booking-summary {
+    background: #f8f9fa;
+    border: 1px dashed #e5e7eb;
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 0.9rem;
+  }
+  @media (max-width: 576px) {
+    .booking-actions {
+      flex-direction: column;
+    }
+    .booking-actions .btn {
+      width: 100%;
+    }
+  }
+</style>
 <div class="container py-5">
   <div class="row justify-content-center">
     <div class="col-lg-8">
@@ -17,7 +38,17 @@
           />
           {% endif %}
 
-          <form method="post">
+          {% if messages %}
+          <div class="mb-3">
+            {% for message in messages %}
+              <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}" role="alert">
+                {{ message }}
+              </div>
+            {% endfor %}
+          </div>
+          {% endif %}
+
+          <form method="post" class="needs-validation" novalidate>
             {% csrf_token %}
             <div class="row g-3">
               <div class="col-md-6">
@@ -25,44 +56,61 @@
                 <input
                   type="date"
                   name="check_in"
+                  id="check-in"
                   class="form-control"
                   required
                 />
+                <div class="invalid-feedback">Please select a valid check-in date.</div>
               </div>
               <div class="col-md-6">
                 <label class="form-label">Stay duration (nights)</label>
                 <input
                   type="number"
                   name="stay_duration"
+                  id="stay-duration"
                   class="form-control"
                   min="1"
                   value="1"
                   required
                 />
+                <div class="invalid-feedback">Stay duration must be at least 1 night.</div>
               </div>
               <div class="col-md-6">
                 <label class="form-label">Adults</label>
                 <input
                   type="number"
                   name="adults"
+                  id="adults"
                   class="form-control"
                   min="1"
                   value="1"
                   required
                 />
+                <div class="invalid-feedback">Adults must be at least 1.</div>
               </div>
               <div class="col-md-6">
                 <label class="form-label">Children</label>
                 <input
                   type="number"
                   name="children"
+                  id="children"
                   class="form-control"
                   min="0"
                   value="0"
                 />
+                <div class="invalid-feedback">Children cannot be negative.</div>
+              </div>
+              <div class="col-12">
+                <div class="booking-summary">
+                  Estimated check-out:
+                  <strong id="computed-checkout">Select dates</strong>
+                </div>
+                <div class="booking-helper mt-2">
+                  Check-out is calculated from check-in + stay duration.
+                </div>
               </div>
             </div>
-            <div class="d-flex gap-2 mt-4">
+            <div class="d-flex gap-2 mt-4 booking-actions">
               <button type="submit" class="btn btn-primary">
                 Confirm Booking
               </button>
@@ -76,4 +124,46 @@
     </div>
   </div>
 </div>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.querySelector('.needs-validation');
+    if (!form) return;
+
+    const checkIn = document.getElementById('check-in');
+    const stay = document.getElementById('stay-duration');
+    const adults = document.getElementById('adults');
+    const children = document.getElementById('children');
+    const checkout = document.getElementById('computed-checkout');
+    const today = new Date().toISOString().split('T')[0];
+
+    checkIn.min = today;
+
+    function updateCheckout() {
+      if (!checkIn.value || !stay.value) {
+        checkout.textContent = 'Select dates';
+        return;
+      }
+      const start = new Date(checkIn.value);
+      const nights = Number(stay.value);
+      if (Number.isNaN(nights) || nights <= 0) {
+        checkout.textContent = 'Select dates';
+        return;
+      }
+      start.setDate(start.getDate() + nights);
+      checkout.textContent = start.toISOString().split('T')[0];
+    }
+
+    [checkIn, stay].forEach(el => el.addEventListener('input', updateCheckout));
+    updateCheckout();
+
+    form.addEventListener('submit', (e) => {
+      const invalidCounts = Number(adults.value) < 1 || Number(children.value) < 0;
+      if (!form.checkValidity() || invalidCounts) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      form.classList.add('was-validated');
+    });
+  });
+</script>
 {% endblock %}

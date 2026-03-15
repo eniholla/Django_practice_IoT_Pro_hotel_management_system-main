@@ -173,8 +173,12 @@ def my_bookings(request):
         elif action == "modify":
             check_in  = request.POST.get("check_in")
             check_out = request.POST.get("check_out")
-            check_in  = datetime.strptime(check_in, "%Y-%m-%d").date()
-            check_out = datetime.strptime(check_out, "%Y-%m-%d").date()
+            try:
+                check_in  = datetime.strptime(check_in, "%Y-%m-%d").date()
+                check_out = datetime.strptime(check_out, "%Y-%m-%d").date()
+            except (TypeError, ValueError):
+                messages.error(request, "Please enter valid dates.")
+                return redirect("my_bookings")
 
             if check_in >= check_out:
                 messages.error(request, "Check-out must be after check-in.")
@@ -214,16 +218,28 @@ def book_room(request, room_id):
 
     if request.method == "POST":
         check_in_raw = request.POST.get("check_in")
-        stay_duration = int(request.POST.get("stay_duration", 1))
-        adults = int(request.POST.get("adults", 1))
-        children = int(request.POST.get("children", 0))
+        try:
+            stay_duration = int(request.POST.get("stay_duration", 1))
+            adults = int(request.POST.get("adults", 1))
+            children = int(request.POST.get("children", 0))
+        except (TypeError, ValueError):
+            messages.error(request, "Please enter valid numeric values.")
+            return redirect("book_room", room_id=room.id)
 
-        check_in = datetime.strptime(check_in_raw, "%Y-%m-%d").date()
-        check_out = check_in + timedelta(days=stay_duration)
+        try:
+            check_in = datetime.strptime(check_in_raw, "%Y-%m-%d").date()
+        except (TypeError, ValueError):
+            messages.error(request, "Please select a valid check-in date.")
+            return redirect("book_room", room_id=room.id)
 
         if stay_duration <= 0:
             messages.error(request, "Stay duration must be at least one night.")
             return redirect("book_room", room_id=room.id)
+        if adults <= 0 or children < 0:
+            messages.error(request, "Please enter valid occupant counts.")
+            return redirect("book_room", room_id=room.id)
+
+        check_out = check_in + timedelta(days=stay_duration)
 
         overlapping = OnlineBooking.objects.filter(
             room=room,
@@ -257,16 +273,39 @@ def book_room(request, room_id):
 # MY BOOKINGS — with cancel & modify
 
 def online_booking(request):
-    if request.method == "POST":
-        form = OnlineBookingForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "Booking successful!")
-            return redirect("online_booking")
-    else:
-        form = OnlineBookingForm()
+    if request.user.is_authenticated:
+        today = datetime.now().date()
+        bookings = list(
+            OnlineBooking.objects.select_related("room", "user")
+            .filter(check_out__gte=today)
+            .order_by("-created_at")
+        )
+        for b in bookings:
+            b.nights = (b.check_out - b.check_in).days
 
-    return render(request, "online_booking_page.html", {"form": form})
+        return render(request, "online_booking_page.html", {
+            "bookings": bookings,
+        })
+
+    if request.method == "POST":
+        messages.error(request, "Please log in to complete a booking.")
+        return redirect("author_login")
+
+    rooms = Room.objects.all().order_by("room_number")
+    selected_room = None
+    form_data = {}
+
+    room_id = request.GET.get("room")
+    if room_id:
+        selected_room = Room.objects.filter(id=room_id).first()
+        if selected_room:
+            form_data["room_id"] = str(selected_room.id)
+
+    return render(request, "online_booking_page.html", {
+        "rooms": rooms,
+        "room": selected_room,
+        "form_data": form_data,
+    })
 
 
 def online_booking_list(request):

@@ -285,6 +285,16 @@
     cursor: pointer;
     color: var(--muted);
   }
+  .form-error {
+    margin-bottom: 12px;
+    font-size: 0.82rem;
+    color: #b91c1c;
+    background: #fde8e8;
+    border-radius: 8px;
+    padding: 8px 12px;
+    display: none;
+  }
+  .form-error.visible { display: block; }
 
   /* CANCEL CONFIRM */
   .cancel-modal .warning {
@@ -313,17 +323,20 @@
 <div class="modal-overlay" id="modify-modal">
   <div class="booking-modal">
     <h3>Modify Booking</h3>
-    <form method="POST" id="modify-form">
+    <form method="POST" id="modify-form" class="needs-validation" novalidate>
       {% csrf_token %}
       <input type="hidden" name="action" value="modify">
       <input type="hidden" name="booking_id" id="modify-booking-id">
+      <div class="form-error" id="modify-error" role="alert"></div>
       <div class="form-group">
         <label>New Check-in Date</label>
         <input type="date" name="check_in" id="modify-checkin" required>
+        <div class="invalid-feedback">Please select a valid check-in date.</div>
       </div>
       <div class="form-group">
         <label>New Check-out Date</label>
         <input type="date" name="check_out" id="modify-checkout" required>
+        <div class="invalid-feedback">Check-out must be after check-in.</div>
       </div>
       <div class="modal-actions">
         <button type="submit" class="btn-confirm">Save Changes</button>
@@ -461,6 +474,8 @@
     const today = new Date().toISOString().split('T')[0];
     const modifyModal = document.getElementById('modify-modal');
     const cancelModal = document.getElementById('cancel-modal');
+    const modifyForm = document.getElementById('modify-form');
+    const modifyError = document.getElementById('modify-error');
 
     function openModify(id, checkIn, checkOut) {
       document.getElementById('modify-booking-id').value = id;
@@ -468,6 +483,10 @@
       document.getElementById('modify-checkout').value = checkOut;
       document.getElementById('modify-checkin').min    = today;
       document.getElementById('modify-checkout').min   = today;
+      if (modifyError) {
+        modifyError.textContent = '';
+        modifyError.classList.remove('visible');
+      }
       modifyModal.classList.add('open');
     }
 
@@ -495,6 +514,29 @@
         openCancel(btn.dataset.bookingId);
       });
     });
+
+    if (modifyForm) {
+      modifyForm.addEventListener('submit', (e) => {
+        const checkIn = document.getElementById('modify-checkin').value;
+        const checkOut = document.getElementById('modify-checkout').value;
+        const invalidRange = checkIn && checkOut && checkIn >= checkOut;
+
+        if (invalidRange) {
+          e.preventDefault();
+          e.stopPropagation();
+          if (modifyError) {
+            modifyError.textContent = 'Check-out must be after check-in.';
+            modifyError.classList.add('visible');
+          }
+        }
+
+        if (!modifyForm.checkValidity() || invalidRange) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+        modifyForm.classList.add('was-validated');
+      });
+    }
 
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape') {
