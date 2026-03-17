@@ -31,7 +31,7 @@ from .forms import (
 
 
 def home(request):
-    return render(request, "Home.html")
+    return render(request, "Home.html", {"rooms": []})
 
 
 
