@@ -352,7 +352,7 @@ def online_booking(request):
                 messages.success(request, "Booking successful!")
                 return redirect("my_bookings")
 
-        rooms = Room.objects.filter(status='available').order_by("room_number")
+        rooms = Room.objects.all().order_by("room_number")
         return render(request, "online_booking_page.html", {
             "rooms": rooms,
             "room": selected_room,
@@ -363,7 +363,7 @@ def online_booking(request):
     if not show_form and request.user.is_authenticated:
         return redirect("my_bookings")
 
-    rooms = Room.objects.filter(status='available').order_by("room_number")
+    rooms = Room.objects.all().order_by("room_number")
     selected_room = None
     form_data = {}
 
@@ -487,7 +487,7 @@ def set_theme(request):
 
 # ROOM LIST PAGE
 def room_list(request):
-    rooms = Room.objects.filter(status='available')
+    rooms = Room.objects.all().order_by("room_number")
     return render(request, "rooms_list.html", {"rooms": rooms})
 
 def add_room(request):
