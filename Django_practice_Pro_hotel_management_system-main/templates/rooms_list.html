@@ -515,11 +515,11 @@
         </button>
         {% else %}
         {% if room.room_type == "single" %}
-        <img src="{% static 'Allfiles/Photo/room-2.jpg' %}" alt="Single Room" />
+        <img src="{% static 'Allfiles/Photo/room-3.jpg' %}" alt="Single Room" />
         {% elif room.room_type == "double" %}
-        <img src="{% static 'Allfiles/Photo/room-3.jpg' %}" alt="Double Room" />
+        <img src="{% static 'Allfiles/Photo/room-4.jpg' %}" alt="Double Room" />
         {% else %}
-        <img src="{% static 'Allfiles/Photo/room-4.jpg' %}" alt="Suite Room" />
+        <img src="{% static 'Allfiles/Photo/room-2.jpg' %}" alt="Suite Room" />
         {% endif %}
         {% endif %}
         <span class="status-badge status-{{ room.status }}"
