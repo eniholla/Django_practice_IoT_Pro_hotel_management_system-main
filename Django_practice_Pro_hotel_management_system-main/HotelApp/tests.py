@@ -185,7 +185,7 @@ class RoomAvailabilityViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIsNone(response.context["room"])
 
-
+    def test_online_booking_shows_bookings_list_for_authenticated_user(self):
         user = get_user_model().objects.create_user(
             email="booker@example.com",
             password="StrongPass123!",
@@ -201,7 +201,6 @@ class RoomAvailabilityViewTests(TestCase):
             status="available",
         )
         from datetime import date
-        today = date.today()
         # Active booking (check_out in future)
         OnlineBooking.objects.create(
             user=user,
