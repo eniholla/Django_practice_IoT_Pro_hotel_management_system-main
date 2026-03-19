@@ -34,7 +34,7 @@
       <link rel="stylesheet" href="{%static 'Allfiles/build/css/custom.css'%}">
   </head>
 
-  <body class="nav-md">
+  <body class="nav-md admin-modern">
     <div class="container body">
       <div class="main_container">
         <div class="col-md-3 left_col">
@@ -162,9 +162,11 @@
           </div>
         </div>
         <!-- /top navigation -->
+          <div class="admin-page-wrap">
           {% block  pagecontant %}
 
         {% endblock %}
+          </div>
 
 
 
@@ -207,7 +209,27 @@
          <script src="{%static 'Allfiles/vendors/moment/min/moment.min.js'%}"></script>
         <script src="{%static 'Allfiles/vendors/bootstrap-daterangepicker/daterangepicker.js'%}"></script>
 
-    <!-- Custom Theme Scripts -->
+     <script>
+       (function () {
+         function wrapTablesForMobile() {
+           var tables = document.querySelectorAll('.right_col table');
+           tables.forEach(function (table) {
+             if (table.closest('.table-responsive')) return;
+             var wrapper = document.createElement('div');
+             wrapper.className = 'table-responsive';
+             table.parentNode.insertBefore(wrapper, table);
+             wrapper.appendChild(table);
+           });
+         }
+         if (document.readyState === 'loading') {
+           document.addEventListener('DOMContentLoaded', wrapTablesForMobile);
+         } else {
+           wrapTablesForMobile();
+         }
+       })();
+     </script>
+
+     <!-- Custom Theme Scripts -->
         <script src="{%static 'Allfiles/build/js/custom.min.js'%}"></script>
 
 
