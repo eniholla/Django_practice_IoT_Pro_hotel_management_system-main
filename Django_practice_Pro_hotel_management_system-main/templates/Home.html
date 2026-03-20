@@ -24,6 +24,29 @@
       min-height: 78vh;
       display: flex;
       align-items: center;
+      background:
+         linear-gradient(120deg, rgba(20, 14, 9, 0.72), rgba(20, 14, 9, 0.5)),
+         url('{% static "Allfiles/Photo/slider-1.jpg" %}') center/cover no-repeat;
+   }
+
+   #slider .slide_text h1 {
+      animation: fadeInUp 0.9s ease both;
+   }
+
+   #slider .slide_text h1 .late {
+      display: inline-block;
+      animation: fadeInUp 1.2s ease both;
+   }
+
+   @keyframes fadeInUp {
+      from {
+         opacity: 0;
+         transform: translateY(18px);
+      }
+      to {
+         opacity: 1;
+         transform: translateY(0);
+      }
    }
 
    #slider .slide_text {
@@ -581,7 +604,7 @@
                         <h1>welcome <span class="late">to RoseGold Hotel and suites</span></h1>
                         <p>Welcome to Hotel rose Booking Management, your one-stop solution for hassle-free hotel reservations. Quickly find the perfect hotel for your next stay. Use our search tool to browse and book hotels in the area.</p>
                         <div class="slider-btn">
-                            <a class="default-btn" href="#">explore</a>
+                            <a class="default-btn" href="#OUR_ROOMS">explore</a>
                         </div>
                     </div>
                 </div>
@@ -642,7 +665,7 @@
                        <img src="{%static 'Allfiles/Photo/room-1.jpg'%}" alt="img">
                        <div class="btn ">
                           <div class="room_btn">
-                            <a href="#">Booking Now</a>
+                            <a href="{% if card_room_ids.0 %}{% url 'online_booking' %}?new=1&room={{ card_room_ids.0 }}{% else %}{% url 'online_booking' %}?new=1{% endif %}">Book Now</a>
                           </div>
                        </div>
                      </div>
@@ -660,7 +683,7 @@
                        <img src=" {%static 'Allfiles/Photo/room-2.jpg'%}" alt="img">
                        <div class="btn ">
                           <div class="room_btn">
-                            <a href="#">Booking Now</a>
+                            <a href="{% if card_room_ids.1 %}{% url 'online_booking' %}?new=1&room={{ card_room_ids.1 }}{% else %}{% url 'online_booking' %}?new=1{% endif %}">Book Now</a>
                           </div>
                        </div>
                      </div>
@@ -678,7 +701,7 @@
                        <img src="{%static 'Allfiles/Photo/room-3.jpg'%}" alt="img">
                        <div class="btn ">
                           <div class="room_btn">
-                            <a href="#">Booking Now</a>
+                            <a href="{% if card_room_ids.2 %}{% url 'online_booking' %}?new=1&room={{ card_room_ids.2 }}{% else %}{% url 'online_booking' %}?new=1{% endif %}">Book Now</a>
                           </div>
                        </div>
                      </div>
@@ -696,7 +719,7 @@
                        <img src="{%static 'Allfiles/Photo/room-4.jpg'%}" alt="img">
                        <div class="btn ">
                           <div class="room_btn">
-                            <a href="#">Booking Now</a>
+                            <a href="{% if card_room_ids.3 %}{% url 'online_booking' %}?new=1&room={{ card_room_ids.3 }}{% else %}{% url 'online_booking' %}?new=1{% endif %}">Book Now</a>
                           </div>
                        </div>
                      </div>
@@ -714,7 +737,7 @@
                        <img src="{%static 'Allfiles/Photo/room-5.jpg'%}" alt="img">
                        <div class="btn ">
                           <div class="room_btn">
-                            <a href="#">Booking Now</a>
+                            <a href="{% if card_room_ids.4 %}{% url 'online_booking' %}?new=1&room={{ card_room_ids.4 }}{% else %}{% url 'online_booking' %}?new=1{% endif %}">Book Now</a>
                           </div>
                        </div>
                      </div>
@@ -732,7 +755,7 @@
                        <img src="{%static 'Allfiles/Photo/room-6.jpg'%}" alt="img">
                        <div class="btn ">
                           <div class="room_btn">
-                            <a href="#">Booking Now</a>
+                            <a href="{% if card_room_ids.5 %}{% url 'online_booking' %}?new=1&room={{ card_room_ids.5 }}{% else %}{% url 'online_booking' %}?new=1{% endif %}">Book Now</a>
                           </div>
                        </div>
                      </div>

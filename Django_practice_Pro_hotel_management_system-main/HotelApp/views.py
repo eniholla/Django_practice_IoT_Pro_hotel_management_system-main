@@ -39,11 +39,18 @@ def home(request):
     if request.user.is_authenticated:
         return redirect("user_home")
     try:
-        rooms = Room.objects.all().order_by('-id')[:6]
+        rooms = list(Room.objects.all().order_by('-id')[:6])
     except (OperationalError, ProgrammingError):
         logger.exception("Failed to load latest rooms for home page. Continuing with empty rooms list.")
         rooms = []
-    return render(request, "Home.html", {"rooms": rooms})
+
+    card_room_ids = [str(room.id) for room in rooms[:6]]
+    card_room_ids.extend([""] * max(0, 6 - len(card_room_ids)))
+
+    return render(request, "Home.html", {
+        "rooms": rooms,
+        "card_room_ids": card_room_ids,
+    })
 
 
 
