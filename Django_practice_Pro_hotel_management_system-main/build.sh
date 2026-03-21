@@ -14,5 +14,12 @@ npm ci
 npm run build
 cd ..
 
+# Ensure lowercase symlinks exist so Django templates can reference
+# Allfiles/css/... and Allfiles/js/... (assets/ uses capital Css/Js/)
+ln -sfn "Css" "assets/Allfiles/css"
+ln -sfn "Js" "assets/Allfiles/js"
+ln -sfn "Style.css" "assets/Allfiles/Css/style.css"
+ln -sfn "Responsive.css" "assets/Allfiles/Css/responsive.css"
+
 python manage.py collectstatic --no-input
 python manage.py migrate
