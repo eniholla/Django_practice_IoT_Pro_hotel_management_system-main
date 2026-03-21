@@ -22,6 +22,7 @@
 
    #slider {
       margin-top: -100px;
+      padding: 0;
    }
 
    #slider .slider_pic {
@@ -505,7 +506,8 @@
 
    @media (max-width: 768px) {
       #slider {
-         margin-top: -88px;
+         /* Matches body padding-top: 86px from allinclude.html @media (max-width: 992px) */
+         margin-top: -86px;
       }
 
       #slider .slider_pic {
@@ -561,6 +563,11 @@
    }
 
    @media (max-width: 480px) {
+      #slider {
+         /* Matches body padding-top: 74px from allinclude.html @media (max-width: 576px) */
+         margin-top: -74px;
+      }
+
       #Staff .Staff_slider:not(.slick-initialized) {
          grid-template-columns: 1fr;
       }
