@@ -253,6 +253,11 @@ Hotel & Resort
     margin-top: 6px;
   }
 
+  /* Tighten the gap between the specific service image column and the text-card column */
+  #Service .row:has(.col-lg-7):has(.col-lg-5) {
+    --bs-gutter-x: 0.75rem;
+  }
+
   #OUR_ROOMS .ROOMS_info {
     margin-top: 14px;
   }
@@ -539,9 +544,17 @@ Hotel & Resort
     letter-spacing: 0.03em;
   }
 
+  /* Hero fullscreen: cancel body padding-top so slides start at y=0 behind the fixed navbar */
+  .hero-slider-shell {
+    margin-top: -100px;
+  }
+
   @media (max-width: 992px) {
     #about .About_info {
       margin-top: 24px;
+    }
+    .hero-slider-shell {
+      margin-top: -86px;
     }
   }
 
@@ -602,6 +615,10 @@ Hotel & Resort
     #Service .col-lg-7,
     #Service .col-lg-5 {
       width: 100%;
+    }
+
+    .hero-slider-shell {
+      margin-top: -74px;
     }
   }
 
