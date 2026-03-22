@@ -490,7 +490,16 @@
 
    /* Add vertical gap between gallery/moments cards */
    #GALLERY .GALLERY_info {
-      margin: 0 8px 20px;
+      margin: 0 8px 12px;
+   }
+
+   /* In non-slick (Bootstrap row) layout, rely on row-gap instead of extra bottom margin */
+   #GALLERY .GALLERY_slider:not(.slick-initialized) {
+      row-gap: 12px;
+   }
+
+   #GALLERY .GALLERY_slider:not(.slick-initialized) .GALLERY_info {
+      margin-bottom: 0;
    }
 
    #Staff .Staff_title {
@@ -659,10 +668,13 @@
          margin: 0;
       }
 
-      #GALLERY .GALLERY_info,
       #Staff .Staff_info,
       #Service .Service_img {
          margin: 0;
+      }
+
+      #GALLERY .GALLERY_info {
+         margin: 0 0 12px;
       }
 
       #Staff .Staff_slider:not(.slick-initialized) {
