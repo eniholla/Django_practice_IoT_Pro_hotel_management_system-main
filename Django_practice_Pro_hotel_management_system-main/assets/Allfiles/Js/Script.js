@@ -142,6 +142,16 @@ $(function () {
             }
         ]
     });
+
+    // Staff card social links: toggle on click/tap for touch devices
+    $(document).on('click', '#Staff .Staff_info', function(e) {
+        // Allow clicks on the social links themselves to pass through
+        if ($(e.target).closest('.Staff_part2').length) return;
+        var $card = $(this);
+        var wasActive = $card.hasClass('active');
+        $('#Staff .Staff_info').removeClass('active');
+        if (!wasActive) $card.addClass('active');
+    });
    
    //counter part js
     $('.counter').counterUp({
