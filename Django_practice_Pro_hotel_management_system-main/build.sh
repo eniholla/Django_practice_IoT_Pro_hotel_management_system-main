@@ -24,12 +24,25 @@ python manage.py collectstatic --no-input
 
 python manage.py migrate
 
-# Create default superuser if it does not already exist
-python manage.py shell -c "
-from HotelApp.models import Authorregis
-if not Authorregis.objects.filter(email='superuser@rosegold.com').exists():
-    Authorregis.objects.create_superuser(email='superuser@rosegold.com', password='Superuser')
+# Optionally create a default superuser if requested via environment variables.
+# To enable, set CREATE_DEFAULT_SUPERUSER=1 and provide SUPERUSER_EMAIL and
+# SUPERUSER_PASSWORD in the environment before running this script.
+if [ "${CREATE_DEFAULT_SUPERUSER:-}" = "1" ]; then
+  python manage.py shell -c "
+import os
+from django.contrib.auth import get_user_model
+User = get_user_model()
+
+email = os.environ.get('SUPERUSER_EMAIL')
+password = os.environ.get('SUPERUSER_PASSWORD')
+
+if not email or not password:
+    raise SystemExit('SUPERUSER_EMAIL and SUPERUSER_PASSWORD must be set when CREATE_DEFAULT_SUPERUSER=1')
+
+if not User.objects.filter(email=email).exists():
+    User.objects.create_superuser(email=email, password=password)
     print('Superuser created.')
 else:
     print('Superuser already exists.')
 "
+fi
