@@ -121,7 +121,8 @@ WSGI_APPLICATION = 'HotelManagementSystem.wsgi.application'
 DATABASES = {
     'default': dj_database_url.config(
         default=f'sqlite:///{BASE_DIR / "Project_hotel"}',
-        conn_max_age=600,
+        conn_max_age=60,
+        conn_health_checks=True,
     )
 }
 
