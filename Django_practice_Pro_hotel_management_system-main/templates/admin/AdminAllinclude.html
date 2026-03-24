@@ -273,58 +273,92 @@
         display: inline;
       }
 
-      /* Single source of truth for navbar height offsets */
+      /* Single source of truth for navbar height and sidebar widths */
       :root {
         --admin-nav-h: 58px;
+        --sidebar-w: 230px;
+        --sidebar-w-sm: 70px;
       }
 
+      /* Full-height fixed sidebar - always anchored to viewport top, never scrolls away */
       body.nav-md.admin-modern .container.body .col-md-3.left_col {
         position: fixed;
-        height: calc(100vh - var(--admin-nav-h));
-        top: var(--admin-nav-h);
-        overflow-y: scroll;
-        overflow-x: hidden;
-        z-index: 100;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: var(--sidebar-w);
+        overflow: hidden;
+        z-index: 200;
       }
 
-      body.nav-sm.admin-modern .container.body .col-md-3.left_col {
-        position: absolute;
-        height: calc(100vh - var(--admin-nav-h));
-        top: var(--admin-nav-h);
+      /* Inner scroll wrapper fills the fixed container and handles its own scrolling */
+      body.nav-md.admin-modern .left_col.scroll-view {
+        height: 100%;
         overflow-y: auto;
         overflow-x: hidden;
-        z-index: 9999;
       }
 
-      /* Fixed full-width admin top navbar */
+      /* Collapsed sidebar - also fully fixed, visible unless toggled away */
+      body.nav-sm.admin-modern .container.body .col-md-3.left_col {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: var(--sidebar-w-sm);
+        overflow: hidden;
+        z-index: 200;
+      }
+
+      body.nav-sm.admin-modern .left_col.scroll-view {
+        height: 100%;
+        overflow-y: auto;
+        overflow-x: hidden;
+      }
+
+      /* Fixed top navbar always anchored at the top */
       body.admin-modern .main_container .top_nav {
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
-        z-index: 101;
+        z-index: 100;
         margin-left: 0;
-        transition: transform 0.3s ease;
-      }
-
-      @media (prefers-reduced-motion: reduce) {
-        body.admin-modern .main_container .top_nav {
-          transition: none;
-        }
       }
 
       body.admin-modern .top_nav .nav_menu {
         margin-bottom: 0;
       }
 
-      /* Class toggled by scroll JS to hide the navbar */
-      body.admin-modern .main_container .top_nav.nav-hidden {
-        transform: translateY(-100%);
+      /* On desktop the navbar sits to the right of the sidebar */
+      @media (min-width: 992px) {
+        body.nav-md.admin-modern .main_container .top_nav {
+          left: var(--sidebar-w);
+          width: calc(100% - var(--sidebar-w));
+        }
+
+        body.nav-sm.admin-modern .main_container .top_nav {
+          left: var(--sidebar-w-sm);
+          width: calc(100% - var(--sidebar-w-sm));
+        }
       }
 
-      /* Offset right column content below fixed navbar */
-      body.admin-modern .container.body .right_col {
+      /* Offset right column below fixed navbar and to the right of the fixed sidebar */
+      body.nav-md.admin-modern .container.body .right_col {
+        margin-left: var(--sidebar-w);
         padding-top: calc(var(--admin-nav-h) + 10px);
+      }
+
+      body.nav-sm.admin-modern .container.body .right_col {
+        margin-left: var(--sidebar-w-sm);
+        padding-top: calc(var(--admin-nav-h) + 10px);
+      }
+
+      /* When the sidebar is hidden on smaller screens, remove the left offset */
+      @media (max-width: 991px) {
+        body.nav-md.admin-modern .container.body .right_col,
+        body.nav-sm.admin-modern .container.body .right_col {
+          margin-left: 0;
+        }
       }
 
       @media (max-width: 767px) {
@@ -598,28 +632,5 @@
 
     <script src="{% static 'Allfiles/build/js/custom.min.js' %}"></script>
 
-    <script>
-      (function () {
-        var topNav = document.querySelector('.top_nav');
-        var lastScrollTop = 0;
-        var delta = 5;
-
-        function onScroll() {
-          if (!topNav) return;
-          var currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
-          if (Math.abs(lastScrollTop - currentScrollTop) <= delta) return;
-
-          if (currentScrollTop > lastScrollTop && currentScrollTop > topNav.offsetHeight) {
-            topNav.classList.add('nav-hidden');
-          } else {
-            topNav.classList.remove('nav-hidden');
-          }
-
-          lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop;
-        }
-
-        window.addEventListener('scroll', onScroll, { passive: true });
-      })();
-    </script>
   </body>
 </html>
