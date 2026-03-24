@@ -321,7 +321,14 @@ def author_login(request):
         else:
             messages.error(request, "Invalid credentials.")
 
-    return render(request, "author_login.html")
+    next_url = request.POST.get("next") or request.GET.get("next", "")
+    if next_url and not url_has_allowed_host_and_scheme(
+        next_url,
+        allowed_hosts={request.get_host()},
+        require_https=request.is_secure(),
+    ):
+        next_url = ""
+    return render(request, "author_login.html", {"next": next_url})
 
 def author_forgot_password(request):
     # You can add actual reset logic later
