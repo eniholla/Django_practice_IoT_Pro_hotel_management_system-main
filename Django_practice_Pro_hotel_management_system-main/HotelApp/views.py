@@ -1,22 +1,27 @@
 from functools import wraps
 from urllib.parse import urlencode
-
-from decimal import Decimal
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
-from django.contrib import messages
-from django.http import HttpResponse, JsonResponse
-from django.db.models import Count, Q, Sum
-from django.db.models.functions import TruncMonth
-from django.views.decorators.http import require_POST, require_http_methods
-from django.db.utils import OperationalError, ProgrammingError
-from django.utils import timezone
-from django.utils.http import url_has_allowed_host_and_scheme
-from django.urls import reverse
-from datetime import date, datetime, timedelta
 import json
 import logging
+import uuid
+from datetime import date, datetime, timedelta
+from decimal import Decimal
+
+from django.conf import settings
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
+from django.contrib.auth.decorators import login_required
+from django.db.models import Count, Q, Sum
+from django.db.models.functions import TruncMonth
+from django.db.utils import OperationalError, ProgrammingError
+from django.http import HttpResponse, JsonResponse
+from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
+from django.utils import timezone
+from django.utils.http import url_has_allowed_host_and_scheme
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST, require_http_methods
+
+from pypaystack2 import PaystackClient
 
 from .models import (
     OnlineBooking,
@@ -1400,11 +1405,6 @@ def process_payment(request, booking_type, booking_id):
 # =========================
 # PAYSTACK PAYMENT INTEGRATION
 # =========================
-
-from pypaystack2 import PaystackClient
-from django.conf import settings
-from django.views.decorators.csrf import csrf_exempt
-import uuid
 
 def generate_payment_reference():
     """Generate unique payment reference"""
