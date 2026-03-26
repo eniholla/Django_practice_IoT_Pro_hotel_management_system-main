@@ -453,6 +453,7 @@
         body.admin-modern .container.body .col-md-3.left_col,
         body.nav-sm.admin-modern .container.body .col-md-3.left_col,
         body.nav-md.admin-modern .container.body .col-md-3.left_col {
+          display: block;
           width: var(--sidebar-mobile-open-w);
           top: var(--admin-nav-h);
           height: calc(100vh - var(--admin-nav-h));
@@ -694,22 +695,30 @@
         }
 
         if (menuToggle) {
-          menuToggle.addEventListener('click', function () {
+          menuToggle.addEventListener('click', function (event) {
             if (!isMobileWidth()) return;
+            // Prevent the legacy #menu_toggle handler in custom.min.js from running on mobile
+            event.stopPropagation();
+            event.stopImmediatePropagation();
             document.body.classList.toggle('mobile-sidebar-open');
-          });
+          }, true);
         }
 
         window.addEventListener('resize', function () {
           if (!isMobileWidth()) {
             closeMobileSidebar();
+            // Restore the desktop nav state that the legacy toggle may have changed
+            document.body.classList.add('nav-md');
+            document.body.classList.remove('nav-sm');
           }
         });
 
         document.addEventListener('click', function (event) {
           if (!isMobileWidth()) return;
           if (!document.body.classList.contains('mobile-sidebar-open')) return;
-          if (event.target.closest('.left_col') || event.target.closest('#menu_toggle')) return;
+          var target = event.target;
+          if (!target || typeof target.closest !== 'function') return;
+          if (target.closest('.left_col') || target.closest('#menu_toggle')) return;
           closeMobileSidebar();
         });
       })();
