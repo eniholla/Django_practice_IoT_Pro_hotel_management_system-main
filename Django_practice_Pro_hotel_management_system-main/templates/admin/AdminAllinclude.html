@@ -278,6 +278,7 @@
         --admin-nav-h: 58px;
         --sidebar-w: 230px;
         --sidebar-w-sm: 70px;
+        --sidebar-mobile-open-w: min(86vw, 320px);
       }
 
       /* Full-height fixed sidebar - always anchored to viewport top, never scrolls away */
@@ -379,10 +380,15 @@
 
         .admin-stat-grid {
           gap: 10px;
+          flex-wrap: nowrap;
+          overflow-x: auto;
+          padding-bottom: 4px;
+          scroll-snap-type: x proximity;
         }
 
         .admin-stat-card {
-          flex: 1 1 calc(50% - 5px);
+          flex: 0 0 min(280px, 88vw);
+          scroll-snap-align: start;
         }
 
         .admin-grid {
@@ -411,11 +417,18 @@
           padding: 10px 12px;
           font-size: 13px;
         }
+
+        .admin-page-wrap .x_panel,
+        .admin-page-wrap .admin-panel,
+        .admin-page-wrap .admin-page-header {
+          max-width: 100%;
+          overflow-x: auto;
+        }
       }
 
       @media (max-width: 480px) {
         .admin-stat-card {
-          flex: 1 1 100%;
+          flex-basis: min(250px, 90vw);
         }
 
         .admin-page-header {
@@ -427,6 +440,43 @@
           align-self: flex-start;
           width: 100%;
           text-align: center;
+        }
+      }
+
+      @media (max-width: 991px) {
+        body.admin-modern .main_container .top_nav {
+          left: 0;
+          width: 100%;
+          z-index: 300;
+        }
+
+        body.admin-modern .container.body .col-md-3.left_col,
+        body.nav-sm.admin-modern .container.body .col-md-3.left_col,
+        body.nav-md.admin-modern .container.body .col-md-3.left_col {
+          width: var(--sidebar-mobile-open-w);
+          top: var(--admin-nav-h);
+          height: calc(100vh - var(--admin-nav-h));
+          transform: translateX(-100%);
+          transition: transform 0.25s ease;
+          z-index: 220;
+          box-shadow: none;
+        }
+
+        body.admin-modern.mobile-sidebar-open .container.body .col-md-3.left_col {
+          transform: translateX(0);
+          box-shadow: 16px 0 30px rgba(15, 23, 42, 0.2);
+        }
+
+        body.nav-md.admin-modern .container.body .right_col,
+        body.nav-sm.admin-modern .container.body .right_col {
+          margin-left: 0;
+          width: 100%;
+          transition: margin-left 0.25s ease, width 0.25s ease;
+        }
+
+        body.admin-modern.mobile-sidebar-open .container.body .right_col {
+          margin-left: var(--sidebar-mobile-open-w);
+          width: calc(100% - var(--sidebar-mobile-open-w));
         }
       }
     </style>
@@ -631,6 +681,39 @@
     </script>
 
     <script src="{% static 'Allfiles/build/js/custom.min.js' %}"></script>
+    <script>
+      (function () {
+        var menuToggle = document.getElementById('menu_toggle');
+
+        function isMobileWidth() {
+          return window.matchMedia('(max-width: 991px)').matches;
+        }
+
+        function closeMobileSidebar() {
+          document.body.classList.remove('mobile-sidebar-open');
+        }
+
+        if (menuToggle) {
+          menuToggle.addEventListener('click', function () {
+            if (!isMobileWidth()) return;
+            document.body.classList.toggle('mobile-sidebar-open');
+          });
+        }
+
+        window.addEventListener('resize', function () {
+          if (!isMobileWidth()) {
+            closeMobileSidebar();
+          }
+        });
+
+        document.addEventListener('click', function (event) {
+          if (!isMobileWidth()) return;
+          if (!document.body.classList.contains('mobile-sidebar-open')) return;
+          if (event.target.closest('.left_col') || event.target.closest('#menu_toggle')) return;
+          closeMobileSidebar();
+        });
+      })();
+    </script>
 
   </body>
 </html>
