@@ -1,22 +1,27 @@
 from functools import wraps
 from urllib.parse import urlencode
-
-from decimal import Decimal
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
-from django.contrib import messages
-from django.http import HttpResponse, JsonResponse
-from django.db.models import Count, Q, Sum
-from django.db.models.functions import TruncMonth
-from django.views.decorators.http import require_POST, require_http_methods
-from django.db.utils import OperationalError, ProgrammingError
-from django.utils import timezone
-from django.utils.http import url_has_allowed_host_and_scheme
-from django.urls import reverse
-from datetime import date, datetime, timedelta
 import json
 import logging
+import uuid
+from datetime import date, datetime, timedelta
+from decimal import Decimal
+
+from django.conf import settings
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
+from django.contrib.auth.decorators import login_required
+from django.db.models import Count, Q, Sum
+from django.db.models.functions import TruncMonth
+from django.db.utils import OperationalError, ProgrammingError
+from django.http import HttpResponse, JsonResponse
+from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
+from django.utils import timezone
+from django.utils.http import url_has_allowed_host_and_scheme
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST, require_http_methods
+
+from pypaystack2 import PaystackClient
 
 from .models import (
     OnlineBooking,
@@ -417,16 +422,62 @@ def my_bookings(request):
                 messages.error(request, "Room is not available for the new dates.")
                 return redirect("my_bookings")
 
+            # Calculate if modification affects price
+            old_amount = booking.get_total_amount()
+            old_check_in = booking.check_in
+            old_check_out = booking.check_out
+            
             booking.check_in  = check_in
             booking.check_out = check_out
-            booking.save()
-            messages.success(request, "Booking updated successfully.")
-            return redirect("my_bookings")
+            new_amount = booking.get_total_amount()
+            
+            # If price increases, redirect to payment for the difference
+            if new_amount > old_amount:
+                # Store modification in session and redirect to payment
+                request.session['booking_modification'] = {
+                    'booking_id': booking.id,
+                    'old_check_in': old_check_in.strftime('%Y-%m-%d'),
+                    'old_check_out': old_check_out.strftime('%Y-%m-%d'),
+                    'new_check_in': check_in.strftime('%Y-%m-%d'),
+                    'new_check_out': check_out.strftime('%Y-%m-%d'),
+                    'additional_amount': float(new_amount - old_amount),
+                    'old_amount': float(old_amount),
+                    'new_amount': float(new_amount),
+                }
+                messages.info(request, f"Your modification requires an additional payment of {format_naira(new_amount - old_amount)}. Please complete payment to confirm changes.")
+                # Create pending booking in session for payment
+                request.session['pending_booking'] = {
+                    'room_id': booking.room.id,
+                    'check_in': check_in.strftime('%Y-%m-%d'),
+                    'check_out': check_out.strftime('%Y-%m-%d'),
+                    'adults': booking.adults,
+                    'children': booking.children,
+                    'city': booking.city,
+                    'country': booking.country,
+                    'address': booking.address,
+                    'is_modification': True,
+                    'existing_booking_id': booking.id,
+                }
+                return redirect("booking_payment_page")
+            else:
+                # Free modification (same or lower price)
+                booking.save()
+                messages.success(request, "Booking updated successfully.")
+                return redirect("my_bookings")
 
     bookings = list(OnlineBooking.objects.filter(user=request.user).select_related('room').order_by("-created_at"))
     today = datetime.now().date()
+    
+    # Add payment info to each booking
     for b in bookings:
         b.nights = (b.check_out - b.check_in).days
+        payments = Payment.objects.filter(booking_type='online', booking_id=b.id)
+        total_paid = sum(p.amount for p in payments if p.payment_status == 'paid')
+        b.total_amount = b.get_total_amount()
+        b.total_paid = total_paid
+        b.balance = b.total_amount - total_paid
+        b.payment_status_display = 'Paid' if b.balance <= 0 else 'Partial' if total_paid > 0 else 'Unpaid'
+    
     total_nights = sum(b.nights for b in bookings)
     total_bookings = len(bookings)
     active_bookings = sum(1 for b in bookings if b.check_out >= today)
@@ -472,20 +523,20 @@ def book_room(request, room_id):
             messages.error(request, "Room is not available for the selected dates.")
             return redirect("book_room", room_id=room.id)
 
-        OnlineBooking.objects.create(
-            user=request.user,
-            room=room,
-            check_in=check_in,
-            check_out=check_out,
-            adults=adults,
-            children=children,
-            city="N/A",
-            country="N/A",
-            address="N/A",
-        )
-
-        messages.success(request, f"Room {room.room_number} booked successfully!")
-        return redirect("my_bookings")
+        # Store booking data in session for payment processing
+        request.session['pending_booking'] = {
+            'room_id': room.id,
+            'check_in': check_in.strftime('%Y-%m-%d'),
+            'check_out': check_out.strftime('%Y-%m-%d'),
+            'adults': adults,
+            'children': children,
+            'city': 'N/A',
+            'country': 'N/A',
+            'address': 'N/A',
+        }
+        
+        # Redirect to payment page instead of creating booking directly
+        return redirect("booking_payment_page")
 
     return render(request, "book_room.html", {"room": room})
 
@@ -620,11 +671,21 @@ def online_booking_list(request, id=None):
         search_query,
         ["user__email", "user__first_name", "user__last_name", "room__room_number", "city", "country", "address"],
     )
+    
+    # Add payment info to each booking
+    bookings_list = list(bookings)
+    for booking_item in bookings_list:
+        payments = Payment.objects.filter(booking_type='online', booking_id=booking_item.id)
+        total_paid = sum(p.amount for p in payments if p.payment_status == 'paid')
+        booking_item.total_amount = booking_item.get_total_amount()
+        booking_item.total_paid = total_paid
+        booking_item.balance = booking_item.total_amount - total_paid
+        booking_item.payment_status_display = 'Paid' if booking_item.balance <= 0 else 'Partial' if total_paid > 0 else 'Unpaid'
 
     context = build_admin_context(
         "online_bookings",
         form=form,
-        data=bookings,
+        data=bookings_list,
         editing_object=booking,
         search_query=search_query,
         form_action_url=reverse("edit_online_booking", args=[booking.pk]) if booking else reverse("online_booking_list"),
@@ -669,11 +730,21 @@ def add_customer(request, id=None):
         search_query,
         ["first_name", "last_name", "email", "mobile_number", "room__room_number", "country", "address"],
     )
+    
+    # Add payment info to each booking
+    customers_list = list(customers)
+    for booking_item in customers_list:
+        payments = Payment.objects.filter(booking_type='offline', booking_id=booking_item.id)
+        total_paid = sum(p.amount for p in payments if p.payment_status == 'paid')
+        booking_item.total_amount = booking_item.get_total_amount()
+        booking_item.total_paid = total_paid
+        booking_item.balance = booking_item.total_amount - total_paid
+        booking_item.payment_status_display = 'Paid' if booking_item.balance <= 0 else 'Partial' if total_paid > 0 else 'Unpaid'
 
     context = build_admin_context(
         "offline_bookings",
         form=form,
-        data=customers,
+        data=customers_list,
         editing_object=customer,
         search_query=search_query,
         form_action_url=reverse("edit_customer", args=[customer.pk]) if customer else reverse("add_customer"),
@@ -1401,11 +1472,6 @@ def process_payment(request, booking_type, booking_id):
 # PAYSTACK PAYMENT INTEGRATION
 # =========================
 
-from pypaystack2 import Paystack
-from django.conf import settings
-from django.views.decorators.csrf import csrf_exempt
-import uuid
-
 def generate_payment_reference():
     """Generate unique payment reference"""
     return f"HMS-{uuid.uuid4().hex[:12].upper()}"
@@ -1436,15 +1502,15 @@ def initiate_payment(request):
         reference = generate_payment_reference()
         
         # Initialize Paystack transaction
-        paystack = Paystack(secret_key=settings.PAYSTACK_SECRET_KEY)
-        response = paystack.transaction.initialize(
+        paystack = PaystackClient(secret_key=settings.PAYSTACK_SECRET_KEY)
+        response = paystack.transactions.initialize(
             email=request.user.email,
             amount=amount,
             reference=reference,
             callback_url=request.build_absolute_uri(reverse('payment_callback'))
         )
         
-        if response['status']:
+        if response.status:
             # Store payment reference in session
             request.session['payment_reference'] = reference
             request.session['payment_amount'] = float(room.price * nights)
@@ -1458,12 +1524,12 @@ def initiate_payment(request):
                 payment_status='pending',
                 receipt_number=reference,
                 paystack_reference=reference,
-                paystack_access_code=response['data']['access_code'],
+                paystack_access_code=response.data.access_code,
                 created_by=request.user
             )
             
             # Redirect to Paystack checkout
-            return redirect(response['data']['authorization_url'])
+            return redirect(response.data.authorization_url)
         else:
             messages.error(request, "Failed to initialize payment. Please try again.")
             return redirect('online_booking')
@@ -1485,78 +1551,127 @@ def payment_callback(request):
     
     try:
         # Verify payment with Paystack
-        paystack = Paystack(secret_key=settings.PAYSTACK_SECRET_KEY)
-        response = paystack.transaction.verify(reference=reference)
+        paystack = PaystackClient(secret_key=settings.PAYSTACK_SECRET_KEY)
+        response = paystack.transactions.verify(reference=reference)
         
-        if response['status'] and response['data']['status'] == 'success':
+        if response.status and response.data.status == 'success':
             # Get pending booking data
             booking_data = request.session.get('pending_booking')
             if not booking_data:
                 messages.error(request, "Booking data not found.")
                 return redirect('user_home')
             
-            # Create the booking
-            room = Room.objects.get(id=booking_data['room_id'])
-            booking = OnlineBooking.objects.create(
-                user=request.user,
-                room=room,
-                check_in=booking_data['check_in'],
-                check_out=booking_data['check_out'],
-                adults=booking_data.get('adults', 1),
-                children=booking_data.get('children', 0),
-                city=booking_data.get('city', ''),
-                country=booking_data.get('country', ''),
-                address=booking_data.get('address', ''),
-                status='confirmed'
-            )
-            
-            # Update payment record
-            payment = Payment.objects.get(paystack_reference=reference)
-            payment.booking_id = booking.id
-            payment.payment_status = 'paid'
-            payment.paid_at = timezone.now()
-            payment.paystack_response = response['data']
-            payment.save()
-            
-            # Update room status
-            room.status = 'reserved'
-            room.save()
-            
-            # Log activity
-            ActivityLog.objects.create(
-                user=request.user,
-                action_type='booking_created',
-                description=f"Booking created with payment via Paystack for Room {room.room_number}",
-                booking_type='online',
-                booking_id=booking.id,
-                room=room
-            )
-            
-            ActivityLog.objects.create(
-                user=request.user,
-                action_type='payment_received',
-                description=f"Payment of ${payment.amount} received via Paystack",
-                booking_type='online',
-                booking_id=booking.id,
-                room=room
-            )
-            
-            # Clear session data
-            if 'pending_booking' in request.session:
-                del request.session['pending_booking']
-            if 'payment_reference' in request.session:
-                del request.session['payment_reference']
-            if 'payment_amount' in request.session:
-                del request.session['payment_amount']
-            
-            messages.success(request, f"Payment successful! Your booking for Room {room.room_number} has been confirmed.")
-            return redirect('payment_success', booking_id=booking.id)
+            # Check if this is a booking modification
+            if booking_data.get('is_modification') and booking_data.get('existing_booking_id'):
+                # Update existing booking
+                booking = OnlineBooking.objects.get(id=booking_data['existing_booking_id'])
+                booking.check_in = booking_data['check_in']
+                booking.check_out = booking_data['check_out']
+                booking.save()
+                
+                # Update payment record for the additional amount
+                payment = Payment.objects.get(paystack_reference=reference)
+                payment.booking_id = booking.id
+                payment.payment_status = 'paid'
+                payment.paid_at = timezone.now()
+                payment.paystack_response = response.raw
+                payment.notes = f"Additional payment for booking modification"
+                payment.save()
+                
+                # Log activity
+                ActivityLog.objects.create(
+                    user=request.user,
+                    action_type='booking_modified',
+                    description=f"Booking modified with additional payment via Paystack for Room {booking.room.room_number}",
+                    booking_type='online',
+                    booking_id=booking.id,
+                    room=booking.room
+                )
+                
+                ActivityLog.objects.create(
+                    user=request.user,
+                    action_type='payment_received',
+                    description=f"Additional payment of {format_naira(payment.amount)} received via Paystack",
+                    booking_type='online',
+                    booking_id=booking.id,
+                    room=booking.room
+                )
+                
+                # Clear session data
+                if 'pending_booking' in request.session:
+                    del request.session['pending_booking']
+                if 'booking_modification' in request.session:
+                    del request.session['booking_modification']
+                if 'payment_reference' in request.session:
+                    del request.session['payment_reference']
+                if 'payment_amount' in request.session:
+                    del request.session['payment_amount']
+                
+                messages.success(request, f"Payment successful! Your booking has been modified.")
+                return redirect('payment_success', booking_id=booking.id)
+            else:
+                # Create new booking
+                room = Room.objects.get(id=booking_data['room_id'])
+                booking = OnlineBooking.objects.create(
+                    user=request.user,
+                    room=room,
+                    check_in=booking_data['check_in'],
+                    check_out=booking_data['check_out'],
+                    adults=booking_data.get('adults', 1),
+                    children=booking_data.get('children', 0),
+                    city=booking_data.get('city', ''),
+                    country=booking_data.get('country', ''),
+                    address=booking_data.get('address', ''),
+                    status='confirmed'
+                )
+                
+                # Update payment record
+                payment = Payment.objects.get(paystack_reference=reference)
+                payment.booking_id = booking.id
+                payment.payment_status = 'paid'
+                payment.paid_at = timezone.now()
+                payment.paystack_response = response.raw
+                payment.save()
+                
+                # Update room status
+                room.status = 'reserved'
+                room.save()
+                
+                # Log activity
+                ActivityLog.objects.create(
+                    user=request.user,
+                    action_type='booking_created',
+                    description=f"Booking created with payment via Paystack for Room {room.room_number}",
+                    booking_type='online',
+                    booking_id=booking.id,
+                    room=room
+                )
+                
+                ActivityLog.objects.create(
+                    user=request.user,
+                    action_type='payment_received',
+                    description=f"Payment of {format_naira(payment.amount)} received via Paystack",
+                    booking_type='online',
+                    booking_id=booking.id,
+                    room=room
+                )
+                
+                # Clear session data
+                if 'pending_booking' in request.session:
+                    del request.session['pending_booking']
+                if 'payment_reference' in request.session:
+                    del request.session['payment_reference']
+                if 'payment_amount' in request.session:
+                    del request.session['payment_amount']
+                
+                messages.success(request, f"Payment successful! Your booking for Room {room.room_number} has been confirmed.")
+                return redirect('payment_success', booking_id=booking.id)
         else:
             # Payment failed
             payment = Payment.objects.filter(paystack_reference=reference).first()
             if payment:
                 payment.payment_status = 'failed'
-                payment.paystack_response = response['data']
+                payment.paystack_response = response.raw
                 payment.save()
             
             messages.error(request, "Payment verification failed. Please try again.")

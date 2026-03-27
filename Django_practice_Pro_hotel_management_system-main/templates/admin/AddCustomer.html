@@ -52,7 +52,7 @@
                 <th>Room</th>
                 <th>Stay</th>
                 <th>Guests</th>
-                <th>Country</th>
+                <th>Payment Status</th>
                 <th>Created</th>
                 <th>Actions</th>
               </tr>
@@ -67,11 +67,24 @@
                   <td>{{ booking.room.room_number }}</td>
                   <td>{{ booking.check_in }} to {{ booking.check_out }}</td>
                   <td>{{ booking.adults }} adults / {{ booking.children }} children</td>
-                  <td>{{ booking.country }}</td>
+                  <td>
+                    {% if booking.payment_status_display == 'Paid' %}
+                      <span class="badge badge-success">Paid</span>
+                    {% elif booking.payment_status_display == 'Partial' %}
+                      <span class="badge badge-warning">Partial</span>
+                    {% else %}
+                      <span class="badge badge-danger">Unpaid</span>
+                    {% endif %}
+                    <br>
+                    <small>{{ booking.total_paid|floatformat:2 }} / {{ booking.total_amount|floatformat:2 }}</small>
+                  </td>
                   <td>{{ booking.created_at|date:"M d, Y" }}</td>
                   <td>
                     <div class="admin-action-row">
                       <a class="btn btn-xs btn-info" href="{% url 'edit_customer' booking.pk %}">Edit</a>
+                      {% if booking.balance > 0 %}
+                        <a class="btn btn-xs btn-success" href="{% url 'process_payment' 'offline' booking.pk %}">Payment</a>
+                      {% endif %}
                       <form class="admin-inline-form" method="post" action="{% url 'delete_customer' booking.pk %}">
                         {% csrf_token %}
                         <button class="btn btn-xs btn-danger" type="submit" onclick="return confirm('Delete this desk booking?');">Delete</button>

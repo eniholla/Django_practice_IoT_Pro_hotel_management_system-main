@@ -578,6 +578,15 @@
             >🌙 {{ booking.nights }} night{{ booking.nights|pluralize }}</span
           >
           <span>{{ booking.room.price|naira }}/night</span>
+          <br>
+          <strong>Total: {{ booking.total_amount|naira }}</strong>
+          {% if booking.payment_status_display == 'Paid' %}
+            <span style="color: #2d6a4f; font-weight: 500;">✓ Paid</span>
+          {% elif booking.payment_status_display == 'Partial' %}
+            <span style="color: #d97706; font-weight: 500;">⚠ Partial ({{ booking.total_paid|naira }} / {{ booking.total_amount|naira }})</span>
+          {% else %}
+            <span style="color: #b91c1c; font-weight: 500;">✗ Unpaid</span>
+          {% endif %}
         </div>
       </div>
 
