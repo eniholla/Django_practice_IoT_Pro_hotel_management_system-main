@@ -1,0 +1,816 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head><base href="http://127.0.0.1:8010/"/>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<link href="http://127.0.0.1:8010/static/Allfiles/Photo/eniadmin.jpg" rel="icon" type="image/ico"/>
+<title>Receptionist Dashboard - Hotel Management</title>
+<link href="http://127.0.0.1:8010/static/Allfiles/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"/>
+<link href="http://127.0.0.1:8010/static/Allfiles/Css/fontawesome.min.css" rel="stylesheet"/>
+<link href="http://127.0.0.1:8010/static/Allfiles/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet"/>
+<link href="http://127.0.0.1:8010/static/Allfiles/vendors/nprogress/nprogress.css" rel="stylesheet"/>
+<link href="http://127.0.0.1:8010/static/Allfiles/vendors/iCheck/skins/flat/green.css" rel="stylesheet"/>
+<link href="http://127.0.0.1:8010/static/Allfiles/vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet"/>
+<link href="http://127.0.0.1:8010/static/Allfiles/vendors/jqvmap/dist/jqvmap.min.css" rel="stylesheet"/>
+<link href="http://127.0.0.1:8010/static/Allfiles/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet"/>
+<link href="http://127.0.0.1:8010/static/Allfiles/build/css/custom.css" rel="stylesheet"/>
+<style>
+      .admin-modern {
+        background: #f5f7fb;
+      }
+
+      .admin-modern .left_col {
+        background: linear-gradient(180deg, #1f2a44 0%, #101827 100%);
+      }
+
+      .admin-modern .nav_title {
+        background: transparent;
+      }
+
+      .admin-modern .site_title {
+        font-size: 20px;
+        font-weight: 700;
+        color: #fff !important;
+      }
+
+      .admin-modern .profile {
+        padding: 16px 18px 0;
+      }
+
+      .admin-modern .profile_info h2,
+      .admin-modern .user-profile,
+      .admin-modern .menu_section h3,
+      .admin-modern .side-menu > li > a,
+      .admin-modern .nav.child_menu > li > a {
+        color: #f8fafc !important;
+      }
+
+      .admin-modern .side-menu > li.active > a,
+      .admin-modern .side-menu > li.current-page > a,
+      .admin-modern .side-menu > li > a:hover,
+      .admin-modern .nav.child_menu > li.current-page a,
+      .admin-modern .nav.child_menu > li a:hover {
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      .admin-page-wrap {
+        padding: 24px 24px 40px;
+      }
+
+      .admin-modern .right_col {
+        background: #f5f7fb;
+        min-height: calc(100vh - 58px);
+      }
+
+      .admin-page-header {
+        background: #fff;
+        border-radius: 16px;
+        padding: 24px 28px;
+        margin-bottom: 24px;
+        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 12px;
+        overflow-x: auto;
+        scrollbar-gutter: stable;
+      }
+
+      .admin-page-header h1,
+      .admin-page-header h2 {
+        margin: 0 0 6px;
+        color: #111827;
+        font-weight: 700;
+      }
+
+      .admin-page-header p {
+        margin: 0;
+        color: #6b7280;
+      }
+
+      .admin-stat-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 18px;
+        margin-bottom: 24px;
+      }
+
+      .admin-stat-card {
+        background: #fff;
+        border-radius: 16px;
+        padding: 20px 22px;
+        min-width: 120px;
+        flex: 1 1 180px;
+        box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+        overflow-x: auto;
+        scrollbar-gutter: stable;
+      }
+
+      .admin-stat-card .label {
+        display: inline-block;
+        font-size: 12px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #64748b;
+        margin-bottom: 10px;
+        padding: 0;
+      }
+
+      .admin-stat-card .value {
+        display: block;
+        font-size: 30px;
+        line-height: 1.1;
+        font-weight: 700;
+        color: #111827;
+      }
+
+      .admin-stat-card .meta {
+        display: block;
+        margin-top: 8px;
+        color: #64748b;
+      }
+
+      .admin-panel {
+        background: #fff;
+        border-radius: 16px;
+        padding: 22px 24px;
+        margin-bottom: 24px;
+        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+        overflow-x: auto;
+        scrollbar-gutter: stable;
+      }
+
+      .admin-panel-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 18px;
+      }
+
+      .admin-panel-header h3 {
+        margin: 0;
+        color: #111827;
+        font-size: 22px;
+        font-weight: 700;
+      }
+
+      .admin-panel-header p {
+        margin: 0;
+        color: #6b7280;
+      }
+
+      .admin-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 24px;
+      }
+
+      .admin-grid > .admin-column {
+        flex: 1 1 min(420px, 100%);
+      }
+
+      .admin-searchbar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-bottom: 18px;
+      }
+
+      .admin-searchbar .form-control {
+        min-width: 200px;
+      }
+
+      .admin-action-row {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .admin-table {
+        width: 100%;
+      }
+
+      .admin-table th {
+        white-space: nowrap;
+        background: #f8fafc;
+      }
+
+      .admin-table td,
+      .admin-table th {
+        vertical-align: middle !important;
+      }
+
+      .admin-table .badge {
+        font-size: 12px;
+      }
+
+      .admin-quick-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .admin-quick-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 16px;
+        border-radius: 12px;
+        background: #f8fafc;
+        color: #1f2937;
+        text-decoration: none;
+      }
+
+      .admin-quick-link:hover {
+        background: #e5eefb;
+        color: #0f172a;
+        text-decoration: none;
+      }
+
+      .admin-form-section .helptext {
+        display: block;
+        margin-top: 6px;
+        color: #6b7280;
+        font-size: 12px;
+      }
+
+      .admin-form-section .errorlist {
+        margin: 8px 0 0;
+        padding-left: 18px;
+        color: #c0392b;
+      }
+
+      .admin-checkbox {
+        width: 18px;
+        height: 18px;
+        vertical-align: middle;
+      }
+
+      .admin-thumbnail {
+        width: 56px;
+        height: 56px;
+        object-fit: cover;
+        border-radius: 12px;
+        background: #e5e7eb;
+      }
+
+      .admin-empty-state {
+        padding: 20px;
+        text-align: center;
+        color: #64748b;
+        border: 1px dashed #cbd5e1;
+        border-radius: 12px;
+      }
+
+      .admin-inline-form {
+        display: inline;
+      }
+
+      /* Single source of truth for navbar height and sidebar widths */
+      :root {
+        --admin-nav-h: 58px;
+        --sidebar-w: 230px;
+        --sidebar-w-sm: 70px;
+      }
+
+      /* Full-height fixed sidebar - always anchored to viewport top, never scrolls away */
+      body.nav-md.admin-modern .container.body .col-md-3.left_col {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: var(--sidebar-w);
+        overflow: hidden;
+        z-index: 200;
+      }
+
+      /* Inner scroll wrapper fills the fixed container and handles its own scrolling */
+      body.nav-md.admin-modern .left_col.scroll-view {
+        height: 100%;
+        overflow-y: auto;
+        overflow-x: hidden;
+      }
+
+      /* Collapsed sidebar - also fully fixed, visible unless toggled away */
+      body.nav-sm.admin-modern .container.body .col-md-3.left_col {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: var(--sidebar-w-sm);
+        overflow: hidden;
+        z-index: 200;
+      }
+
+      body.nav-sm.admin-modern .left_col.scroll-view {
+        height: 100%;
+        overflow-y: auto;
+        overflow-x: hidden;
+      }
+
+      /* Fixed top navbar always anchored at the top */
+      body.admin-modern .main_container .top_nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 100;
+        margin-left: 0;
+      }
+
+      body.admin-modern .top_nav .nav_menu {
+        margin-bottom: 0;
+      }
+
+      /* On desktop the navbar sits to the right of the sidebar */
+      @media (min-width: 992px) {
+        body.nav-md.admin-modern .main_container .top_nav {
+          left: var(--sidebar-w);
+          width: calc(100% - var(--sidebar-w));
+        }
+
+        body.nav-sm.admin-modern .main_container .top_nav {
+          left: var(--sidebar-w-sm);
+          width: calc(100% - var(--sidebar-w-sm));
+        }
+      }
+
+      /* Offset right column below fixed navbar and to the right of the fixed sidebar */
+      body.nav-md.admin-modern .container.body .right_col {
+        margin-left: var(--sidebar-w);
+        padding-top: calc(var(--admin-nav-h) + 10px);
+      }
+
+      body.nav-sm.admin-modern .container.body .right_col {
+        margin-left: var(--sidebar-w-sm);
+        padding-top: calc(var(--admin-nav-h) + 10px);
+      }
+
+      /* When the sidebar is hidden on smaller screens, remove the left offset */
+      @media (max-width: 991px) {
+        body.nav-md.admin-modern .container.body .right_col,
+        body.nav-sm.admin-modern .container.body .right_col {
+          margin-left: 0;
+        }
+      }
+
+      @media (max-width: 767px) {
+        .admin-page-wrap {
+          padding: 12px 12px 24px;
+        }
+
+        .admin-page-header,
+        .admin-panel,
+        .admin-stat-card {
+          padding: 14px 16px;
+        }
+
+        .admin-page-header h1,
+        .admin-page-header h2 {
+          font-size: 20px;
+        }
+
+        .admin-stat-grid {
+          gap: 10px;
+        }
+
+        .admin-stat-card {
+          flex: 1 1 calc(50% - 5px);
+        }
+
+        .admin-grid {
+          gap: 16px;
+        }
+
+        .admin-grid > .admin-column {
+          flex: 1 1 100%;
+        }
+
+        .admin-panel-header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 8px;
+        }
+
+        .admin-panel-header .btn {
+          align-self: flex-start;
+        }
+
+        .admin-quick-links {
+          gap: 8px;
+        }
+
+        .admin-quick-link {
+          padding: 10px 12px;
+          font-size: 13px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .admin-stat-card {
+          flex: 1 1 100%;
+        }
+
+        .admin-page-header {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .admin-page-header .btn {
+          align-self: flex-start;
+          width: 100%;
+          text-align: center;
+        }
+      }
+    </style>
+</head>
+<body class="nav-md admin-modern">
+<div class="container body">
+<div class="main_container">
+<div class="col-md-3 left_col">
+<div class="left_col scroll-view">
+<div class="navbar nav_title" style="border: 0;">
+<a class="site_title" href="http://127.0.0.1:8010/receptionist/dashboard/"><i class="fa fa-building"></i> <span>RoseGold Admin</span></a>
+</div>
+<div class="clearfix"></div>
+<div class="profile clearfix">
+<div class="profile_pic">
+<img alt="..." class="img-circle profile_img" src="http://127.0.0.1:8010/static/Allfiles/Photo/eniadmin.jpg"/>
+</div>
+<div class="profile_info">
+<span>Signed in as</span>
+<h2>Grace Okafor</h2>
+</div>
+</div>
+<br/>
+<div class="main_menu_side hidden-print main_menu" id="sidebar-menu">
+<div class="menu_section">
+<h3>Front Desk</h3>
+<ul class="nav side-menu">
+<li class="current-page">
+<a href="http://127.0.0.1:8010/receptionist/dashboard/"><i class="fa fa-th-large"></i> Reception Dashboard</a>
+</li>
+<li class="">
+<a href="http://127.0.0.1:8010/receptionist/room-status/"><i class="fa fa-th"></i> Room Status</a>
+</li>
+<li class="">
+<a href="http://127.0.0.1:8010/receptionist/search/"><i class="fa fa-search"></i> Guest Search</a>
+</li>
+<li class="">
+<a href="http://127.0.0.1:8010/receptionist/housekeeping/"><i class="fa fa-broom"></i> Housekeeping</a>
+</li>
+</ul>
+</div>
+<div class="menu_section">
+<h3>Shortcuts</h3>
+<ul class="nav side-menu">
+<li><a href="http://127.0.0.1:8010/receptionist/dashboard/"><i class="fa fa-th-large"></i> Front Desk</a></li>
+</ul>
+</div>
+</div>
+<div class="sidebar-footer hidden-small">
+<a data-placement="top" data-toggle="tooltip" href="http://127.0.0.1:8010/receptionist/dashboard/" title="Dashboard">
+<span aria-hidden="true" class="glyphicon glyphicon-home"></span>
+</a>
+<a data-placement="top" data-toggle="tooltip" href="http://127.0.0.1:8010/receptionist/housekeeping/" title="Housekeeping">
+<span aria-hidden="true" class="glyphicon glyphicon-tasks"></span>
+</a>
+<a data-placement="top" data-toggle="tooltip" href="http://127.0.0.1:8010/logout/" title="Logout">
+<span aria-hidden="true" class="glyphicon glyphicon-off"></span>
+</a>
+</div>
+</div>
+</div>
+<div class="top_nav">
+<div class="nav_menu">
+<div class="nav toggle">
+<a id="menu_toggle"><i class="fa fa-bars"></i></a>
+</div>
+<nav class="nav navbar-nav">
+<ul class="nav navbar-right">
+<li class="nav-item dropdown open" style="padding-left: 15px;">
+<a aria-expanded="false" aria-haspopup="true" class="user-profile dropdown-toggle" data-toggle="dropdown" href="javascript:;" id="navbarDropdown">
+<img alt="" src="http://127.0.0.1:8010/static/Allfiles/Photo/eniadmin.jpg"/>Grace Okafor
+                  </a>
+<div aria-labelledby="navbarDropdown" class="dropdown-menu dropdown-usermenu pull-right">
+<a class="dropdown-item" href="http://127.0.0.1:8010/receptionist/dashboard/">Dashboard</a>
+<a class="dropdown-item" href="http://127.0.0.1:8010/logout/"><i class="fa fa-sign-out pull-right"></i> Log Out</a>
+</div>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+<div class="right_col" role="main">
+<div class="admin-page-wrap">
+<div class="admin-page-wrap">
+<div class="admin-page-header">
+<div>
+<h1><i class="fa fa-th-large"></i> Receptionist Dashboard</h1>
+<p>Front desk command center - Wednesday, March 25, 2026</p>
+</div>
+</div>
+<!-- Statistics Cards -->
+<div class="admin-stat-grid">
+<div class="admin-stat-card">
+<h3>10</h3>
+<p>Total Rooms</p>
+<div class="stat-icon"><i class="fa fa-building"></i></div>
+</div>
+<div class="admin-stat-card" style="background: #10b981; color: #fff;">
+<h3>4</h3>
+<p>Available</p>
+<div class="stat-icon"><i class="fa fa-check-circle"></i></div>
+</div>
+<div class="admin-stat-card" style="background: #ef4444; color: #fff;">
+<h3>5</h3>
+<p>Occupied</p>
+<div class="stat-icon"><i class="fa fa-user"></i></div>
+</div>
+<div class="admin-stat-card" style="background: #f59e0b; color: #fff;">
+<h3>0</h3>
+<p>Reserved</p>
+<div class="stat-icon"><i class="fa fa-bookmark"></i></div>
+</div>
+<div class="admin-stat-card" style="background: #6366f1; color: #fff;">
+<h3>50.0%</h3>
+<p>Occupancy Rate</p>
+<div class="stat-icon"><i class="fa fa-chart-pie"></i></div>
+</div>
+</div>
+<!-- Quick Actions -->
+<div class="admin-content-card" style="margin-bottom: 24px;">
+<h3><i class="fa fa-bolt"></i> Quick Actions</h3>
+<div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 16px;">
+<a class="btn btn-primary" href="http://127.0.0.1:8010/receptionist/room-status/">
+<i class="fa fa-th"></i> Room Status Board
+            </a>
+<a class="btn btn-success" href="http://127.0.0.1:8010/offline-booking/">
+<i class="fa fa-plus"></i> Walk-in Booking
+            </a>
+<a class="btn btn-info" href="http://127.0.0.1:8010/receptionist/search/">
+<i class="fa fa-search"></i> Search Guest
+            </a>
+<a class="btn btn-warning" href="http://127.0.0.1:8010/receptionist/housekeeping/">
+<i class="fa fa-broom"></i> Housekeeping
+            </a>
+</div>
+</div>
+<!-- Today's Check-ins and Check-outs -->
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(500px, 100%), 1fr)); gap: 24px; margin-bottom: 24px;">
+<!-- Today's Check-ins -->
+<div class="admin-content-card">
+<h3><i class="fa fa-sign-in-alt"></i> Today's Check-ins (2)</h3>
+<div class="table-responsive" style="margin-top: 16px;">
+<table class="table table-striped">
+<thead>
+<tr>
+<th>Guest</th>
+<th>Room</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Amara Nwosu</td>
+<td>Room 102</td>
+<td><span class="badge badge-warning">confirmed</span></td>
+<td>
+<a class="btn btn-sm btn-success" href="http://127.0.0.1:8010/receptionist/check-in/online/2/">
+<i class="fa fa-check"></i> Check In
+                                </a>
+</td>
+</tr>
+<tr>
+<td>Chioma Eze</td>
+<td>Room 202</td>
+<td><span class="badge badge-warning">confirmed</span></td>
+<td>
+<a class="btn btn-sm btn-success" href="http://127.0.0.1:8010/receptionist/check-in/offline/2/">
+<i class="fa fa-check"></i> Check In
+                                </a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Today's Check-outs -->
+<div class="admin-content-card">
+<h3><i class="fa fa-sign-out-alt"></i> Today's Check-outs (2)</h3>
+<div class="table-responsive" style="margin-top: 16px;">
+<table class="table table-striped">
+<thead>
+<tr>
+<th>Guest</th>
+<th>Room</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Daniel Olaoye</td>
+<td>Room 101</td>
+<td><span class="badge badge-info">checked_in</span></td>
+<td>
+<a class="btn btn-sm btn-danger" href="http://127.0.0.1:8010/receptionist/check-out/online/1/">
+<i class="fa fa-sign-out"></i> Check Out
+                                </a>
+</td>
+</tr>
+<tr>
+<td>Tunde Balogun</td>
+<td>Room 201</td>
+<td><span class="badge badge-info">checked_in</span></td>
+<td>
+<a class="btn btn-sm btn-danger" href="http://127.0.0.1:8010/receptionist/check-out/offline/1/">
+<i class="fa fa-sign-out"></i> Check Out
+                                </a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- Housekeeping & Activity Section -->
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(400px, 100%), 1fr)); gap: 24px;">
+<!-- Pending Housekeeping -->
+<div class="admin-content-card">
+<h3><i class="fa fa-broom"></i> Pending Housekeeping Tasks</h3>
+<div style="margin-top: 16px;">
+<ul class="list-group">
+<li class="list-group-item d-flex justify-content-between align-items-center">
+<span>
+<strong>Room 104</strong>
+<span class="badge badge-danger">URGENT</span>
+</span>
+<span class="badge badge-secondary">pending</span>
+</li>
+</ul>
+<a class="btn btn-sm btn-outline-primary" href="http://127.0.0.1:8010/receptionist/housekeeping/" style="margin-top: 12px;">View All</a>
+</div>
+</div>
+<!-- Recent Activity -->
+<div class="admin-content-card">
+<h3><i class="fa fa-history"></i> Recent Activity</h3>
+<div style="margin-top: 16px;">
+<ul class="list-group">
+<li class="list-group-item">
+<small class="text-muted">24 minutes ago</small><br/>
+<strong>Housekeeping Assigned</strong>
+<p class="mb-0">Assigned a high-priority housekeeping review for Room 203.</p>
+</li>
+<li class="list-group-item">
+<small class="text-muted">24 minutes ago</small><br/>
+<strong>Room Status Changed</strong>
+<p class="mb-0">Updated Room 104 to dirty pending express housekeeping.</p>
+</li>
+<li class="list-group-item">
+<small class="text-muted">24 minutes ago</small><br/>
+<strong>Payment Received</strong>
+<p class="mb-0">Recorded a desk payment for Room 201 at checkout.</p>
+</li>
+<li class="list-group-item">
+<small class="text-muted">24 minutes ago</small><br/>
+<strong>Booking Created</strong>
+<p class="mb-0">Created an online reservation for Room 102 after a successful Paystack payment.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- Additional Stats Row -->
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 24px; margin-top: 24px;">
+<div class="admin-content-card text-center">
+<i class="fa fa-users fa-3x" style="color: #6366f1; margin-bottom: 12px;"></i>
+<h2>2</h2>
+<p class="text-muted">Guests In-House</p>
+</div>
+<div class="admin-content-card text-center">
+<i class="fa fa-naira-sign fa-3x" style="color: #10b981; margin-bottom: 12px;"></i>
+<h2>₦89,000</h2>
+<p class="text-muted">Revenue Today</p>
+</div>
+<div class="admin-content-card text-center">
+<i class="fa fa-exclamation-triangle fa-3x" style="color: #ef4444; margin-bottom: 12px;"></i>
+<h2>1</h2>
+<p class="text-muted">Pending Payments</p>
+</div>
+<div class="admin-content-card text-center">
+<i class="fa fa-wrench fa-3x" style="color: #f59e0b; margin-bottom: 12px;"></i>
+<h2>1</h2>
+<p class="text-muted">Under Maintenance</p>
+</div>
+</div>
+</div>
+<style>
+    .admin-stat-card {
+        background: #fff;
+        border-radius: 12px;
+        padding: 24px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        position: relative;
+        overflow-x: auto;
+        min-width: 0;
+    }
+    .admin-stat-card h3 {
+        margin: 0 0 8px;
+        font-size: 32px;
+        font-weight: 700;
+    }
+    .admin-stat-card p {
+        margin: 0;
+        font-size: 14px;
+        opacity: 0.9;
+    }
+    .stat-icon {
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 48px;
+        opacity: 0.2;
+    }
+    .admin-content-card {
+        background: #fff;
+        border-radius: 12px;
+        padding: 24px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        overflow-x: auto;
+    }
+    .admin-content-card h3 {
+        margin: 0 0 16px;
+        font-size: 18px;
+        font-weight: 600;
+        color: #111827;
+    }
+    @media (max-width: 767px) {
+        .admin-stat-card {
+            padding: 16px;
+        }
+        .admin-stat-card h3 {
+            font-size: 24px;
+        }
+        .admin-content-card {
+            padding: 16px;
+        }
+    }
+</style>
+</div>
+</div>
+</div>
+</div>
+<script src="http://127.0.0.1:8010/static/Allfiles/vendors/jquery/dist/jquery.min.js"></script>
+<script src="http://127.0.0.1:8010/static/Allfiles/vendors/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="http://127.0.0.1:8010/static/Allfiles/vendors/fastclick/lib/fastclick.js"></script>
+<script src="http://127.0.0.1:8010/static/Allfiles/vendors/nprogress/nprogress.js"></script>
+<script src="http://127.0.0.1:8010/static/Allfiles/vendors/Chart.js/dist/Chart.min.js"></script>
+<script src="http://127.0.0.1:8010/static/Allfiles/vendors/gauge.js/dist/gauge.min.js"></script>
+<script src="http://127.0.0.1:8010/static/Allfiles/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
+<script src="http://127.0.0.1:8010/static/Allfiles/vendors/iCheck/icheck.min.js"></script>
+<script src="http://127.0.0.1:8010/static/Allfiles/vendors/skycons/skycons.js"></script>
+<script src="http://127.0.0.1:8010/static/Allfiles/vendors/Flot/jquery.flot.js"></script>
+<script src="http://127.0.0.1:8010/static/Allfiles/vendors/Flot/jquery.flot.pie.js"></script>
+<script src="http://127.0.0.1:8010/static/Allfiles/vendors/Flot/jquery.flot.time.js"></script>
+<script src="http://127.0.0.1:8010/static/Allfiles/vendors/Flot/jquery.flot.stack.js"></script>
+<script src="http://127.0.0.1:8010/static/Allfiles/vendors/Flot/jquery.flot.resize.js"></script>
+<script src="http://127.0.0.1:8010/static/Allfiles/vendors/flot.orderbars/js/jquery.flot.orderBars.js"></script>
+<script src="http://127.0.0.1:8010/static/Allfiles/vendors/flot-spline/js/jquery.flot.spline.min.js"></script>
+<script src="http://127.0.0.1:8010/static/Allfiles/vendors/flot.curvedlines/curvedLines.js"></script>
+<script src="http://127.0.0.1:8010/static/Allfiles/vendors/DateJS/build/date.js"></script>
+<script src="http://127.0.0.1:8010/static/Allfiles/vendors/jqvmap/dist/jquery.vmap.js"></script>
+<script src="http://127.0.0.1:8010/static/Allfiles/vendors/jqvmap/dist/maps/jquery.vmap.world.js"></script>
+<script src="http://127.0.0.1:8010/static/Allfiles/vendors/jqvmap/examples/js/jquery.vmap.sampledata.js"></script>
+<script src="http://127.0.0.1:8010/static/Allfiles/vendors/moment/min/moment.min.js"></script>
+<script src="http://127.0.0.1:8010/static/Allfiles/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+<script>
+      (function () {
+        function wrapTablesForMobile() {
+          var tables = document.querySelectorAll('.admin-page-wrap table');
+          tables.forEach(function (table) {
+            if (table.closest('.table-responsive')) return;
+            var wrapper = document.createElement('div');
+            wrapper.className = 'table-responsive';
+            table.parentNode.insertBefore(wrapper, table);
+            wrapper.appendChild(table);
+          });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', wrapTablesForMobile);
+        } else {
+          wrapTablesForMobile();
+        }
+      })();
+    </script>
+<script src="http://127.0.0.1:8010/static/Allfiles/build/js/custom.min.js"></script>
+</body>
+</html>

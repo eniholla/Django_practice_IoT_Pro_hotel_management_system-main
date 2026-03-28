@@ -1,0 +1,746 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="{% static 'Allfiles/Photo/eniadmin.jpg' %}" type="image/ico" />
+    <title>{% block title %}{% endblock %}</title>
+
+    <link rel="stylesheet" href="{% static 'Allfiles/vendors/bootstrap/dist/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'Allfiles/Css/fontawesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'Allfiles/vendors/font-awesome/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'Allfiles/vendors/nprogress/nprogress.css' %}">
+    <link rel="stylesheet" href="{% static 'Allfiles/vendors/iCheck/skins/flat/green.css' %}">
+    <link rel="stylesheet" href="{% static 'Allfiles/vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css' %}">
+    <link rel="stylesheet" href="{% static 'Allfiles/vendors/jqvmap/dist/jqvmap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'Allfiles/vendors/bootstrap-daterangepicker/daterangepicker.css' %}">
+    <link rel="stylesheet" href="{% static 'Allfiles/build/css/custom.css' %}">
+
+    <style>
+      .admin-modern {
+        background: #f5f7fb;
+      }
+
+      .admin-modern .left_col {
+        background: linear-gradient(180deg, #1f2a44 0%, #101827 100%);
+      }
+
+      .admin-modern .nav_title {
+        background: transparent;
+      }
+
+      .admin-modern .site_title {
+        font-size: 20px;
+        font-weight: 700;
+        color: #fff !important;
+      }
+
+      .admin-modern .profile {
+        padding: 16px 18px 0;
+      }
+
+      .admin-modern .profile_info h2,
+      .admin-modern .user-profile,
+      .admin-modern .menu_section h3,
+      .admin-modern .side-menu > li > a,
+      .admin-modern .nav.child_menu > li > a {
+        color: #f8fafc !important;
+      }
+
+      .admin-modern .side-menu > li.active > a,
+      .admin-modern .side-menu > li.current-page > a,
+      .admin-modern .side-menu > li > a:hover,
+      .admin-modern .nav.child_menu > li.current-page a,
+      .admin-modern .nav.child_menu > li a:hover {
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      .admin-page-wrap {
+        padding: 24px 24px 40px;
+      }
+
+      .admin-modern .right_col {
+        background: #f5f7fb;
+        min-height: calc(100vh - 58px);
+      }
+
+      .admin-page-header {
+        background: #fff;
+        border-radius: 16px;
+        padding: 24px 28px;
+        margin-bottom: 24px;
+        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 12px;
+        overflow-x: auto;
+        scrollbar-gutter: stable;
+      }
+
+      .admin-page-header h1,
+      .admin-page-header h2 {
+        margin: 0 0 6px;
+        color: #111827;
+        font-weight: 700;
+      }
+
+      .admin-page-header p {
+        margin: 0;
+        color: #6b7280;
+      }
+
+      .admin-stat-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 18px;
+        margin-bottom: 24px;
+      }
+
+      .admin-stat-card {
+        background: #fff;
+        border-radius: 16px;
+        padding: 20px 22px;
+        min-width: 120px;
+        flex: 1 1 180px;
+        box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+        overflow-x: auto;
+        scrollbar-gutter: stable;
+      }
+
+      .admin-stat-card .label {
+        display: inline-block;
+        font-size: 12px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #64748b;
+        margin-bottom: 10px;
+        padding: 0;
+      }
+
+      .admin-stat-card .value {
+        display: block;
+        font-size: 30px;
+        line-height: 1.1;
+        font-weight: 700;
+        color: #111827;
+      }
+
+      .admin-stat-card .meta {
+        display: block;
+        margin-top: 8px;
+        color: #64748b;
+      }
+
+      .admin-panel {
+        background: #fff;
+        border-radius: 16px;
+        padding: 22px 24px;
+        margin-bottom: 24px;
+        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+        overflow-x: auto;
+        scrollbar-gutter: stable;
+      }
+
+      .admin-panel-scroll {
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+      }
+
+      .admin-panel-scroll-body {
+        max-height: 420px;
+        overflow: auto;
+        scrollbar-gutter: stable;
+      }
+
+      .admin-panel-scroll-body .admin-table {
+        margin-bottom: 0;
+      }
+
+      .admin-panel-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 18px;
+      }
+
+      .admin-panel-header h3 {
+        margin: 0;
+        color: #111827;
+        font-size: 22px;
+        font-weight: 700;
+      }
+
+      .admin-panel-header p {
+        margin: 0;
+        color: #6b7280;
+      }
+
+      .admin-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 24px;
+      }
+
+      .admin-grid > .admin-column {
+        flex: 1 1 min(420px, 100%);
+      }
+
+      .admin-searchbar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-bottom: 18px;
+      }
+
+      .admin-searchbar .form-control {
+        min-width: 200px;
+      }
+
+      .admin-action-row {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .admin-table {
+        width: 100%;
+      }
+
+      .admin-table th {
+        white-space: nowrap;
+        background: #f8fafc;
+      }
+
+      .admin-table td,
+      .admin-table th {
+        vertical-align: middle !important;
+      }
+
+      .admin-table .badge {
+        font-size: 12px;
+      }
+
+      .admin-quick-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .admin-quick-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 16px;
+        border-radius: 12px;
+        background: #f8fafc;
+        color: #1f2937;
+        text-decoration: none;
+      }
+
+      .admin-quick-link:hover {
+        background: #e5eefb;
+        color: #0f172a;
+        text-decoration: none;
+      }
+
+      .admin-form-section .helptext {
+        display: block;
+        margin-top: 6px;
+        color: #6b7280;
+        font-size: 12px;
+      }
+
+      .admin-form-section .errorlist {
+        margin: 8px 0 0;
+        padding-left: 18px;
+        color: #c0392b;
+      }
+
+      .admin-checkbox {
+        width: 18px;
+        height: 18px;
+        vertical-align: middle;
+      }
+
+      .admin-thumbnail {
+        width: 56px;
+        height: 56px;
+        object-fit: cover;
+        border-radius: 12px;
+        background: #e5e7eb;
+      }
+
+      .admin-empty-state {
+        padding: 20px;
+        text-align: center;
+        color: #64748b;
+        border: 1px dashed #cbd5e1;
+        border-radius: 12px;
+      }
+
+      .admin-inline-form {
+        display: inline;
+      }
+
+      /* Single source of truth for navbar height and sidebar widths */
+      :root {
+        --admin-nav-h: 58px;
+        --sidebar-w: 230px;
+        --sidebar-w-sm: 70px;
+        --sidebar-mobile-open-w: min(86vw, 320px);
+      }
+
+      /* Full-height fixed sidebar - always anchored to viewport top, never scrolls away */
+      body.nav-md.admin-modern .container.body .col-md-3.left_col {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: var(--sidebar-w);
+        overflow: hidden;
+        z-index: 200;
+      }
+
+      /* Inner scroll wrapper fills the fixed container and handles its own scrolling */
+      body.nav-md.admin-modern .left_col.scroll-view {
+        height: 100%;
+        overflow-y: auto;
+        overflow-x: hidden;
+      }
+
+      /* Collapsed sidebar - also fully fixed, visible unless toggled away */
+      body.nav-sm.admin-modern .container.body .col-md-3.left_col {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: var(--sidebar-w-sm);
+        overflow: hidden;
+        z-index: 200;
+      }
+
+      body.nav-sm.admin-modern .left_col.scroll-view {
+        height: 100%;
+        overflow-y: auto;
+        overflow-x: hidden;
+      }
+
+      /* Fixed top navbar always anchored at the top */
+      body.admin-modern .main_container .top_nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 100;
+        margin-left: 0;
+      }
+
+      body.admin-modern .top_nav .nav_menu {
+        margin-bottom: 0;
+      }
+
+      /* On desktop the navbar sits to the right of the sidebar */
+      @media (min-width: 992px) {
+        body.nav-md.admin-modern .main_container .top_nav {
+          left: var(--sidebar-w);
+          width: calc(100% - var(--sidebar-w));
+        }
+
+        body.nav-sm.admin-modern .main_container .top_nav {
+          left: var(--sidebar-w-sm);
+          width: calc(100% - var(--sidebar-w-sm));
+        }
+      }
+
+      /* Offset right column below fixed navbar and to the right of the fixed sidebar */
+      body.nav-md.admin-modern .container.body .right_col {
+        margin-left: var(--sidebar-w);
+        padding-top: calc(var(--admin-nav-h) + 10px);
+      }
+
+      body.nav-sm.admin-modern .container.body .right_col {
+        margin-left: var(--sidebar-w-sm);
+        padding-top: calc(var(--admin-nav-h) + 10px);
+      }
+
+      /* When the sidebar is hidden on smaller screens, remove the left offset */
+      @media (max-width: 991px) {
+        body.nav-md.admin-modern .container.body .right_col,
+        body.nav-sm.admin-modern .container.body .right_col {
+          margin-left: 0;
+        }
+      }
+
+      @media (max-width: 767px) {
+        .admin-page-wrap {
+          padding: 12px 12px 24px;
+        }
+
+        .admin-page-header,
+        .admin-panel,
+        .admin-stat-card {
+          padding: 14px 16px;
+        }
+
+        .admin-page-header h1,
+        .admin-page-header h2 {
+          font-size: 20px;
+        }
+
+        .admin-stat-grid {
+          gap: 10px;
+          flex-wrap: nowrap;
+          overflow-x: auto;
+          padding-bottom: 4px;
+          scroll-snap-type: x proximity;
+        }
+
+        .admin-stat-card {
+          flex: 0 0 min(280px, 88vw);
+          scroll-snap-align: start;
+        }
+
+        .admin-grid {
+          gap: 16px;
+        }
+
+        .admin-grid > .admin-column {
+          flex: 1 1 100%;
+        }
+
+        .admin-panel-header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 8px;
+        }
+
+        .admin-panel-header .btn {
+          align-self: flex-start;
+        }
+
+        .admin-quick-links {
+          gap: 8px;
+        }
+
+        .admin-quick-link {
+          padding: 10px 12px;
+          font-size: 13px;
+        }
+
+        .admin-page-wrap .x_panel,
+        .admin-page-wrap .admin-panel,
+        .admin-page-wrap .admin-page-header {
+          max-width: 100%;
+          overflow-x: auto;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .admin-stat-card {
+          flex-basis: min(250px, 90vw);
+        }
+
+        .admin-page-header {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .admin-page-header .btn {
+          align-self: flex-start;
+          width: 100%;
+          text-align: center;
+        }
+      }
+
+      @media (max-width: 991px) {
+        body.admin-modern .main_container .top_nav {
+          left: 0;
+          width: 100%;
+          z-index: 300;
+        }
+
+        body.admin-modern .container.body .col-md-3.left_col,
+        body.nav-sm.admin-modern .container.body .col-md-3.left_col,
+        body.nav-md.admin-modern .container.body .col-md-3.left_col {
+          display: block;
+          width: var(--sidebar-mobile-open-w);
+          top: var(--admin-nav-h);
+          height: calc(100vh - var(--admin-nav-h));
+          transform: translateX(-100%);
+          transition: transform 0.25s ease;
+          z-index: 220;
+          box-shadow: none;
+        }
+
+        body.admin-modern.mobile-sidebar-open .container.body .col-md-3.left_col {
+          transform: translateX(0);
+          box-shadow: 16px 0 30px rgba(15, 23, 42, 0.2);
+        }
+
+        body.nav-md.admin-modern .container.body .right_col,
+        body.nav-sm.admin-modern .container.body .right_col {
+          margin-left: 0;
+          width: 100%;
+          transition: margin-left 0.25s ease, width 0.25s ease;
+        }
+
+        body.admin-modern.mobile-sidebar-open .container.body .right_col {
+          margin-left: var(--sidebar-mobile-open-w);
+          width: calc(100% - var(--sidebar-mobile-open-w));
+        }
+      }
+    </style>
+  </head>
+
+  <body class="nav-md admin-modern">
+    <div class="container body">
+      <div class="main_container">
+        <div class="col-md-3 left_col">
+          <div class="left_col scroll-view">
+            <div class="navbar nav_title" style="border: 0;">
+              <a href="{% if request.user.is_receptionist %}{% url 'receptionist_dashboard' %}{% elif request.user.is_staff %}{% url 'dashboard' %}{% else %}{% url 'home' %}{% endif %}" class="site_title"><i class="fa fa-building"></i> <span>RoseGold Admin</span></a>
+            </div>
+
+            <div class="clearfix"></div>
+
+            <div class="profile clearfix">
+              <div class="profile_pic">
+                <img src="{% static 'Allfiles/Photo/eniadmin.jpg' %}" alt="..." class="img-circle profile_img">
+              </div>
+              <div class="profile_info">
+                <span>Signed in as</span>
+                <h2>{{ request.user.get_full_name|default:request.user.email }}</h2>
+              </div>
+            </div>
+
+            <br />
+
+            <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+              {% if request.user.is_staff %}
+                <div class="menu_section">
+                  <h3>Admin</h3>
+                  <ul class="nav side-menu">
+                    <li class="{% if active_admin_section == 'dashboard' %}current-page{% endif %}">
+                      <a href="{% url 'dashboard' %}"><i class="fa fa-dashboard"></i> Dashboard</a>
+                    </li>
+                    <li class="{% if active_admin_section == 'online_bookings' %}current-page{% endif %}">
+                      <a href="{% url 'online_booking_list' %}"><i class="fa fa-globe"></i> Online Bookings</a>
+                    </li>
+                    <li class="{% if active_admin_section == 'offline_bookings' %}current-page{% endif %}">
+                      <a href="{% url 'add_customer' %}"><i class="fa fa-bed"></i> Desk Bookings</a>
+                    </li>
+                    <li class="{% if active_admin_section == 'rooms' %}current-page{% endif %}">
+                      <a href="{% url 'add_room' %}"><i class="fa fa-home"></i> Rooms</a>
+                    </li>
+                    <li class="{% if active_admin_section == 'employees' %}current-page{% endif %}">
+                      <a href="{% url 'add_employee' %}"><i class="fa fa-users"></i> Employees</a>
+                    </li>
+                    <li class="{% if active_admin_section == 'salaries' %}current-page{% endif %}">
+                      <a href="{% url 'add_salary' %}"><i class="fa fa-money"></i> Salaries</a>
+                    </li>
+                    <li class="{% if active_admin_section == 'users' %}current-page{% endif %}">
+                      <a href="{% url 'manage_users' %}"><i class="fa fa-user-circle"></i> Users</a>
+                    </li>
+                    <li class="{% if active_admin_section == 'iot_monitoring' %}current-page{% endif %}">
+                      <a href="{% url 'iot_monitoring_dashboard' %}"><i class="fa fa-thermometer-half"></i> IoT Monitoring</a>
+                    </li>
+                    <li class="{% if active_admin_section == 'iot_alert_center' %}current-page{% endif %}">
+                      <a href="{% url 'iot_alert_center' %}"><i class="fa fa-shield"></i> HSE Alerts</a>
+                    </li>
+                  </ul>
+                </div>
+              {% endif %}
+
+              {% if request.user.is_staff or request.user.is_receptionist %}
+                <div class="menu_section">
+                  <h3>Front Desk</h3>
+                  <ul class="nav side-menu">
+                    <li class="{% if active_admin_section == 'receptionist_dashboard' %}current-page{% endif %}">
+                      <a href="{% url 'receptionist_dashboard' %}"><i class="fa fa-th-large"></i> Reception Dashboard</a>
+                    </li>
+                    <li class="{% if active_admin_section == 'room_status_board' %}current-page{% endif %}">
+                      <a href="{% url 'room_status_board' %}"><i class="fa fa-th"></i> Room Status</a>
+                    </li>
+                    <li class="{% if active_admin_section == 'guest_search' %}current-page{% endif %}">
+                      <a href="{% url 'guest_search' %}"><i class="fa fa-search"></i> Guest Search</a>
+                    </li>
+                    <li class="{% if active_admin_section == 'housekeeping_board' %}current-page{% endif %}">
+                      <a href="{% url 'housekeeping_board' %}"><i class="fa fa-broom"></i> Housekeeping</a>
+                    </li>
+                  </ul>
+                </div>
+              {% endif %}
+
+              <div class="menu_section">
+                <h3>Shortcuts</h3>
+                <ul class="nav side-menu">
+                  {% if request.user.is_staff or request.user.is_receptionist %}
+                    <li><a href="{% url 'receptionist_dashboard' %}"><i class="fa fa-th-large"></i> Front Desk</a></li>
+                  {% endif %}
+                  {% if request.user.is_staff %}
+                    <li><a href="/admin/"><i class="fa fa-cogs"></i> Django Admin</a></li>
+                    <li><a href="{% url 'iot_monitoring_dashboard' %}"><i class="fa fa-thermometer-half"></i> IoT Monitoring</a></li>
+                  {% endif %}
+                </ul>
+              </div>
+            </div>
+
+            <div class="sidebar-footer hidden-small">
+              <a data-toggle="tooltip" data-placement="top" title="Dashboard" href="{% if request.user.is_receptionist %}{% url 'receptionist_dashboard' %}{% elif request.user.is_staff %}{% url 'dashboard' %}{% else %}{% url 'home' %}{% endif %}">
+                <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+              </a>
+              {% if request.user.is_staff %}
+                <a data-toggle="tooltip" data-placement="top" title="Users" href="{% url 'manage_users' %}">
+                  <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                </a>
+              {% elif request.user.is_receptionist %}
+                <a data-toggle="tooltip" data-placement="top" title="Housekeeping" href="{% url 'housekeeping_board' %}">
+                  <span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>
+                </a>
+              {% endif %}
+              <a data-toggle="tooltip" data-placement="top" title="Logout" href="{% url 'auth_logout' %}">
+                <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="top_nav">
+          <div class="nav_menu">
+            <div class="nav toggle">
+              <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+            </div>
+            <nav class="nav navbar-nav">
+              <ul class="nav navbar-right">
+                <li class="nav-item dropdown open" style="padding-left: 15px;">
+                  <a href="javascript:;" class="user-profile dropdown-toggle" aria-haspopup="true" id="navbarDropdown" data-toggle="dropdown" aria-expanded="false">
+                    <img src="{% static 'Allfiles/Photo/eniadmin.jpg' %}" alt="">{{ request.user.get_full_name|default:request.user.email }}
+                  </a>
+                  <div class="dropdown-menu dropdown-usermenu pull-right" aria-labelledby="navbarDropdown">
+                    {% if request.user.is_staff %}
+                      <a class="dropdown-item" href="{% url 'manage_users' %}">Manage Users</a>
+                    {% endif %}
+                    <a class="dropdown-item" href="{% if request.user.is_receptionist %}{% url 'receptionist_dashboard' %}{% elif request.user.is_staff %}{% url 'dashboard' %}{% else %}{% url 'home' %}{% endif %}">Dashboard</a>
+                    <a class="dropdown-item" href="{% url 'auth_logout' %}"><i class="fa fa-sign-out pull-right"></i> Log Out</a>
+                  </div>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+
+        <div class="right_col" role="main">
+          <div class="admin-page-wrap">
+            {% if messages %}
+              {% for message in messages %}
+                <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade in" role="alert">
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">x</span></button>
+                  {{ message }}
+                </div>
+              {% endfor %}
+            {% endif %}
+
+            {% block pagecontant %}{% endblock %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="{% static 'Allfiles/vendors/jquery/dist/jquery.min.js' %}"></script>
+    <script src="{% static 'Allfiles/vendors/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'Allfiles/vendors/fastclick/lib/fastclick.js' %}"></script>
+    <script src="{% static 'Allfiles/vendors/nprogress/nprogress.js' %}"></script>
+    <script src="{% static 'Allfiles/vendors/Chart.js/dist/Chart.min.js' %}"></script>
+    <script src="{% static 'Allfiles/vendors/gauge.js/dist/gauge.min.js' %}"></script>
+    <script src="{% static 'Allfiles/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js' %}"></script>
+    <script src="{% static 'Allfiles/vendors/iCheck/icheck.min.js' %}"></script>
+    <script src="{% static 'Allfiles/vendors/skycons/skycons.js' %}"></script>
+    <script src="{% static 'Allfiles/vendors/Flot/jquery.flot.js' %}"></script>
+    <script src="{% static 'Allfiles/vendors/Flot/jquery.flot.pie.js' %}"></script>
+    <script src="{% static 'Allfiles/vendors/Flot/jquery.flot.time.js' %}"></script>
+    <script src="{% static 'Allfiles/vendors/Flot/jquery.flot.stack.js' %}"></script>
+    <script src="{% static 'Allfiles/vendors/Flot/jquery.flot.resize.js' %}"></script>
+    <script src="{% static 'Allfiles/vendors/flot.orderbars/js/jquery.flot.orderBars.js' %}"></script>
+    <script src="{% static 'Allfiles/vendors/flot-spline/js/jquery.flot.spline.min.js' %}"></script>
+    <script src="{% static 'Allfiles/vendors/flot.curvedlines/curvedLines.js' %}"></script>
+    <script src="{% static 'Allfiles/vendors/DateJS/build/date.js' %}"></script>
+    <script src="{% static 'Allfiles/vendors/jqvmap/dist/jquery.vmap.js' %}"></script>
+    <script src="{% static 'Allfiles/vendors/jqvmap/dist/maps/jquery.vmap.world.js' %}"></script>
+    <script src="{% static 'Allfiles/vendors/jqvmap/examples/js/jquery.vmap.sampledata.js' %}"></script>
+    <script src="{% static 'Allfiles/vendors/moment/min/moment.min.js' %}"></script>
+    <script src="{% static 'Allfiles/vendors/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+
+    <script>
+      (function () {
+        function wrapTablesForMobile() {
+          var tables = document.querySelectorAll('.admin-page-wrap table');
+          tables.forEach(function (table) {
+            if (table.closest('.table-responsive')) return;
+            var wrapper = document.createElement('div');
+            wrapper.className = 'table-responsive';
+            table.parentNode.insertBefore(wrapper, table);
+            wrapper.appendChild(table);
+          });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', wrapTablesForMobile);
+        } else {
+          wrapTablesForMobile();
+        }
+      })();
+    </script>
+
+    <script src="{% static 'Allfiles/build/js/custom.min.js' %}"></script>
+    <script>
+      (function () {
+        var menuToggle = document.getElementById('menu_toggle');
+
+        function isMobileWidth() {
+          return window.matchMedia('(max-width: 991px)').matches;
+        }
+
+        function closeMobileSidebar() {
+          document.body.classList.remove('mobile-sidebar-open');
+        }
+
+        if (menuToggle) {
+          menuToggle.addEventListener('click', function (event) {
+            if (!isMobileWidth()) return;
+            // Prevent the legacy #menu_toggle handler in custom.min.js from running on mobile
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+            document.body.classList.toggle('mobile-sidebar-open');
+          }, true);
+        }
+
+        window.addEventListener('resize', function () {
+          if (!isMobileWidth()) {
+            // When leaving mobile width, just close the mobile sidebar overlay
+            // and preserve whichever desktop nav state (nav-md or nav-sm) is active.
+            closeMobileSidebar();
+          }
+        });
+
+        document.addEventListener('click', function (event) {
+          if (!isMobileWidth()) return;
+          if (!document.body.classList.contains('mobile-sidebar-open')) return;
+          var target = event.target;
+          if (target && target.nodeType === Node.TEXT_NODE && target.parentElement) {
+            target = target.parentElement;
+          }
+          if (!target || !(target instanceof Element)) return;
+          if (target.closest('.left_col') || target.closest('#menu_toggle')) return;
+          closeMobileSidebar();
+        });
+      })();
+    </script>
+
+  </body>
+</html>

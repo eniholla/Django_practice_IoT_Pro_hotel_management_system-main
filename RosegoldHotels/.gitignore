@@ -1,0 +1,90 @@
+# ======================
+# RosegoldHotels .gitignore
+# ======================
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+.venv/
+env/
+.env/
+ENV/
+*/venv/
+**/venv/
+
+# Environment variables (NEVER commit secrets!)
+.env
+*.env
+!*.env.example
+iot_alerts.env
+
+# Database
+db.sqlite3
+*.sqlite3
+*.db
+Project_hotel
+Project_hotel.db
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux
+*~
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Migrations cache
+*/migrations/__pycache__/
+
+# Static files collected
+staticfiles/
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Frontend build output
+static/dist/
+frontend/
+
+# Test artifacts
+.coverage
+htmlcov/
+.pytest_cache/
+.test-static/
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+tmp/
+temp/
+
+# Secrets (never commit)
+secrets/
+*.pem
+*.key
+
+# Media uploads (user content)
+media/
