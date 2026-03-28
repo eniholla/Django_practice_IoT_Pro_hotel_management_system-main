@@ -1,0 +1,10 @@
+Hello {{ user.first_name|default:"there" }},
+
+Thanks for registering with RoseGold Hotel.
+
+Please confirm your email address by opening the link below:
+{{ activation_url }}
+
+You will be able to sign in after your account is confirmed.
+
+If you did not create this account, you can safely ignore this email.
