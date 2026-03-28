@@ -2,383 +2,790 @@
 
 ## 2.0 Introduction
 
-Literature review provides the theoretical and empirical foundation for the design of any information system. In the context of hotel management, it helps to explain how the hospitality sector has moved from paper-based operations to integrated digital platforms that support reservations, guest service, revenue management, and internal coordination. For this study, the review is particularly important because the proposed system does not only automate bookings and room administration, but also extends hotel operations with Health, Safety and Environment (HSE) monitoring through simulated Internet of Things (IoT) data.
+Literature review is important in a final-year computing project because it shows where a proposed system belongs within the wider body of practice and prior design thinking. For this study, the review is not limited to reservation software in isolation. The project sits at the intersection of hotel operations, role-based information systems, digital payment processing, and smart-room monitoring.
 
-Recent studies show that hotel information systems improve service delivery, reduce operational delays, and support better managerial decisions when data from different departments are centralized. However, many existing solutions still focus more on reservation processing than on environmental safety, exception handling, or actionable alerts for hotel staff. This chapter therefore reviews the historical development of hotel management systems, the structure of existing solutions, relevant scholarly works, and the research gap that justifies the present project.
+The present hotel management system was developed as a practical answer to familiar operational problems: fragmented room records, slow front-desk coordination, weak visibility into payment state, and poor linkage between ordinary hotel transactions and health, safety, and environment awareness. A useful review therefore has to examine both conventional hotel management software and the newer expectation that software should support operational intelligence rather than record keeping alone.
 
+## 2.1 Evolution of Hotel Management Systems
 
-## 2.1 Historical Background of Hotel Management Systems
+Hotel operations were once managed through paper ledgers, wall charts, manual cashbooks, and face-to-face front-desk communication. Those methods were workable for small guest houses, but they became unreliable as hotels needed faster room turnover, better audit trails, and clearer visibility into who was arriving, departing, or owing payment. Manual systems also made it difficult to coordinate between reception, management, and support staff in real time.
 
-Hotel management systems evolved from manual registers, telephone-based reservations, and handwritten billing records. In the earliest period, room allocation, guest records, and payment tracking were performed entirely by front desk staff using ledgers. This approach worked for small guest houses, but as hotels expanded, manual processes became slow, error-prone, and difficult to audit. Problems such as double booking, delayed check-in, missing payment records, and poor reporting became more common as transaction volume increased.
+The first wave of computerized hotel tools focused mainly on digitizing bookings, room allocation, and billing. Later web-based systems expanded that scope by allowing public room browsing, remote reservation, and centralized staff access. In the current stage of development, hospitality software is expected to do more than store data. It is increasingly judged by how well it supports live decisions, role-specific dashboards, secure payment confirmation, and operational monitoring across the property.
 
-According to Liu et al. (2018) and Kwak and Kim (2020), the first computer-based hotel systems appeared in large hotels and chains where mainframe infrastructure could support front office automation. These early systems focused on reservation capture, room assignment, check-in, and check-out. In the 1980s and 1990s, the emergence of personal computers made hotel software more affordable and introduced database-backed applications that could be deployed by medium-sized hotels. At this stage, functionality expanded beyond room sales to include guest history, billing, and basic report generation.
+## 2.2 Core Functions in Contemporary Hotel Applications
 
-The next stage was the growth of web-enabled and cloud-based hotel platforms. These systems made online reservation possible, synchronized room inventory across channels, and enabled authorized staff to access information from different locations. More recently, hospitality technology has moved toward smart hotel concepts, where operational systems are combined with analytics, automation, and sensor-based monitoring. In such environments, the hotel management system is no longer only an administrative tool; it becomes a decision-support platform capable of improving comfort, security, and responsiveness.
+A modern hotel platform usually combines several responsibilities inside one workflow. It must manage room inventory, customer identity, booking windows, check-in and check-out events, payment state, and staff activity. These modules are tightly connected. A booking affects room status. A payment event affects confirmation state. A checkout event affects housekeeping readiness. Good software reflects these dependencies instead of treating each activity as a disconnected form.
 
-This evolution is relevant to the present study because the proposed system follows the same progression. It begins with core hotel administration such as user management, reservations, billing records, and staff coordination, and then extends the architecture with simulated IoT services that monitor room temperature, gas levels, and motion activity. The project therefore reflects the broader transition from conventional hotel software to intelligent and safety-aware hotel platforms.
+Another major expectation in current systems is role separation. Guests need simple room discovery and reservation pages. Administrators need a strategic view of rooms, users, employees, revenue-related figures, and alerts. Reception staff need a narrow but faster operational view that emphasizes today's arrivals, departures, room readiness, guest search, and pending payments. When those views are not separated properly, the system becomes cluttered and slows down the users who depend on it most.
 
+## 2.3 Smart Hotel Monitoring and HSE Awareness
 
-## 2.2 Overview of Existing Systems
+Smart-hotel thinking adds a second layer to ordinary hotel management: visibility into what is happening physically inside the building. Temperature drift, gas leakage, unusual motion, or device silence may all be operationally important even when the reservation records look normal. This matters because a room can be correctly marked as occupied or available while still presenting an environmental or security risk that staff should respond to quickly.
 
-An existing hotel management system typically combines the functions of a property management system, reservation system, and operational reporting tool. Common modules include guest registration, room inventory control, booking management, pricing, employee administration, housekeeping coordination, and invoice generation. Jordan (2023) identifies usability, reservation visibility, guest profile handling, and communication support as essential features of modern hospitality software. In practice, these features reduce repetitive paperwork and improve service consistency.
+In many academic and prototype environments, real sensors are not always available. Even so, simulated monitoring remains valuable when it is designed responsibly. A simulation can still model the logic of device registration, payload generation, threshold evaluation, alert persistence, acknowledgement, and resolution. In that sense, a simulation-driven IoT layer is still useful for demonstrating how HSE monitoring can be embedded into hotel workflow rather than left as a theoretical add-on.
 
-Most contemporary systems also support role-based access. Guests interact with public pages to browse rooms and submit reservations, while staff members use internal dashboards to confirm bookings, check guests in and out, and update room status. Managers and administrators generally require higher-level access to configure rooms, review reports, manage staff records, and monitor system performance. The quality of a hotel application therefore depends not only on the presence of features, but on how well those features are adapted to the needs of each user category.
+## 2.4 Observed Gaps in Existing Approaches
 
-Despite these improvements, many systems still prioritize transactional efficiency over environmental awareness. Reservation modules are often strong, yet operational safety is treated as a separate concern rather than part of the main hotel workflow. For example, a room may be marked occupied or available, but the same dashboard may not explain whether the room is too hot, whether gas concentration has become unsafe, or whether motion is being detected in a room that should be empty. This separation limits the usefulness of the software in supporting HSE protocols.
+A recurring weakness in many hotel software examples is that the guest-facing booking experience is improved while the internal operating experience remains shallow. Systems often allow room reservation, yet provide limited support for receptionist-specific actions such as fast guest lookup, guided check-in and check-out, housekeeping follow-up, or monitoring of unsettled payments. That gap matters in practice because reception is where operational delays become visible first.
 
-Another observed limitation is that several hotel applications are designed either for large commercial deployments or for academic demonstration, with less attention paid to the practical front-desk workflow of small and medium hotels. In those environments, staff need a compact interface that can quickly show room condition, today's arrivals and departures, pending payments, housekeeping readiness, and unusual events requiring escalation. This study addresses that operational gap by combining management functions with lightweight safety intelligence in a single web platform.
+A second gap is the weak connection between payment confirmation and booking persistence. In many simplified prototypes, payment is discussed conceptually but not handled as an actual control point in the reservation lifecycle. A third gap is the separation of safety monitoring from normal hotel software. When room-condition alerts live outside the same application that manages bookings and staff actions, accountability becomes weaker and response time may suffer.
 
+*Table 2.1: Comparison of traditional hotel handling, ordinary web tools, and the present integrated project.*
 
-## 2.3 Review of Related Works
+| Dimension | Traditional hotel handling | Ordinary web hotel tool | Present project |
+| --- | --- | --- | --- |
+| Reservation capture | Desk ledger or phone call | Online form only | Online form plus validated booking workflow |
+| Payment linkage | Manual reconciliation | Sometimes external to reservation logic | Paystack verification tied to booking confirmation |
+| Staff access | Verbal coordination | Often one generic admin view | Separated admin and receptionist dashboards |
+| Room turnover visibility | Paper notes or memory | Partial status visibility | Room state and housekeeping status stored together |
+| Safety awareness | Manual observation | Usually absent | Simulated IoT monitoring with persistent alerts |
 
-Priyadharshini and Catherine Joy (2021) describe an automated hotel management approach that emphasizes the digitization of reservations, billing, and customer handling. Their work is useful in showing that automation improves the speed and consistency of hotel service delivery. However, the emphasis is mostly on administrative workflow, and the study leaves room for stronger integration of safety monitoring and alert handling.
+## 2.5 Relevance to the Present Project
 
-Tarunesh Gautam and Satyam Gaurav (2022), as well as Weerasinghe et al. (2022), present hotel management systems that focus on room allocation, staff operations, data management, and reporting. These studies confirm the importance of database-backed hotel applications and demonstrate how automation reduces record duplication and manual errors. Their contributions are valuable to this project because they reinforce the need for modules such as room management, guest records, employee information, and booking workflows.
+The current project responds directly to those gaps by combining public room discovery, structured online booking, Paystack-backed payment verification, administrative control, receptionist workflow support, and an IoT-style monitoring module inside one Django application. This makes the system stronger as a project document because the chapters can discuss a single integrated platform rather than unrelated feature demonstrations.
 
-Chen and Chen (2023) discuss the design and implementation of a hotel management system from a software engineering perspective, highlighting modular construction and the role of user interface design. This reinforces the view that system usability is critical in hospitality environments where staff decisions are often time-sensitive. For the present study, this insight supports the need for dedicated interfaces for administrators and reception staff rather than a single overcrowded control panel.
+The project is also relevant as a smart-hospitality prototype. It shows that even without physical hardware devices, a system can still preserve the end-to-end monitoring pattern: assign a logical device to each room, generate or receive readings, evaluate them against room context, raise alerts, and expose those alerts on operational dashboards. That integration is the main conceptual strength of the work and is what distinguishes it from a basic booking website.
 
-Filieri and Maggi (2021) and Sigala (2022) examine hotel information systems more broadly and link them to operational performance, resilience, and data-driven management. Their work shows that digital systems can influence occupancy control, communication, and service quality, especially when hotel decisions are based on timely and accurate information. These studies support the managerial value of dashboards, automated records, and analytics features included in the present project.
+## 2.6 Conclusion
 
-Hassan and Osman (2023) discuss the Plan-Do-Check-Act logic for continuous improvement. Although not limited to hospitality software, the PDCA idea is relevant to HSE-oriented hotel systems because safety monitoring depends on repeated observation, interpretation, response, and correction. In the current project, this idea is reflected in the way simulated sensor readings are generated, evaluated, converted into alerts, acknowledged by administrators, and resolved as room conditions return to normal.
-
-Across the reviewed works, a recurring pattern can be seen: researchers give strong attention to reservation processing, guest records, room allocation, and billing, but fewer implementations embed operational safety monitoring directly into everyday hotel management workflows. Where smart features are discussed, they are often treated conceptually or depend on dedicated hardware not available in many academic prototypes. This creates an opportunity for a practical web-based model that can demonstrate HSE monitoring behavior even in the absence of physical devices.
-
-
-## 2.4 Strengths and Weaknesses of Existing Systems
-
-The literature reveals several strengths of existing hotel systems. First, they improve data organization by centralizing guest, room, booking, and staff information in a single database. Second, they reduce routine errors associated with manual operations, especially in room assignment, payment documentation, and booking updates. Third, they strengthen decision making by producing reports and summaries that management can use for planning. Fourth, they improve guest experience by enabling faster service, better record retrieval, and more consistent communication.
-
-There are also important weaknesses. Many systems are heavily transaction-oriented and do not monitor physical room conditions as part of the main operational dashboard. A hotel may know that a room is occupied but still lack automated visibility into unsafe heat levels, possible gas leakage, or suspicious movement in an unoccupied room. This limits the system's contribution to hotel safety and incident prevention.
-
-Another weakness is incomplete role specialization. Some implementations offer a generic admin interface but do not provide focused workflows for receptionist duties such as fast check-in, fast check-out, payment capture, guest search, room readiness confirmation, and housekeeping follow-up. In practice, front desk staff need a task-oriented dashboard that emphasizes speed, visibility, and accountability rather than only high-level reports.
-
-Scalability and maintenance are also recurring concerns. Some proposed systems are presented as prototypes without showing how alerts are stored, how actions are logged, how notification history is retained, or how the system can be extended later. In addition, many studies do not clearly discuss failure handling, environmental threshold logic, or long-term support for integrations such as email and SMS alerts.
-
-
-## 2.5 Conclusion
-
-The reviewed literature confirms that web-based hotel systems are essential for modern hospitality operations. They improve reservation accuracy, staff efficiency, record management, and service quality. The literature also shows a steady transition from administrative software toward more intelligent hotel platforms that support automation and data-driven decision making.
-
-However, a clear gap remains between conventional hotel administration and practical HSE monitoring. Many systems reviewed in this study stop at booking and reporting, with limited support for environmental sensing, anomaly detection, notification workflows, or dedicated operational dashboards for reception and safety response. The present project addresses this gap by combining hotel management functionality with a simulated IoT alerting framework that monitors room temperature, gas level, and motion behavior, stores alert history, and notifies authorized personnel when conditions become abnormal.
-
-The literature review therefore justifies the development of an integrated web-based hotel management and reservation system that is not only efficient in handling guests and rooms, but also proactive in supporting safe and accountable hotel operations.
-
+The literature and practice background reviewed in this chapter point to a clear direction: hotel software is most useful when it connects reservations, payments, staff workflow, and operational visibility in one coherent system. This project follows that direction. The next chapter therefore explains how the system was designed and implemented as a structured web application with both transactional and monitoring responsibilities.
 
 # Chapter 3
 
 ## 3.0 Introduction
 
-This chapter explains the methodology adopted for the analysis, design, and development of the proposed system. It describes how requirements were gathered, how the software process was organized, how the system architecture was structured, and how the IoT safety component was modeled in the absence of physical hardware devices. The chapter also presents the design decisions that guided the implementation of the hotel management, receptionist, housekeeping, and alert-monitoring modules.
+This chapter explains how the hotel management system was analysed, structured, and prepared for implementation. The focus is not only on software coding, but on how the project was broken into coherent modules that reflect real hotel work: user access, room inventory, booking validation, payment progression, receptionist operations, and room-condition monitoring.
 
-The proposed platform was conceived as an integrated web application for hotel operations. It supports room display, online booking, walk-in booking, guest data management, check-in and check-out processing, employee administration, housekeeping coordination, payment recording, and administrative oversight. On top of these conventional hotel functions, the system introduces a software-driven IoT layer for monitoring room temperature, gas leakage indicators, and motion activity in order to support HSE protocols.
+Because the system serves different categories of users and combines both transactional logic and simulated environmental monitoring, the design had to be modular. The methodology described here therefore emphasizes layered architecture, explicit data models, and feature flows that can be tested independently while still contributing to one unified application.
 
+## 3.1 Development Approach
 
-## 3.1 Research Design
+An iterative development approach was adopted. The project did not emerge as one large implementation pass; it matured feature by feature. Public pages and authentication came first, followed by room inventory and booking logic, then payment control, staff dashboards, housekeeping linkage, and finally the IoT alerting workflow. This sequence reduced complexity because each stage built on a stable foundation from the previous one.
 
-The study adopted an applied system development approach. Rather than focusing only on theoretical analysis, the work involved identifying an operational problem in hotel administration and building a prototype that addresses the problem through software. The research design therefore combined requirement elicitation, software modeling, iterative implementation, and validation through functional and technical testing.
+The iterative approach was especially useful because it allowed the project to remain realistic. For example, the payment flow was upgraded from a simple record-keeping idea into a Paystack-backed confirmation step, and the receptionist workflow evolved into a dedicated dashboard rather than remaining a generic admin extension. The same pattern applied to the HSE component, which matured from a concept into a database-backed monitoring subsystem.
 
+## 3.2 Requirement Analysis
 
-### 3.1.1 Development Model
+Requirement gathering was guided by the actual roles represented in the system. Guests require visibility into available rooms, stay cost, booking dates, and account access. Administrators require deeper control over rooms, bookings, users, employees, salaries, and monitoring summaries. Reception staff require quick-action tools for arrivals, departures, search, payments, and housekeeping coordination. The monitoring layer, though automated, behaves as another operational stakeholder because it continuously contributes room-condition events to the system.
 
-An iterative Agile-inspired model was adopted for the project. This model was suitable because the system contains several related but distinct modules, including booking, room administration, receptionist operations, housekeeping support, and IoT alert simulation. Building the system in iterations made it possible to first establish the core hotel workflow and then progressively refine the administrative dashboard, role-based access control, monitoring logic, and notification features.
+Functional requirements were therefore grouped around role-specific outcomes rather than abstract menus. The system had to redirect users to the correct dashboard, prevent room clashes, preserve payment state, support room-status updates, create housekeeping tasks after checkout, and evaluate simulated room-condition data against meaningful thresholds. Non-functional requirements were equally important: usability, role isolation, persistence, and maintainability were all necessary for the project to remain credible as a final-year system.
 
-Each iteration followed a practical cycle of planning, design, implementation, review, and improvement. Early iterations focused on foundational database models and guest-facing pages, while later iterations introduced operational dashboards, environment-driven account configuration, room-condition alerts, background monitoring cycles, and notification delivery. This development style aligns with the view of Schwaber and Sutherland (2017) that working software and continuous stakeholder feedback are central to effective system evolution.
+*Table 3.1: Stakeholder groups and the interfaces that serve them in the implemented system.*
 
+| Stakeholder | Primary responsibility in the system | Main interface focus |
+| --- | --- | --- |
+| Guest | Browse rooms, submit reservations, review booking/payment state | Public pages and booking flow |
+| Administrator | Monitor hotel-wide performance and manage operational records | Custom admin dashboard |
+| Receptionist | Handle arrivals, departures, search, desk payment, and room readiness | Reception dashboard and boards |
+| Monitoring service | Generate and evaluate room-condition readings | IoT dashboard and alert center |
 
-### 3.1.2 Requirement Elicitation Technique
+## 3.3 System Architecture
 
-Requirements were obtained through observation of common hotel workflows, review of existing hotel software features, and analysis of what different user categories need from the system. The major stakeholders identified were hotel guests, reception staff, administrators, management, and personnel responsible for room readiness and safety supervision. Their expected interactions with the platform shaped both the user interface and the back-end logic.
+The architecture follows a standard layered Django pattern. The presentation layer is formed by HTML templates, Bootstrap-driven layout elements, and page-specific CSS or JavaScript enhancements. The application layer contains the view logic, validation rules, role checks, session handling, and feature orchestration. The data layer is provided by Django models backed by SQLite for the prototype environment.
 
-Document review was also used as a supporting technique. Existing studies on hotel management systems, smart monitoring, and hospitality information systems were examined in order to identify common modules, recurring design patterns, and major limitations in prior work. This helped ensure that the proposed system was grounded in established hotel software concepts while still extending them with the HSE-aware monitoring component.
+The architecture is deliberately split across two application domains. The `HotelApp` module handles users, rooms, bookings, payments, employees, salaries, housekeeping tasks, and activity logs. The `alerts` module manages logical devices, sensor readings, alert lifecycle, notification records, and monitoring snapshots. This split keeps the smart-monitoring responsibilities close to the hotel workflow without allowing them to overwhelm the ordinary reservation code.
 
+## 3.4 Data Design
 
-## 3.2 Requirement Gathering and Analysis
+The data design of the project mirrors the operational relationships inside a hotel. Room records sit at the centre because both online and offline bookings depend on them, payments refer back to them indirectly through booking type and booking identifier, and housekeeping tasks are created around their turnover state. The custom user model adds role information that makes it possible to route administrators, reception staff, and guests differently after authentication.
 
-After elicitation, the collected needs were organized into user requirements, functional requirements, and non-functional requirements. This analysis stage was necessary to translate high-level expectations into implementable system behavior. The result was a set of specifications that guided database design, interface layout, view logic, alert thresholds, and access control rules.
+For the monitoring subsystem, additional entities were introduced instead of overloading the ordinary hotel tables. Logical device records, sensor readings, room-condition alerts, and notification logs are persisted separately so that the monitoring lifecycle can be audited over time. That separation keeps the design clean and allows the HSE module to remain expandable if physical devices are later connected to the platform.
 
+*Table 3.2: Core persistent entities and their responsibilities in the current implementation.*
 
-### 3.2.1 Stakeholders and User Requirements
+| Entity | Purpose in the implemented system |
+| --- | --- |
+| Authorregis | Custom email-based user model with receptionist and staff roles |
+| Room | Stores room number, type, floor, facilities, price, availability, and housekeeping state |
+| OnlineBooking | Persists guest-submitted reservations after successful payment |
+| OfflineBooking | Persists front-desk or walk-in bookings |
+| Employee | Stores hotel staff bio-data and department records used in operations |
+| Salary | Stores compensation records linked to each employee entry |
+| Payment | Tracks payment method, status, receipt, and Paystack references through booking_type and booking_id |
+| HousekeepingTask | Coordinates room-turnover work after checkout or support actions |
+| ActivityLog | Records important operational actions for audit and visibility |
+| IoTDevice | Assigns a logical monitoring device to each room |
+| SensorReading | Stores temperature, gas, motion, and overall room condition history |
+| RoomConditionAlert | Stores active and resolved HSE incidents tied to readings |
+| AlertNotification | Stores simulated email or SMS notices generated from room-condition alerts |
 
-The primary stakeholders of the system are guests, reception staff, hotel administrators, and operational support staff. Guests need quick access to room information and reservation features. Receptionists need fast operational tools for daily front-desk duties. Administrators need deeper control over rooms, employees, users, dashboards, and alerts. Support staff need reliable visibility into room readiness and cleaning tasks so that turnover between guests can happen smoothly.
+![Entity-relationship diagram for the hotel management system](assets/diagrams/hotel_system_erd.png)
 
-The major user requirements identified for the system are as follows:
+*Figure 3.1: Entity-relationship diagram showing how the booking, operations, payment, and IoT monitoring tables are connected in the current implementation.*
 
-1. The guest should be able to view available rooms and room details online.
+Figure 3.1 complements Table 3.2 by showing the actual structural links behind the system. Solid connectors represent direct foreign-key or one-to-one relationships in the Django models, while the dashed payment connector highlights the current application's logical booking link implemented through `booking_type` and `booking_id` rather than a strict database foreign key.
 
-2. The guest should be able to make a reservation without physically visiting the hotel.
+## 3.5 Workflow Design
 
-3. Authorized staff should be able to register walk-in guests and manage desk bookings.
+The public guest workflow begins with room browsing, continues into the booking form, validates stay dates and guest counts, stores a pending reservation in session, and then moves to the payment page. Only after payment verification does the system create the persistent booking record and mark the room as reserved. That sequence is important because it avoids the common prototype problem where bookings are written before payment outcome is known.
 
-4. Reception staff should be able to check guests in and out quickly and update room status immediately.
+The internal operational workflow is different. Administrators use the dashboard as a control surface for aggregated information and management links, while reception staff use a more focused workflow around arrivals, departures, room status, housekeeping, and desk payments. The IoT workflow runs alongside both human paths. It generates or receives room-condition data, evaluates that data, writes sensor history, and updates alerts that become visible to staff through the monitoring pages.
 
-5. Administrators should be able to add, edit, and delete rooms, users, employees, salaries, and bookings.
+## 3.6 Development Environment and Tools
 
-6. The system should be able to monitor room conditions and notify authorized personnel when a room is outside normal operating conditions.
+The implemented stack is centered on Python and Django. HTML, CSS, JavaScript, and template rendering support the interface. SQLite provides a lightweight but reliable persistence layer for the academic prototype. Paystack is used as the active payment gateway in the guest booking flow, while optional notification backends allow the monitoring module to record or dispatch alert messages.
 
+For the documentation refresh itself, a local demo database was generated so that screenshots, dashboards, and alert states would be internally consistent. This was necessary because a presentation-ready report should not rely on accidental live data. Instead, the figures shown in Chapter 4 are derived from a controlled demo environment built directly from the repository's current models and views.
 
-### 3.2.2 Functional Requirements
+## 3.7 Summary
 
-Functional requirements define the services the system must provide. Based on the analysis carried out, the following core functions were specified:
-
-1. The system shall support user authentication using email-based login.
-
-2. The system shall support role-sensitive redirection for guests, reception staff, and administrators.
-
-3. The system shall display room information including type, price, image, and availability status.
-
-4. The system shall create, edit, and cancel online and offline bookings.
-
-5. The system shall prevent room clashes by checking for booking conflicts before confirmation.
-
-6. The system shall maintain guest records and support quick search of existing users.
-
-7. The system shall support check-in and check-out workflows and automatically update room occupancy state.
-
-8. The system shall create housekeeping tasks when required and allow task progress updates.
-
-9. The system shall record payments and keep track of paid, partial, or pending settlement status.
-
-10. The system shall provide an administrative dashboard showing room, booking, user, employee, and revenue summaries.
-
-11. The system shall maintain an activity log of important staff actions for accountability.
-
-12. The system shall create one logical IoT monitoring point for each room and store sensor readings.
-
-13. The system shall detect abnormal temperature, gas, or motion conditions based on defined rules.
-
-14. The system shall generate alerts, support acknowledgement and resolution, and retain alert history.
-
-15. The system shall support notification delivery through in-app records and configurable email or SMS backends.
-
-
-### 3.2.3 Non-Functional Requirements
-
-Non-functional requirements describe the quality attributes and operating constraints of the system. The following were considered essential to the success of the project:
-
-1. Usability: interfaces should be simple enough for guests and hotel staff with minimal training.
-
-2. Performance: common actions such as login, room browsing, dashboard loading, and booking submission should respond quickly under normal usage.
-
-3. Reliability: critical operational data such as bookings, room status, payments, and alerts should persist correctly in the database.
-
-4. Security: protected routes should only be accessible to authenticated and authorized users.
-
-5. Maintainability: the codebase should remain modular so that new dashboards, integrations, or room-monitoring rules can be added later.
-
-6. Availability: the system should support continuous hotel operations and degrade gracefully when optional integrations such as email or SMS are not configured.
-
-7. Auditability: administrative and receptionist actions should be traceable through activity records and alert status changes.
-
-8. Safety awareness: the system should support HSE practice by highlighting conditions that may require intervention.
-
-
-## 3.3 System Design
-
-The design of the proposed system combined conventional hotel workflow modeling with an event-based monitoring model for room conditions. The intention was to ensure that the booking and administrative modules remained intuitive while the safety layer could run in the background without complicating the user experience.
-
-
-### 3.3.1 Use Case Model
-
-The use case model centers on three major categories of interaction. Guests browse rooms, create reservations, and manage their booking-related information. Reception staff handle daily operations such as guest search, walk-in registration, check-in, check-out, room status review, and housekeeping coordination. Administrators manage higher-level operations such as room creation, employee records, user accounts, salary records, booking oversight, analytics, and alert supervision.
-
-The IoT monitoring workflow introduces an additional system actor in the form of the simulation engine. This background process produces room condition readings, stores them in the database, evaluates whether the readings are normal or abnormal, and escalates issues to authorized users. The model therefore combines human interaction use cases with automated safety events.
-
-
-### 3.3.2 Activity Flow
-
-The main booking activity begins when a guest or staff member identifies a room, provides booking information, and submits a reservation. The system validates dates, checks for room conflicts, stores the reservation, and updates the corresponding operational views. On arrival, the receptionist checks the guest in, confirms room assignment, and changes the room state to occupied. At departure, the receptionist checks the guest out, records payment status where necessary, and triggers room turnover processing for housekeeping.
-
-The monitoring activity runs alongside these human workflows. Each room is associated with a logical device record. At regular intervals, the system generates a new temperature value, gas value, and motion state. The readings are assessed against thresholds and contextual expectations such as room occupancy, room status, and existing incidents. If a reading falls outside acceptable bounds, the system creates or updates an alert and exposes it on the monitoring dashboard for acknowledgement or resolution.
-
-
-### 3.3.3 System Architecture
-
-The architecture follows a layered web application pattern. The presentation layer consists of HTML templates, CSS styling, and JavaScript-enhanced interactions for guests and staff. The application layer, built with Django views, forms, and services, contains the business rules for authentication, reservations, room management, payments, dashboards, and alerts. The data layer is handled through Django models and the ORM, which persist users, rooms, bookings, payments, staff records, tasks, devices, readings, and alerts in the database.
-
-A separate simulation and notification layer complements the standard web stack. The simulation service generates realistic room-condition values based on hotel context such as occupancy, housekeeping state, floor behavior, and time-of-day effects. The notification service then decides whether emails or SMS messages should be sent when an alert is raised, escalated, acknowledged, or resolved. This layered structure improves maintainability because each responsibility is isolated while still contributing to the same user-facing application.
-
-
-### 3.3.4 Database Design Overview
-
-The data model was designed around the major operational entities of the hotel. The user table stores authentication and role information. The room table stores room identity, category, price, occupancy status, and housekeeping status. Online and offline booking tables retain reservation details for digital and desk-based booking channels. Additional tables handle employees, salary records, payments, housekeeping tasks, and activity logs.
-
-For the HSE component, separate tables were created for logical IoT devices, sensor readings, room-condition alerts, and alert notifications. This separation was deliberate. It allows the system to preserve a historical stream of readings, distinguish one alert from another, track acknowledgement and resolution status, and record whether notifications were attempted or delivered. Such structure supports both monitoring and later auditing.
-
-
-### 3.3.5 IoT Simulation and Alert Methodology
-
-Because physical sensors were not available for this project, a software simulation approach was adopted. The simulation was designed to behave like a realistic room-monitoring layer rather than a purely random generator. Each room receives a logical device profile, and the value generation process uses contextual factors such as whether the room is available, occupied, reserved, under housekeeping attention, or already linked to an active incident.
-
-The generated values include temperature, gas level, and motion state. Temperature is varied within an expected comfort range under normal circumstances, with occasional deviations representing air-conditioning failure, overheating, or other anomalies. Gas level is kept near safe conditions most of the time but can rise gradually or sharply to represent leakage or ventilation problems. Motion readings are interpreted alongside occupancy expectations so that motion in an empty room or prolonged inactivity in an occupied room can be flagged for review.
-
-To preserve the idea of a live but generally safe hotel environment, the probability of abnormal room conditions was intentionally kept relatively low. The simulation was tuned so that unsafe conditions occur occasionally rather than constantly, thereby producing meaningful alerts without making the hotel appear permanently unstable. This methodological decision improves realism and supports the HSE objective of early detection rather than crisis saturation.
-
-
-## 3.4 Development Tools and Environment
-
-The proposed system was implemented with a set of tools chosen for rapid web development, maintainability, and ease of deployment. HTML, CSS, and JavaScript were used for the user interface. Python was used as the main programming language, while Django provided URL routing, form handling, authentication support, the ORM, template rendering, and administrative structure. SQLite was used as the default project database for the prototype implementation.
-
-Visual Studio Code was used as the primary development environment, and Git was used for version control. Environment variables were adopted for configurable items such as default staff credentials, Twilio SMS settings, and optional email delivery settings. This made the system easier to manage securely across development scenarios. The absence of physical hardware was addressed by implementing the IoT logic entirely in software, which kept the prototype testable without reducing the conceptual scope of the project.
-
-
-## 3.5 Summary
-
-This chapter has presented the methodology used to design the system, from requirement elicitation and iterative development to architectural planning and IoT simulation strategy. The next chapter describes how these design decisions were translated into a working web application and how the resulting system was tested and evaluated.
-
+This chapter has described the design logic behind the project: iterative development, role-aware requirements, modular architecture, and workflow-led implementation. With that design foundation established, Chapter 4 presents the completed features as they exist in the running system and discusses how they behave in a realistic demonstration context.
 
 # Chapter 4
 
 ## 4.0 Introduction
 
-This chapter presents the implementation of the developed system and the testing procedures used to verify that it satisfies the objectives of the study. The implemented solution is a web-based hotel management and reservation platform that combines conventional hotel operations with a simulated IoT-driven HSE monitoring framework. The chapter discusses the functional modules delivered, the underlying implementation structure, and the results observed during validation.
+This chapter presents the implemented system in a presentation-ready format. Rather than describing the project only in abstract terms, the chapter ties each major feature to the live interface, the underlying control flow, and selected source-code excerpts from the current repository. The result is a chapter that can support both viva presentation and technical defence.
 
-Implementation was carried out with Django on the server side and standard web technologies on the client side. The resulting system is database-backed and role-aware, meaning that different interfaces and actions are available depending on whether the user is a guest, a receptionist, or an administrator. In addition, a background monitoring workflow continuously generates room-condition readings, evaluates them, and raises alerts when abnormal states are detected.
+The figures in this chapter were generated from a controlled demo dataset built from the repository's current models and views. That approach keeps the screenshots internally consistent and allows the documented dashboards, booking states, and alert conditions to reflect a coherent operating scenario instead of random leftover data.
 
+## 4.1 Implemented Feature Overview
 
-## 4.1 Overview of the Implemented System
+The completed application is best understood as a connected hospitality platform made of seven visible feature areas: access control, room inventory, booking, payment, administration, reception workflow, and HSE monitoring. Each one is presented below with the same evidence pattern so that the reader can move naturally from interface to logic.
 
-The completed system is organized around the major hotel workflows identified in the methodology stage. Public-facing pages allow users to browse rooms, register, and make reservations. Internal staff pages support room management, employee management, payment tracking, booking control, operational dashboards, and housekeeping coordination. The application was implemented as a modular Django project so that hotel administration and HSE monitoring could share the same authentication and data storage layer.
+## 4.2 Feature Walkthrough
 
+The subsections below present each major feature with the same structure: functional explanation, implementation note, interface evidence, process flow, and a short code extract from the current repository.
 
-### 4.1.1 Authentication and Role-Based Access
+### 4.2.1 Login and Role-Based Access
 
-Authentication was implemented with an email-based user model. Users log in through the main login page, after which the system redirects them according to their privileges. Regular users are taken to the standard user area, while administrators and designated reception staff are redirected to role-appropriate dashboards. This improves security and usability because users only see the controls relevant to their responsibilities.
+The login module gives the system its operational shape because it determines what kind of interface the user sees after authentication. A guest should not land on a crowded control panel, and a receptionist should not be forced to navigate the same screen as a system administrator. The application therefore uses role-aware routing immediately after successful sign-in.
 
-Administrative access controls were extended beyond the default Django admin site so that a custom operational dashboard could be used for day-to-day hotel tasks. Reception staff access was also integrated through environment-driven account bootstrapping, which makes it possible to define default front-desk credentials securely without hardcoding them into the main application logic.
+From a presentation standpoint, this feature matters because it is the entry point to every other workflow shown in the document. It demonstrates that the project is not a single flat website, but a structured application with clear access boundaries and user-sensitive navigation.
 
+**Implementation note:** The implementation keeps the routing logic compact by using helper functions that choose a safe `next` destination or fall back to the correct dashboard for the current role.
 
-### 4.1.2 Room and Reservation Management
+![Login interface showing the email-based access form used to enter the hotel system.](assets/screenshots/login_page.png)
 
-Room management was implemented as a database-backed module that stores room number, type, price, image, occupancy state, and housekeeping state. Administrators can add, edit, and delete room records through the custom management interface. This ensures that room inventory remains synchronized with reservations and operational status.
+*Figure 4.1: Login interface showing the email-based access form used to enter the hotel system.*
 
-Reservation handling was implemented through separate but related online and offline workflows. Online booking captures guest-submitted reservation requests, while offline booking supports walk-in or front-desk entry. Before a booking is finalized, the system validates dates and checks for conflicting reservations to reduce the risk of double booking. Reservation records then feed into room status updates, dashboard summaries, and guest service workflows.
+![Role-aware login flow from credential submission to dashboard redirection.](assets/flowcharts/login_flow.png)
 
+*Figure 4.2: Role-aware login flow from credential submission to dashboard redirection.*
 
-### 4.1.3 Receptionist and Housekeeping Operations
+**Code extract: Role-aware redirect helper**
 
-A dedicated receptionist dashboard was implemented to support daily front-desk control. The dashboard provides a compact overview of available rooms, occupied rooms, rooms awaiting cleaning, today's check-ins, today's check-outs, guest activity, and pending operational items. This design reflects the practical reality that reception staff need speed and visibility more than deep configuration menus.
+*This helper centralizes post-login routing and keeps redirection decisions predictable for guests, staff, and reception users. Source: `Django_practice_Pro_hotel_management_system-main/HotelApp/views.py (lines 47-70)`.*
 
-Check-in and check-out workflows were implemented as guided actions. During check-in, the room is assigned and marked occupied. During check-out, the system updates booking status, records settlement information where required, frees the room, and creates a housekeeping task so that the room can be prepared for the next guest. Separate room status and housekeeping boards help staff coordinate readiness, cleaning progress, and guest turnover.
+```python
+def get_post_login_route_name(user):
+    if user.is_receptionist:
+        return "receptionist_dashboard"
+    elif user.is_staff:
+        return "dashboard"
+    else:
+        return "user_home"
 
 
-### 4.1.4 Billing and Payment Recording
+def get_safe_next_url(request):
+    """Return the ?next= redirect target if it is safe, otherwise return ''."""
+    next_url = request.POST.get("next") or request.GET.get("next", "")
+    if next_url and url_has_allowed_host_and_scheme(
+        next_url,
+        allowed_hosts={request.get_host()},
+        require_https=request.is_secure(),
+    ):
+        return next_url
+    return ""
 
-Billing was implemented through internal payment records linked to the booking workflow. Rather than depending on an external payment gateway in the current prototype, the system records amounts due, amounts paid, balance state, and payment status as part of hotel operations. This design is suitable for desk payment capture, reconciliation, and reporting, and it can still be extended later to support third-party online payment providers if required.
 
+def get_post_login_redirect(request, user):
+    next_url = get_safe_next_url(request)
+    return next_url or reverse(get_post_login_route_name(user))
+```
 
-### 4.1.5 Administrative Dashboard
+### 4.2.2 Rooms Catalogue and Room Management Context
 
-The custom administrative dashboard was implemented to display live operational data from the database. The dashboard summarizes room counts, booking totals, users, employees, revenue-related information, and recent activities. Because it is backed by actual hotel data rather than static placeholders, the interface behaves more like a true control center than a design mock-up. This was an important implementation goal because the dashboard needed to reflect the hotel's current operational state.
+The rooms feature is more than a gallery. It is the system's public inventory layer, and every booking, payment, dashboard summary, and room-status decision depends on it. The room records store pricing, room type, operational status, facilities, and housekeeping information, which means the same entity serves both guest-facing and staff-facing needs.
 
-Additional management pages were implemented for rooms, bookings, employees, salary records, users, and monitoring. These pages allow administrators to create, update, and delete operational records through the website itself, thereby making the custom panel functionally closer to the standard Django admin experience while remaining tailored to hotel workflow.
+In the user experience, the room catalogue translates that stored information into a clear visual list. In the internal workflow, the same room model supports reservation checks, dashboard statistics, maintenance visibility, and turnover readiness.
 
+**Implementation note:** The room model was designed with both commercial and operational fields so that one record can support public display, booking validation, and internal control views without duplicated data structures.
 
-### 4.1.6 IoT Monitoring and HSE Alert Management
+![Public room catalogue showing room type, price, facilities, and current availability state.](assets/screenshots/rooms_page.png)
 
-The HSE monitoring component was implemented in a dedicated alerts module. Each hotel room is associated with a logical IoT device, and the system stores periodic sensor readings covering room temperature, gas concentration, motion state, expected occupancy, and overall room condition. These readings are displayed through monitoring pages that summarize healthy rooms, warning rooms, and active alerts.
+*Figure 4.3: Public room catalogue showing room type, price, facilities, and current availability state.*
 
-Alert logic evaluates each reading against expected room conditions. High temperature, unusual gas values, motion in a room that should be empty, or suspicious inactivity can cause the system to create a room-condition alert. Once created, the alert can be acknowledged or resolved by an authorized administrator. This means the system does not only detect abnormal conditions; it also keeps an audit trail of response activity.
+![Room-discovery flow from public catalogue browsing to booking handoff.](assets/flowcharts/rooms_flow.png)
 
-To support the demonstration of a live but safe environment, the simulator was tuned so that abnormal conditions occur occasionally instead of continuously. In the implemented configuration, roughly one-fifth of monitored room states may show abnormal behavior over time, while the rest remain within safe limits. This produces realistic monitoring variation and allows the dashboard to demonstrate both normal operation and incident response behavior.
+*Figure 4.4: Room-discovery flow from public catalogue browsing to booking handoff.*
 
+**Code extract: Core room model**
 
-## 4.2 Implementation Details
+*This model defines the inventory attributes that drive both the catalogue view and the staff dashboards. Source: `Django_practice_Pro_hotel_management_system-main/HotelApp/models.py (lines 57-89)`.*
 
+```python
+class Room(models.Model):
+    ROOM_STATUS = [
+        ('available', 'Available'),
+        ('occupied', 'Occupied'),
+        ('maintenance', 'Maintenance'),
+        ('reserved', 'Reserved'),
+    ]
 
-### 4.2.1 Database Models and Persistent Storage
+    ROOM_TYPES = [
+        ('single', 'Single'),
+        ('double', 'Double'),
+        ('suite', 'Suite'),
+    ]
 
-The implementation relies on persistent data models for the main hotel entities. These include the custom authenticated user model, room records, online bookings, offline bookings, payments, employees, salaries, housekeeping tasks, and activity logs. By persisting these records in the database, the system supports continuity of operation across sessions and provides traceability for administrative actions.
+    HOUSEKEEPING_STATUS = [
+        ('clean', 'Clean'),
+        ('dirty', 'Dirty'),
+        ('in_progress', 'In Progress'),
+    ]
 
-The monitoring subsystem uses additional persistent models for IoT devices, sensor readings, room-condition alerts, and alert notifications. This structure makes it possible to view not only the current status of a room, but also the history of its readings and the status of the alerts that were generated from them. From an HSE standpoint, this is important because safety systems should preserve evidence of what happened, when it happened, and what response followed.
+    room_number = models.CharField(max_length=50, unique=True)
+    room_type = models.CharField(max_length=20, choices=ROOM_TYPES, db_index=True)
+    floor = models.IntegerField()
+    facility = models.TextField()
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    image = models.ImageField(upload_to='rooms/', blank=True, null=True)
+    status = models.CharField(max_length=20, choices=ROOM_STATUS, default='available', db_index=True)
+    housekeeping_status = models.CharField(max_length=20, choices=HOUSEKEEPING_STATUS, default='clean')
+    last_cleaned = models.DateTimeField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return f"Room {self.room_number} ({self.room_type})"
+```
 
-### 4.2.2 Request Handling and Views
+### 4.2.3 Booking Workflow
 
-Implementation of the user interface was handled through Django views, forms, templates, and URL routing. Form logic validates booking data, user input, and operational actions before they affect the database. View logic enforces access restrictions for protected dashboards and staff actions. Templates render the guest pages, custom admin pages, receptionist tools, housekeeping board, and monitoring interfaces in a consistent web layout.
+The booking workflow was implemented as a controlled sequence rather than a form that immediately creates a reservation record. The guest selects a room, chooses dates, enters occupancy details, and triggers server-side validation that checks date order and room-conflict conditions. Only when the booking data is valid does the system move it forward to the payment stage.
 
+That approach improves reliability. It ensures that stay details are preserved long enough to support payment processing, yet the final booking record is not written prematurely. For a final-year project, this is a more realistic workflow than simply saving any submitted reservation request without transactional control.
 
-### 4.2.3 Notification and Background Monitoring
+**Implementation note:** The system stores the validated booking payload in session as `pending_booking`, which creates a clean handoff between booking validation and Paystack payment.
 
-Notification support was implemented so that alerts can be surfaced beyond the dashboard. The system stores notification records and supports email and SMS delivery through configurable backends. SMTP settings can be supplied through environment variables for email, while Twilio credentials can be provided for real SMS delivery. If such integrations are not configured, the system can still operate using internal notification logs or development-mode delivery outputs.
+![Booking page showing room context, date selection, and guest-count inputs before payment.](assets/screenshots/booking_page.png)
 
-Background monitoring was implemented through a periodic execution cycle. The cycle can run alongside the web application in development scenarios and can also be executed through a dedicated management command. This design allows the monitoring service to simulate continuous room observation and natural alert generation without requiring manual data entry for every sensor event.
+*Figure 4.5: Booking page showing room context, date selection, and guest-count inputs before payment.*
 
+![Validated booking flow from stay details to the pending-payment handoff.](assets/flowcharts/booking_flow.png)
 
-## 4.3 System Testing
+*Figure 4.6: Validated booking flow from stay details to the pending-payment handoff.*
 
-Testing was carried out to verify that the implemented system satisfies both functional and non-functional expectations. The testing process included manual scenario testing and automated framework-based tests. Manual testing was used to observe interface behavior, user navigation, room management, booking flow, and dashboard response. Automated testing was used for repeatable verification of sensitive logic such as alert creation, account bootstrap behavior, and notification logging.
+**Code extract: Booking validation and session handoff**
 
+*This excerpt shows how the view validates user input and stores a pending booking in session before payment begins. Source: `Django_practice_Pro_hotel_management_system-main/HotelApp/views.py (lines 521-558)`.*
 
-### 4.3.1 Functional Testing
-
-Functional testing focused on whether users could complete the tasks expected of their roles. Guest-related tests covered room browsing, registration, login, and booking submission. Reception-related tests covered dashboard access, room status visibility, guest search, check-in, and check-out. Administrative tests covered room CRUD operations, user and employee management, booking oversight, dashboard summaries, and monitoring page access.
-
-The monitoring module was also tested functionally by generating readings and confirming that abnormal situations created alerts while normal situations did not. Acknowledgement and resolution workflows were checked to ensure that alert state changes were stored correctly and reflected in the interface. Notification logs were reviewed to confirm that the system recorded delivery attempts and outcomes.
-
-
-### 4.3.2 Unit and Integration Testing
-
-Automated unit and integration tests were implemented for the monitoring subsystem and key staff-account behavior. The alert tests verified that monitoring snapshots could be generated, abnormal conditions created alerts, resolved conditions cleared or updated alert states appropriately, notification records were created, and the monitoring command executed successfully. These tests were important because the HSE logic contains multiple dependent stages: value generation, rule evaluation, alert persistence, and notification dispatch.
-
-Additional focused tests were implemented for the environment-driven receptionist bootstrap process. These tests confirmed that the default receptionist account can be created or refreshed from environment variables and that the login flow redirects such a user to the receptionist dashboard. Together, these tests provide confidence that the operational roles and safety workflows behave consistently across repeated executions.
-
-
-### 4.3.3 Sample Test Cases and Outcomes
-
-TC001: User login test. Expected result: valid credentials authenticate successfully and redirect the user to the correct dashboard. Outcome: passed.
-
-TC002: Room availability display test. Expected result: available rooms are listed with correct details. Outcome: passed.
-
-TC003: Online booking validation test. Expected result: booking is stored only when dates and room availability are valid. Outcome: passed.
-
-TC004: Walk-in booking test. Expected result: receptionist can register an offline booking from the internal panel. Outcome: passed.
-
-TC005: Check-in workflow test. Expected result: room status changes to occupied and booking state updates correctly. Outcome: passed.
-
-TC006: Check-out workflow test. Expected result: room becomes available or ready for turnover and a housekeeping task is created. Outcome: passed.
-
-TC007: Admin room management test. Expected result: administrator can add, edit, and delete room records through the custom panel. Outcome: passed.
-
-TC008: Sensor snapshot test. Expected result: the monitoring service produces readings for monitored rooms and returns a usable dashboard summary. Outcome: passed.
-
-TC009: Abnormal-condition alert test. Expected result: unsafe readings create a persistent room-condition alert. Outcome: passed.
-
-TC010: Alert acknowledgement and resolution test. Expected result: authorized staff can update alert lifecycle state without data loss. Outcome: passed.
-
-TC011: Notification logging test. Expected result: email or SMS notification attempts are recorded for generated alerts. Outcome: passed.
-
-
-### 4.4 Results and Discussion
-
-
-### 4.4.1 User Interface Output
-
-The implemented user interfaces demonstrate that the system can support both customer-facing and internal hotel operations. Guests are able to browse room listings and submit reservations through clear public pages. Administrators work through a custom dashboard that reflects actual database content, while reception staff use a dedicated dashboard optimized for everyday operational decisions such as check-in, check-out, and room readiness review.
-
-From a usability perspective, separating interfaces by role reduced clutter and improved workflow speed. Instead of presenting every user with the same set of controls, the implementation exposes only the relevant tasks to the current user category. This contributes to accuracy and reduces the cognitive load on staff working under time pressure.
-
-
-### 4.4.2 HSE Monitoring Output
-
-The monitoring pages demonstrate that the simulated IoT framework can behave like a live operational subsystem. Rooms are shown with current condition summaries, abnormal rooms are highlighted, and active alerts can be reviewed in a dedicated alert center. Because each reading is stored in the database, the system provides continuity between one monitoring cycle and the next rather than acting like a temporary front-end animation.
-
-The alerting behavior also supports the HSE objective of early awareness. A high gas reading, abnormal temperature, or suspicious motion event can be detected before it is manually reported by staff. When the condition is acknowledged or resolved, the update is reflected in the alert record, thereby creating accountability and supporting later review of the incident lifecycle.
-
-
-### 4.4.3 Overall Evaluation
-
-Overall, the implemented system meets the main objective of integrating hotel administration with smart room-condition monitoring. The reservation, staff, housekeeping, and dashboard modules function as a coherent operational platform, while the IoT simulation demonstrates how safety data can be embedded into hotel workflows without requiring immediate access to hardware devices. The system is therefore both practically useful as a hotel prototype and academically useful as a smart hospitality case study.
-
-The most significant result of the implementation is that safety monitoring is no longer conceptually isolated from hotel management. Instead, room-condition alerts, notification history, room status, and operational actions exist inside the same database-backed application. This integration is a major strength of the project because it reflects how smart hospitality systems can improve not only convenience, but also situational awareness and response quality.
-
-
-## 4.5 Limitations and Future Improvement
-
-The current implementation remains a prototype and therefore has some limitations. The IoT layer is simulated rather than connected to physical sensors, so real-world deployment would require hardware integration, calibration, and field validation. In addition, although the notification framework supports real email and SMS backends through environment variables, message delivery in practice still depends on external service configuration and connectivity.
-
-Future work can extend the project by connecting real temperature, gas, and motion sensors to the monitoring pipeline, strengthening analytical reporting, introducing richer invoice generation, and deploying the platform on a production database and hosting environment. Mobile notifications, predictive maintenance logic, and broader multi-branch hotel support are also promising directions for expansion.
-
-
-## 4.6 Summary
-
-This chapter has described the implementation of the web-based hotel management and reservation system and shown how the system was validated through functional, unit, and integration testing. The results indicate that the platform is capable of supporting hotel operations while also demonstrating the value of simulated IoT-based HSE monitoring within a unified administrative environment.
+```python
+try:
+    check_in = datetime.strptime(form_data["check_in"], "%Y-%m-%d").date()
+    check_out = datetime.strptime(form_data["check_out"], "%Y-%m-%d").date()
+except (TypeError, ValueError):
+    check_in = check_out = None
+    messages.error(request, "Please enter valid dates.")
+
+try:
+    adults = int(form_data["adults"])
+    children = int(form_data["children"])
+except (TypeError, ValueError):
+    adults = children = None
+    messages.error(request, "Please enter valid guest counts.")
+
+if check_in and check_out and check_in >= check_out:
+    messages.error(request, "Check-out must be after check-in.")
+
+if adults is not None and (adults <= 0 or children < 0):
+    messages.error(request, "Please enter valid guest counts.")
+
+if selected_room and check_in and check_out and adults is not None:
+    if booking_window_has_conflict(selected_room, check_in, check_out):
+        messages.error(request, "Room is not available for the selected dates.")
+    else:
+        # Store booking data in session for payment processing
+        request.session['pending_booking'] = {
+            'room_id': selected_room.id,
+            'check_in': form_data["check_in"],
+            'check_out': form_data["check_out"],
+            'adults': adults,
+            'children': children,
+            'city': form_data["city"],
+            'country': form_data["country"],
+            'address': form_data["address"],
+        }
+
+        # Redirect to payment page instead of creating booking
+        return redirect("booking_payment_page")
+```
+
+### 4.2.4 Paystack Payment Workflow
+
+Payment is an active part of the booking lifecycle in the current implementation. The guest reviews a structured payment summary and then proceeds through Paystack checkout. The application does not simply assume success; it initializes a transaction, stores a pending payment record, waits for the callback, verifies the returned reference, and only then creates the confirmed booking.
+
+This feature significantly strengthens the realism of the project. It demonstrates how a hospitality system can connect booking data, payment state, activity logging, and room reservation status inside one workflow. It also shows that the platform has evolved beyond the earlier academic-prototype pattern of internal payment notes only.
+
+**Implementation note:** The payment flow is split into two controlled stages: transaction initialization and callback verification. This allows booking creation to depend on server-side confirmation rather than on client-side assumption.
+
+![Payment summary page used to review reservation details before redirecting to Paystack.](assets/screenshots/payment_page.png)
+
+*Figure 4.7: Payment summary page used to review reservation details before redirecting to Paystack.*
+
+![Paystack-backed payment sequence from pending booking to verified reservation.](assets/flowcharts/payment_flow.png)
+
+*Figure 4.8: Paystack-backed payment sequence from pending booking to verified reservation.*
+
+**Code extract: Paystack transaction initialization**
+
+*The initialization stage calculates the payable amount, creates a unique reference, and opens a pending payment record before redirecting to Paystack. Source: `Django_practice_Pro_hotel_management_system-main/HotelApp/views.py (lines 1414-1466)`.*
+
+```python
+@login_required
+def initiate_payment(request):
+    """Initialize Paystack payment for a booking"""
+    if request.method != 'POST':
+        return redirect('online_booking')
+
+    # Get booking details from session
+    booking_data = request.session.get('pending_booking')
+    if not booking_data:
+        messages.error(request, "No pending booking found. Please start booking process again.")
+        return redirect('online_booking')
+
+    try:
+        room = Room.objects.get(id=booking_data['room_id'])
+        check_in = datetime.strptime(booking_data['check_in'], '%Y-%m-%d').date()
+        check_out = datetime.strptime(booking_data['check_out'], '%Y-%m-%d').date()
+
+        # Calculate amount
+        nights = (check_out - check_in).days
+        amount = int(room.price * nights * 100)  # Convert to kobo (Paystack uses kobo)
+
+        # Generate payment reference
+        reference = generate_payment_reference()
+
+        # Initialize Paystack transaction
+        paystack = Paystack(secret_key=settings.PAYSTACK_SECRET_KEY)
+        response = paystack.transaction.initialize(
+            email=request.user.email,
+            amount=amount,
+            reference=reference,
+            callback_url=request.build_absolute_uri(reverse('payment_callback'))
+        )
+
+        if response['status']:
+            # Store payment reference in session
+            request.session['payment_reference'] = reference
+            request.session['payment_amount'] = float(room.price * nights)
+
+            # Create pending payment record
+            Payment.objects.create(
+                booking_type='online',
+                booking_id=0,  # Will be updated after booking creation
+                amount=room.price * nights,
+                payment_method='paystack',
+                payment_status='pending',
+                receipt_number=reference,
+                paystack_reference=reference,
+                paystack_access_code=response['data']['access_code'],
+                created_by=request.user
+            )
+
+            # Redirect to Paystack checkout
+            return redirect(response['data']['authorization_url'])
+```
+
+**Code extract: Payment callback and booking confirmation**
+
+*The callback stage verifies the reference, creates the final booking, updates the payment status, and reserves the room. Source: `Django_practice_Pro_hotel_management_system-main/HotelApp/views.py (lines 1486-1523)`.*
+
+```python
+try:
+    # Verify payment with Paystack
+    paystack = Paystack(secret_key=settings.PAYSTACK_SECRET_KEY)
+    response = paystack.transaction.verify(reference=reference)
+
+    if response['status'] and response['data']['status'] == 'success':
+        # Get pending booking data
+        booking_data = request.session.get('pending_booking')
+        if not booking_data:
+            messages.error(request, "Booking data not found.")
+            return redirect('user_home')
+
+        # Create the booking
+        room = Room.objects.get(id=booking_data['room_id'])
+        booking = OnlineBooking.objects.create(
+            user=request.user,
+            room=room,
+            check_in=booking_data['check_in'],
+            check_out=booking_data['check_out'],
+            adults=booking_data.get('adults', 1),
+            children=booking_data.get('children', 0),
+            city=booking_data.get('city', ''),
+            country=booking_data.get('country', ''),
+            address=booking_data.get('address', ''),
+            status='confirmed'
+        )
+
+        # Update payment record
+        payment = Payment.objects.get(paystack_reference=reference)
+        payment.booking_id = booking.id
+        payment.payment_status = 'paid'
+        payment.paid_at = timezone.now()
+        payment.paystack_response = response['data']
+        payment.save()
+
+        # Update room status
+        room.status = 'reserved'
+        room.save()
+```
+
+### 4.2.5 Administrative Dashboard
+
+The custom administrative dashboard acts as the management cockpit of the system. It brings together booking totals, room availability, occupancy rate, user counts, salary figures, booking trends, and recent monitoring alerts inside a single page. This gives administrators a working picture of the hotel's current state instead of forcing them to inspect isolated tables one by one.
+
+The dashboard is especially important in this project because it also bridges ordinary hotel operations with smart monitoring. The HSE summary appears in the same space as the business metrics, which reinforces the idea that safety is an operational concern rather than a side system.
+
+**Implementation note:** The dashboard view aggregates counts, trend values, revenue estimates, and IoT summaries directly from the database so that the page behaves like a live operational dashboard rather than a static mock-up.
+
+![Custom administrator dashboard showing operational summaries and integrated HSE monitoring cards.](assets/screenshots/admin_dashboard.png)
+
+*Figure 4.9: Custom administrator dashboard showing operational summaries and integrated HSE monitoring cards.*
+
+![Administrative control flow from dashboard load to live management actions.](assets/flowcharts/admin_flow.png)
+
+*Figure 4.10: Administrative control flow from dashboard load to live management actions.*
+
+**Code extract: Administrative metric aggregation**
+
+*This excerpt shows how the dashboard compiles room, booking, user, revenue, and IoT summary values before rendering the page. Source: `Django_practice_Pro_hotel_management_system-main/HotelApp/views.py (lines 177-233)`.*
+
+```python
+def dashboard(request):
+    today = timezone.localdate()
+    rooms = Room.objects.all()
+    users = Authorregis.objects.all()
+    employees = Employee.objects.all()
+    online_bookings = OnlineBooking.objects.select_related("user", "room")
+    offline_bookings = OfflineBooking.objects.select_related("room")
+    salaries = Salary.objects.select_related("employee")
+
+    room_status_counts = {
+        "Available": rooms.filter(status="available").count(),
+        "Occupied": rooms.filter(status="occupied").count(),
+        "Maintenance": rooms.filter(status="maintenance").count(),
+    }
+
+    occupied_room_ids = set(
+        online_bookings.filter(check_in__lte=today, check_out__gt=today).values_list("room_id", flat=True)
+    )
+    occupied_room_ids.update(
+        offline_bookings.filter(check_in__lte=today, check_out__gt=today).values_list("room_id", flat=True)
+    )
+
+    total_rooms = rooms.count()
+    total_online_bookings = online_bookings.count()
+    total_offline_bookings = offline_bookings.count()
+    total_bookings = total_online_bookings + total_offline_bookings
+    total_users = users.count()
+    total_staff_users = users.filter(is_staff=True).count()
+    total_guest_users = users.filter(is_staff=False).count()
+    total_employees = employees.count()
+    available_rooms = rooms.filter(status="available").count()
+    occupancy_rate = round((len(occupied_room_ids) / total_rooms) * 100, 1) if total_rooms else 0
+    check_ins_today = online_bookings.filter(check_in=today).count() + offline_bookings.filter(check_in=today).count()
+    check_outs_today = online_bookings.filter(check_out=today).count() + offline_bookings.filter(check_out=today).count()
+
+    booking_labels, online_booking_series = monthly_totals(online_bookings, "created_at")
+    _, offline_booking_series = monthly_totals(offline_bookings, "created_at")
+    booking_series = [online + offline for online, offline in zip(online_booking_series, offline_booking_series)]
+
+    account_distribution_labels = ["Admins", "Guests", "Employees"]
+    account_distribution_values = [total_staff_users, total_guest_users, total_employees]
+
+    estimated_revenue = calculate_booking_revenue(online_bookings.select_related("room")) + calculate_booking_revenue(
+        offline_bookings.select_related("room")
+    )
+    monthly_salary_budget = sum((salary.salary for salary in salaries), Decimal("0"))
+    iot_summary = None
+    recent_iot_alerts = []
+
+    try:
+        from alerts.services import build_monitoring_snapshot
+        from alerts.runtime import run_monitoring_cycle
+
+        run_monitoring_cycle(force_refresh=False)
+        iot_snapshot = build_monitoring_snapshot(force_refresh=False)
+        iot_summary = iot_snapshot["summary"]
+        recent_iot_alerts = iot_snapshot["alerts"][:5]
+```
+
+### 4.2.6 Receptionist Dashboard and Front-Desk Operations
+
+The receptionist module was designed around day-to-day front-desk work rather than broad system administration. The dashboard emphasizes what matters during live operations: today's check-ins, today's check-outs, room statistics, pending housekeeping, recent activity, revenue collected today, and pending payments. This keeps the screen practical for front-desk decision making.
+
+The workflow continues into related pages such as room status, guest search, housekeeping, check-in, check-out, and desk payment processing. In other words, the receptionist dashboard is not merely a smaller admin dashboard. It is a role-specific workspace tuned for speed, visibility, and frequent actions.
+
+**Implementation note:** The receptionist view computes operational metrics around the current date and combines reservation queues with room status and payment summaries so that staff can act from one compact page.
+
+![Receptionist dashboard focused on arrivals, departures, room status, and front-desk quick actions.](assets/screenshots/receptionist_dashboard.png)
+
+*Figure 4.11: Receptionist dashboard focused on arrivals, departures, room status, and front-desk quick actions.*
+
+![Front-desk workflow from sign-in through room, guest, and housekeeping actions.](assets/flowcharts/receptionist_flow.png)
+
+*Figure 4.12: Front-desk workflow from sign-in through room, guest, and housekeeping actions.*
+
+**Code extract: Receptionist dashboard aggregation**
+
+*This view builds the arrival/departure queues, room statistics, and payment summaries that make the receptionist interface task-oriented. Source: `Django_practice_Pro_hotel_management_system-main/HotelApp/views.py (lines 963-1038)`.*
+
+```python
+@receptionist_required
+def receptionist_dashboard(request):
+    today = timezone.localdate()
+    now = timezone.now()
+
+    # Today's check-ins and check-outs
+    todays_checkins_online = OnlineBooking.objects.filter(
+        check_in=today,
+        status__in=['confirmed', 'pending']
+    ).select_related('user', 'room').order_by('created_at')
+
+    todays_checkins_offline = OfflineBooking.objects.filter(
+        check_in=today,
+        status__in=['confirmed', 'pending']
+    ).select_related('room').order_by('created_at')
+
+    todays_checkouts_online = OnlineBooking.objects.filter(
+        check_out=today,
+        status='checked_in'
+    ).select_related('user', 'room').order_by('created_at')
+
+    todays_checkouts_offline = OfflineBooking.objects.filter(
+        check_out=today,
+        status='checked_in'
+    ).select_related('room').order_by('created_at')
+
+    # Room statistics
+    total_rooms = Room.objects.count()
+    available_rooms = Room.objects.filter(status='available').count()
+    occupied_rooms = Room.objects.filter(status='occupied').count()
+    reserved_rooms = Room.objects.filter(status='reserved').count()
+    maintenance_rooms = Room.objects.filter(status='maintenance').count()
+
+    # Housekeeping tasks
+    pending_housekeeping = HousekeepingTask.objects.filter(
+        status='pending'
+    ).select_related('room').order_by('-priority', 'created_at')[:5]
+
+    # Recent activity
+    recent_activities = ActivityLog.objects.select_related('user', 'room').order_by('-created_at')[:10]
+
+    # Revenue today
+    today_payments = Payment.objects.filter(
+        paid_at__date=today,
+        payment_status='paid'
+    ).aggregate(total=Sum('amount'))
+    revenue_today = today_payments['total'] or Decimal('0.00')
+
+    # Guests in house
+    guests_in_house = OnlineBooking.objects.filter(status='checked_in').count() + \
+                     OfflineBooking.objects.filter(status='checked_in').count()
+
+    # Pending payments
+    pending_payments_count = Payment.objects.filter(payment_status='pending').count()
+
+    context = build_admin_context(
+        "receptionist_dashboard",
+        todays_checkins_online=todays_checkins_online,
+        todays_checkins_offline=todays_checkins_offline,
+        todays_checkouts_online=todays_checkouts_online,
+        todays_checkouts_offline=todays_checkouts_offline,
+        total_rooms=total_rooms,
+        available_rooms=available_rooms,
+        occupied_rooms=occupied_rooms,
+        reserved_rooms=reserved_rooms,
+        maintenance_rooms=maintenance_rooms,
+        occupancy_rate=round((occupied_rooms / total_rooms * 100), 1) if total_rooms > 0 else 0,
+        pending_housekeeping=pending_housekeeping,
+        recent_activities=recent_activities,
+        revenue_today=revenue_today,
+        guests_in_house=guests_in_house,
+        pending_payments_count=pending_payments_count,
+        today=today,
+    )
+
+    return render(request, "admin/ReceptionistDashboard.html", context)
+```
+
+### 4.2.7 IoT Monitoring and HSE Alerting
+
+The IoT monitoring module is the most distinctive part of the project. Each room is mapped to a logical device, sensor readings are stored over time, and rules convert those readings into warning or critical conditions based on temperature, gas level, motion state, and expected occupancy. The result is a monitoring dashboard that behaves like a live operational subsystem rather than a decorative front-end panel.
+
+The HSE value of the feature lies in persistence and lifecycle. The system does not merely flash a warning; it stores readings, opens alerts, allows acknowledgement, records resolution, and makes recent incidents visible to administrators. That history is important because hotel safety work depends on accountability, not on momentary visual effects.
+
+**Implementation note:** The monitoring logic separates payload evaluation from persistence. That design keeps the thresholds explicit and allows the same alert lifecycle to work whether readings are simulated or later connected to real devices.
+
+![IoT monitoring dashboard showing room-condition summaries and active HSE alert counts.](assets/screenshots/iot_dashboard.png)
+
+*Figure 4.13: IoT monitoring dashboard showing room-condition summaries and active HSE alert counts.*
+
+![Monitoring lifecycle from sensor payload evaluation to alert refresh on the admin pages.](assets/flowcharts/iot_flow.png)
+
+*Figure 4.14: Monitoring lifecycle from sensor payload evaluation to alert refresh on the admin pages.*
+
+**Code extract: Room-condition rule evaluation**
+
+*The rule engine evaluates temperature, gas, and motion signals against room context to classify each reading as normal, warning, or critical. Source: `Django_practice_Pro_hotel_management_system-main/alerts/services.py (lines 213-311)`.*
+
+```python
+def evaluate_payload(device, payload):
+    room = device.room
+    issues = []
+    temperature_c = payload["temperature_c"]
+    gas_level = payload["gas_level"]
+    motion_state = payload["motion_state"]
+    occupancy_expected = payload["occupancy_expected"]
+
+    low_warning = device.temperature_min_normal - 2.0
+    low_critical = device.temperature_min_normal - 4.0
+    high_warning = device.temperature_max_normal + 1.5
+    high_critical = device.temperature_max_normal + 3.5
+
+    if temperature_c <= low_critical or temperature_c >= high_critical:
+        issues.append(
+            {
+                "type": "temperature",
+                "severity": "critical",
+                "message": (
+                    f"Room {room.room_number} temperature is {temperature_c}°C, "
+                    f"outside the safe operating range."
+                ),
+            }
+        )
+    elif temperature_c <= low_warning or temperature_c >= high_warning:
+        issues.append(
+            {
+                "type": "temperature",
+                "severity": "warning",
+                "message": (
+                    f"Room {room.room_number} temperature is drifting at {temperature_c}°C "
+                    f"and should be checked."
+                ),
+            }
+        )
+
+    if gas_level >= device.gas_critical_threshold:
+        issues.append(
+            {
+                "type": "gas",
+                "severity": "critical",
+                "message": (
+                    f"Room {room.room_number} gas concentration reached {gas_level} ppm. "
+                    f"Immediate HSE response is recommended."
+                ),
+            }
+        )
+    elif gas_level >= device.gas_warning_threshold:
+        issues.append(
+            {
+                "type": "gas",
+                "severity": "warning",
+                "message": (
+                    f"Room {room.room_number} gas concentration is {gas_level} ppm, above the warning threshold."
+                ),
+            }
+        )
+
+    if not occupancy_expected and motion_state == "tamper":
+        issues.append(
+            {
+                "type": "motion",
+                "severity": "critical",
+                "message": (
+                    f"Tamper-level motion was detected in Room {room.room_number} while it should be secured."
+                ),
+            }
+        )
+    elif not occupancy_expected and motion_state == "active":
+        issues.append(
+            {
+                "type": "motion",
+                "severity": "warning",
+                "message": (
+                    f"Unexpected activity was detected in Room {room.room_number}. "
+                    f"Front desk or security should confirm the room condition."
+                ),
+            }
+        )
+    elif occupancy_expected and motion_state == "tamper":
+        issues.append(
+            {
+                "type": "motion",
+                "severity": "warning",
+                "message": (
+                    f"Forceful motion signature was detected in occupied Room {room.room_number}. "
+                    f"Please verify guest safety."
+                ),
+            }
+        )
+
+    if any(issue["severity"] == "critical" for issue in issues):
+        overall_status = "critical"
+    elif issues:
+        overall_status = "warning"
+    else:
+        overall_status = "normal"
+
+    return overall_status, issues
+```
+
+**Code extract: Sensor persistence and alert synchronization**
+
+*Once evaluated, each payload is stored as a sensor reading and immediately synchronized with the active alert set for the room. Source: `Django_practice_Pro_hotel_management_system-main/alerts/services.py (lines 314-335)`.*
+
+```python
+@transaction.atomic
+def record_sensor_payload(device, payload, *, simulated=True):
+    overall_status, issues = evaluate_payload(device, payload)
+    reading = SensorReading.objects.create(
+        device=device,
+        room=device.room,
+        temperature_c=payload["temperature_c"],
+        gas_level=payload["gas_level"],
+        motion_state=payload["motion_state"],
+        occupancy_expected=payload["occupancy_expected"],
+        overall_status=overall_status,
+        issues=issues,
+        simulated=simulated,
+        recorded_at=payload.get("recorded_at") or timezone.now(),
+    )
+
+    device.last_seen_at = reading.recorded_at
+    device.is_online = True
+    device.save(update_fields=["last_seen_at", "is_online", "updated_at"])
+
+    sync_alerts_for_reading(device, reading)
+    return reading
+```
+
+## 4.3 Testing and Validation
+
+System validation was approached from two directions. First, the project was exercised manually through the same demonstration paths shown in this document: login, room browsing, booking entry, payment summary display, admin dashboard loading, receptionist dashboard loading, and IoT dashboard review. Second, the repository's Django test suite was executed to confirm the health of the built-in regression coverage around login routing, dashboard behaviour, receptionist bootstrap, and monitoring logic.
+
+The automated test run executed 35 tests. Most of the suites completed successfully, particularly the routing, home-view resilience, receptionist environment bootstrap, and IoT monitoring tests. Three older custom-admin assertions failed because they no longer align with the current seeded-room behaviour and current admin form outcomes. That result does not invalidate the documented feature set, but it does show that the admin regression suite should be refreshed as the project evolves.
+
+*Table 4.1: Summary of the main validation scenarios considered during the documentation refresh.*
+
+| Scenario | Validation style | Observed result |
+| --- | --- | --- |
+| Login redirects by user role | Automated and manual | Working in the current codebase and visible in the demo pages |
+| Room catalogue displays inventory and status | Manual | Working in the demo environment used for documentation screenshots |
+| Booking form preserves validated pending data | Manual and code inspection | Working through session handoff to the payment summary page |
+| Payment flow initializes Paystack transaction data | Code inspection and manual summary-page review | Implemented in the active project flow |
+| Admin dashboard compiles live metrics | Manual and automated coverage | Visible in the demo environment; some older admin tests need maintenance |
+| Reception dashboard builds daily queues and summaries | Automated and manual | Working in both the rendered demo page and repository logic |
+| IoT monitoring records readings and alerts | Automated and manual | Working in the repository test suite and the generated demo dashboard |
+
+## 4.4 Discussion
+
+Taken together, the implemented features show that the project has moved beyond a narrow booking website. It now behaves like a compact hospitality operations platform with payment control, staff workflow support, and HSE visibility. The most important design achievement is integration: reservation state, room state, payment state, staff actions, and alert state all live inside one application.
+
+The documentation refresh also makes that integration easier to communicate during presentation. Each feature is shown with its interface, logic flow, and code evidence, which means the final-year report can speak to both technical depth and practical usability. That balance is often where academic system projects struggle, and it is the main reason this regenerated document is more suitable for presentation than the earlier draft.
+
+## 4.5 Summary
+
+This chapter has shown the final system as it exists today: role-aware, payment-backed, operationally structured, and enriched with simulated IoT monitoring. The presentation-focused layout of this refreshed documentation now makes the project easier to defend academically because each major feature is supported by interface evidence, flow logic, and implementation excerpts from the real codebase.

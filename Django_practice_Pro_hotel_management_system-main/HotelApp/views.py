@@ -21,7 +21,7 @@ from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST, require_http_methods
 
-from pypaystack2 import PaystackClient
+from pypaystack2 import Paystack
 
 from .models import (
     OnlineBooking,
@@ -1502,7 +1502,7 @@ def initiate_payment(request):
         reference = generate_payment_reference()
         
         # Initialize Paystack transaction
-        paystack = PaystackClient(secret_key=settings.PAYSTACK_SECRET_KEY)
+        paystack = Paystack(secret_key=settings.PAYSTACK_SECRET_KEY)
         response = paystack.transactions.initialize(
             email=request.user.email,
             amount=amount,
@@ -1551,7 +1551,7 @@ def payment_callback(request):
     
     try:
         # Verify payment with Paystack
-        paystack = PaystackClient(secret_key=settings.PAYSTACK_SECRET_KEY)
+        paystack = Paystack(secret_key=settings.PAYSTACK_SECRET_KEY)
         response = paystack.transactions.verify(reference=reference)
         
         if response.status and response.data.status == 'success':
@@ -1608,7 +1608,7 @@ def payment_callback(request):
                     del request.session['payment_amount']
                 
                 messages.success(request, f"Payment successful! Your booking has been modified.")
-                return redirect('payment_success', booking_id=booking.id)
+                return redirect('my_bookings')
             else:
                 # Create new booking
                 room = Room.objects.get(id=booking_data['room_id'])
@@ -1665,7 +1665,7 @@ def payment_callback(request):
                     del request.session['payment_amount']
                 
                 messages.success(request, f"Payment successful! Your booking for Room {room.room_number} has been confirmed.")
-                return redirect('payment_success', booking_id=booking.id)
+                return redirect('my_bookings')
         else:
             # Payment failed
             payment = Payment.objects.filter(paystack_reference=reference).first()

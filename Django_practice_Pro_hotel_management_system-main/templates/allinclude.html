@@ -549,6 +549,28 @@
         }
       }
 
+      /* Desktop navbar - horizontal layout */
+      @media (min-width: 993px) {
+        .navbar-nav {
+          flex-direction: row;
+          gap: 0;
+        }
+
+        .navbar-collapse {
+          display: flex !important;
+          flex-basis: auto;
+        }
+
+        .nav-item {
+          display: inline-block;
+        }
+
+        .navbar-nav .nav-link {
+          display: inline-block;
+          padding: 0.5rem 0.75rem;
+        }
+      }
+
       @media (max-width: 992px) {
         :root { --navbar-h: 86px; }
 
