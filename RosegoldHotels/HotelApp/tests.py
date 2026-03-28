@@ -608,6 +608,7 @@ class SeedInitialRoomsTests(TestCase):
         self.assertTrue(all(image_names))
 
 
+@override_settings(SECURE_SSL_REDIRECT=False)
 class PaystackPaymentTests(TestCase):
     def setUp(self):
         self.user = get_user_model().objects.create_user(
@@ -693,7 +694,7 @@ class PaystackPaymentTests(TestCase):
             MockClient.return_value.transactions.initialize.return_value = init_resp
             response = self.client.post(reverse("initiate_payment"))
 
-        self.assertRedirects(response, reverse("online_booking"))
+        self.assertRedirects(response, reverse("booking_payment_page"))
 
     def test_initiate_payment_redirects_to_online_booking_when_no_pending_booking_in_session(self):
         response = self.client.post(reverse("initiate_payment"))
@@ -702,6 +703,28 @@ class PaystackPaymentTests(TestCase):
     def test_initiate_payment_get_request_redirects_to_online_booking(self):
         response = self.client.get(reverse("initiate_payment"))
         self.assertRedirects(response, reverse("online_booking"))
+
+    @override_settings(PAYSTACK_MOCK_MODE=True, PAYSTACK_SECRET_KEY="")
+    def test_initiate_payment_completes_booking_in_mock_mode(self):
+        from HotelApp.models import Payment, OnlineBooking
+
+        session = self.client.session
+        session["pending_booking"] = self._pending_booking_session()
+        session.save()
+
+        response = self.client.post(reverse("initiate_payment"))
+
+        booking = OnlineBooking.objects.get(user=self.user, room=self.room)
+        payment = Payment.objects.get(booking_id=booking.id)
+
+        self.assertEqual(payment.payment_status, "paid")
+        self.assertEqual(payment.payment_method, "paystack")
+        self.assertIn("local demo payment mode", payment.notes)
+        self.assertRedirects(
+            response,
+            reverse("payment_success", kwargs={"booking_id": booking.id}),
+            fetch_redirect_response=False,
+        )
 
     # --- payment_callback ---
 

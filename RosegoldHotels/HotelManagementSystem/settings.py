@@ -375,12 +375,19 @@ PAYSTACK_SECRET_KEY = os.environ.get('PAYSTACK_SECRET_KEY', '')
 PAYSTACK_WEBHOOK_SECRET = os.environ.get('PAYSTACK_WEBHOOK_SECRET', '')
 PAYSTACK_API_BASE_URL = os.environ.get('PAYSTACK_API_BASE_URL', 'https://api.paystack.co')
 PAYSTACK_CURRENCY = os.environ.get('PAYSTACK_CURRENCY', 'NGN')
+PAYSTACK_MOCK_MODE = env_bool('PAYSTACK_MOCK_MODE', DEBUG and not PAYSTACK_SECRET_KEY)
 
 # Development warning for missing payment keys
-if not PAYSTACK_PUBLIC_KEY and DEBUG:
+if DEBUG and PAYSTACK_MOCK_MODE:
     import warnings
     warnings.warn(
-        "PAYSTACK_PUBLIC_KEY not set. Payment functionality will not work. "
+        "Paystack keys are not configured, so local demo payment mode is enabled. "
+        "Bookings will complete inside the app without contacting Paystack."
+    )
+elif not PAYSTACK_PUBLIC_KEY and DEBUG:
+    import warnings
+    warnings.warn(
+        "PAYSTACK_PUBLIC_KEY not set. Real Paystack checkout may not work. "
         "Get your keys from: https://dashboard.paystack.com/#/settings/developer"
     )
 

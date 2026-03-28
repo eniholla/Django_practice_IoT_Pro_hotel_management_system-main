@@ -12,6 +12,23 @@
                     <h3 class="mb-0"><i class="fa fa-credit-card"></i> Complete Your Payment</h3>
                 </div>
                 <div class="card-body">
+                    {% if messages %}
+                    <div class="mb-4">
+                        {% for message in messages %}
+                        <div class="alert {% if message.tags == 'error' %}alert-danger{% elif message.tags == 'warning' %}alert-warning{% else %}alert-info{% endif %}">
+                            {{ message }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    {% if paystack_mock_mode %}
+                    <div class="alert alert-warning">
+                        <i class="fa fa-flask"></i> <strong>Local demo mode:</strong>
+                        clicking <em>Pay Now</em> will complete this booking inside the app without contacting Paystack.
+                    </div>
+                    {% endif %}
+
                     <!-- Booking Summary -->
                     <h4 class="mb-3">Booking Summary</h4>
                     <div class="table-responsive">
