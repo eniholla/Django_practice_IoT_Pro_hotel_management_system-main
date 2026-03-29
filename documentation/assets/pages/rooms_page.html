@@ -1,0 +1,2036 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head><base href="http://127.0.0.1:8010/"/>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>RoseGold Hotel</title>
+<!-- Bootstrap 5.3 -->
+<link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" rel="stylesheet"/>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;family=Cormorant+Garamond:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Font Awesome 6 -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+<link href="http://127.0.0.1:8010/static/css/style.css" rel="stylesheet"/>
+<link href="http://127.0.0.1:8010/static/css/user_home.css" rel="stylesheet"/>
+<link href="http://127.0.0.1:8010/static/Allfiles/css/animate.css" rel="stylesheet"/>
+<link href="http://127.0.0.1:8010/static/Allfiles/css/slick.css" rel="stylesheet"/>
+<link href="http://127.0.0.1:8010/static/Allfiles/css/jquery.datetimepicker.min.css" rel="stylesheet"/>
+<link href="http://127.0.0.1:8010/static/Allfiles/css/modal-video.min.css" rel="stylesheet"/>
+<link href="http://127.0.0.1:8010/static/Allfiles/css/magnific-popup.css" rel="stylesheet"/>
+<link href="http://127.0.0.1:8010/static/Allfiles/css/style.css" rel="stylesheet"/>
+<link href="http://127.0.0.1:8010/static/dist/assets/index-E6phwilR.css" rel="stylesheet"/>
+<style>
+      :root {
+        --primary: #1a1a2e;
+        --accent: #d4af37;
+        --light: #f8f9fa;
+        --dark: #111;
+        --gray: #6c757d;
+        --page-bg: #f4efe8;
+        --text-main: #1f2933;
+        --text-soft: #5f6670;
+        --surface: #fffaf1;
+        --surface-elevated: #ffffff;
+        --nav-bg: rgba(26, 26, 46, 0.88);
+        --nav-link: #f4f7fa;
+        --outline: #dacfbf;
+        --font-ui:
+          "Manrope", "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
+        --font-display: "Cormorant Garamond", Georgia, serif;
+        --btn-radius: 10px;
+        --navbar-h: 100px; /* matches body padding-top — used by sticky panels */
+      }
+
+      .dark {
+        --page-bg: #111823;
+        --text-main: #e9eef4;
+        --text-soft: #a8b7c5;
+        --surface: #182331;
+        --surface-elevated: #1f2f42;
+        --nav-bg: rgba(13, 20, 30, 0.94);
+        --nav-link: #f8fbff;
+        --outline: #2f4256;
+      }
+
+      body {
+        font-family: var(--font-ui);
+        color: var(--text-main);
+        background:
+          radial-gradient(
+            circle at 12% 8%,
+            rgba(212, 175, 55, 0.2),
+            transparent 28%
+          ),
+          radial-gradient(
+            circle at 88% 12%,
+            rgba(20, 184, 166, 0.16),
+            transparent 34%
+          ),
+          var(--page-bg);
+        transition:
+          background-color 0.4s ease,
+          color 0.4s ease;
+        padding-top: 100px;
+        overflow-x: hidden; /* fallback for browsers that don't support clip */
+        overflow-x: clip;   /* preferred: clips without creating a scroll container (preserves sticky) */
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        font-family: var(--font-display);
+        font-weight: 700;
+        letter-spacing: 0.01em;
+      }
+
+      p,
+      a,
+      li,
+      span,
+      button,
+      input,
+      textarea,
+      select,
+      label,
+      .nav-link,
+      .dropdown-item-custom,
+      .user-avatar-btn,
+      .btn {
+        font-family: var(--font-ui);
+      }
+
+      .navbar-brand,
+      .section-title,
+      .booking-room-name,
+      .room-number,
+      .hero-content h1,
+      .bookings-hero h1,
+      .booking-hero h1,
+      .rooms-hero h1 {
+        font-family: var(--font-display) !important;
+      }
+
+      .btn-primary {
+        background: var(--accent);
+        border-color: var(--accent);
+        border-radius: var(--btn-radius);
+        padding: 12px 32px;
+        font-weight: 600;
+        transition:
+          transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+          box-shadow 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+          background-color 0.35s ease,
+          border-color 0.35s ease,
+          color 0.35s ease;
+      }
+      .btn-primary:hover {
+        background: #b8972e;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(212, 175, 55, 0.3);
+      }
+
+      .btn,
+      button:not(.theme-toggle),
+      input[type="submit"],
+      input[type="button"],
+      .book-btn,
+      .new-booking-btn,
+      .btn-modify,
+      .btn-cancel,
+      .btn-confirm,
+      .btn-close-modal,
+      .filter-reset {
+        border-radius: var(--btn-radius) !important;
+      }
+
+      /* Modern Navbar */
+      .modern-navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1050;
+      }
+
+      .user-dropdown {
+        position: relative;
+        z-index: 1051;
+      }
+
+      .user-dropdown-menu {
+        z-index: 1200;
+      }
+      .modern-navbar {
+        background: var(--nav-bg) !important;
+        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        transition: background 0.35s ease;
+      }
+      .navbar-brand {
+        color: white !important;
+        font-size: 1.6rem;
+        font-weight: 700;
+      }
+      .nav-link {
+        color: var(--nav-link) !important;
+        font-weight: 500;
+        margin: 0 12px;
+        transition: color 0.2s ease;
+      }
+      .nav-link:hover,
+      .nav-link.active {
+        color: var(--accent) !important;
+      }
+
+      /* ── USER AVATAR BUTTON ── */
+      .user-avatar-btn {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1.5px solid rgba(212, 175, 55, 0.35);
+        border-radius: 12px;
+        padding: 5px 10px 5px 6px;
+        color: #fff;
+        text-decoration: none;
+        font-family: var(--font-ui);
+        font-size: 0;
+        font-weight: 500;
+        line-height: 0;
+        cursor: pointer;
+        transition:
+          background 0.2s,
+          border-color 0.2s;
+        position: relative;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+      .user-avatar-btn:hover {
+        background: rgba(212, 175, 55, 0.15);
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+      .user-avatar-btn:hover .avatar-circle {
+        background: var(--accent);
+        color: #1a1a2e;
+      }
+
+      .avatar-circle {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--accent), #a07820);
+        color: #1a1a2e;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        font-weight: 700;
+        font-family: var(--font-display);
+        flex-shrink: 0;
+        transition:
+          background 0.2s,
+          color 0.2s;
+        letter-spacing: 0.03em;
+      }
+
+      .avatar-name {
+        display: none;
+      }
+
+      .avatar-chevron {
+        font-size: 0.65rem;
+        line-height: 1;
+        opacity: 0.7;
+        margin-left: 2px;
+        transition: transform 0.2s;
+      }
+
+      /* DROPDOWN */
+      .user-dropdown {
+        position: relative;
+      }
+      .user-dropdown-menu {
+        display: none;
+        position: absolute;
+        top: calc(100% + 10px);
+        right: 0;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+        min-width: 200px;
+        z-index: 9999;
+        overflow: hidden;
+        animation: dropIn 0.18s ease;
+      }
+      @keyframes dropIn {
+        from {
+          opacity: 0;
+          transform: translateY(-8px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .user-dropdown-menu.open {
+        display: block;
+      }
+
+      .dropdown-user-info {
+        padding: 14px 16px 10px;
+        border-bottom: 1px solid #f0e9da;
+      }
+      .dropdown-user-info .d-name {
+        font-family: "Montserrat", sans-serif;
+        font-size: 0.88rem;
+        font-weight: 700;
+        color: #1a1a2e;
+      }
+      .dropdown-user-info .d-email {
+        font-size: 0.75rem;
+        color: #8a7d6b;
+        margin-top: 2px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 170px;
+      }
+
+      .dropdown-item-custom {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 11px 16px;
+        color: #333;
+        text-decoration: none;
+        font-size: 0.86rem;
+        font-family: var(--font-ui);
+        transition: background 0.15s;
+      }
+      .dropdown-item-custom:hover {
+        background: #fdf8ee;
+        color: #1a1a2e;
+      }
+      .dropdown-item-custom .d-icon {
+        width: 28px;
+        height: 28px;
+        border-radius: 8px;
+        background: #f5efe0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        color: var(--accent);
+        flex-shrink: 0;
+      }
+      .dropdown-item-custom.logout {
+        border-top: 1px solid #f0e9da;
+        color: #9b2226;
+      }
+      .dropdown-item-custom.logout .d-icon {
+        background: #fde8e8;
+        color: #9b2226;
+      }
+      .dropdown-item-custom.logout:hover {
+        background: #fde8e8;
+      }
+
+      /* Hero Section */
+      .hero-section {
+        background: url("/static/Allfiles/Photo/slider-1jpg.jpg")
+          center/cover no-repeat fixed;
+        min-height: 100vh;
+        position: relative;
+        display: flex;
+        align-items: center;
+        text-align: center;
+        color: white;
+      }
+      .hero-section::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.55);
+      }
+      .hero-content {
+        position: relative;
+        z-index: 2;
+      }
+      .hero-content h1 {
+        font-size: 4.5rem;
+        text-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
+      }
+      .hero-content p {
+        font-size: 1.5rem;
+        margin: 1.5rem 0 2rem;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+      }
+
+      /* Room Cards */
+      .room-card {
+        border: none;
+        border-radius: 16px;
+        overflow: hidden;
+        transition:
+          transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+          box-shadow 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+          border-color 0.35s ease;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      }
+      .room-card:hover {
+        transform: translateY(-9px);
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+      }
+      .room-card img {
+        height: 260px;
+        object-fit: cover;
+      }
+      .room-price {
+        color: var(--accent);
+        font-size: 1.4rem;
+        font-weight: 700;
+      }
+
+      .cta-section {
+        background: linear-gradient(135deg, var(--primary), #2a2a4a);
+        color: white;
+      }
+
+      .theme-toggle {
+        width: 52px;
+        height: 30px;
+        border: 1px solid rgba(255, 255, 255, 0.45);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.12);
+        display: inline-flex;
+        align-items: center;
+        padding: 3px;
+        transition:
+          background 0.25s ease,
+          border-color 0.25s ease;
+      }
+
+      .theme-toggle-track {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+
+      .theme-toggle-knob {
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: #fff;
+        color: #111827;
+        font-size: 11px;
+        line-height: 1;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transform: translateX(0);
+        transition: transform 0.22s ease;
+      }
+
+      .dark .theme-toggle {
+        background: rgba(44, 183, 168, 0.22);
+        border-color: rgba(44, 183, 168, 0.6);
+      }
+
+      .dark .theme-toggle-knob {
+        transform: translateX(22px);
+      }
+
+      .scroll-fade-card {
+        opacity: 0;
+        transform: translate3d(0, 44px, 0) scale(0.97);
+        transform-origin: 50% 65%;
+        filter: saturate(92%);
+        transition:
+          opacity 1280ms cubic-bezier(0.16, 1, 0.3, 1),
+          transform 1280ms cubic-bezier(0.16, 1, 0.3, 1),
+          filter 1280ms cubic-bezier(0.16, 1, 0.3, 1);
+        transition-delay: var(--reveal-delay, 0ms);
+        will-change: opacity, transform;
+        animation: none !important;
+      }
+
+      .scroll-fade-card.is-visible {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+        filter: saturate(100%);
+      }
+
+      .card,
+      .room-card,
+      .booking-card,
+      .stat-card,
+      .booking-form-card,
+      .feature-card,
+      .contact-card {
+        transition:
+          transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+          box-shadow 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+          border-color 0.35s ease,
+          background-color 0.35s ease;
+      }
+
+      .nav-link,
+      .dropdown-item-custom,
+      .user-avatar-btn,
+      .btn,
+      button:not(.theme-toggle),
+      .book-btn,
+      .new-booking-btn,
+      .btn-modify,
+      .btn-cancel,
+      .btn-confirm,
+      .btn-close-modal {
+        transition:
+          transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+          box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+          color 0.3s ease,
+          background-color 0.3s ease,
+          border-color 0.3s ease;
+      }
+
+      @media (hover: hover) and (pointer: fine) {
+        .card:hover,
+        .booking-card:hover,
+        .stat-card:hover,
+        .feature-card:hover,
+        .contact-card:hover {
+          transform: translateY(-6px);
+          box-shadow: 0 18px 36px rgba(17, 24, 39, 0.14);
+        }
+
+        .btn:hover,
+        .book-btn:hover,
+        .new-booking-btn:hover,
+        .btn-modify:hover,
+        .btn-confirm:hover {
+          transform: translateY(-2px);
+        }
+      }
+
+      @media (max-width: 992px) {
+        :root { --navbar-h: 86px; }
+
+        body {
+          padding-top: 86px;
+        }
+
+        #header .container .row.py-2 {
+          font-size: 0.85rem;
+          row-gap: 6px;
+        }
+
+        #header .top-contact {
+          justify-content: center;
+        }
+
+        .modern-navbar .container {
+          padding-left: 14px;
+          padding-right: 14px;
+        }
+
+        .hero-content h1 {
+          font-size: clamp(2.1rem, 7vw, 3.2rem);
+        }
+
+        .hero-content p {
+          font-size: clamp(1rem, 2.8vw, 1.25rem);
+        }
+
+        .navbar-nav {
+          gap: 6px;
+          align-items: stretch !important;
+        }
+
+        .navbar-collapse {
+          margin-top: 10px;
+          background: rgba(14, 18, 28, 0.95);
+          border-radius: 12px;
+          padding: 10px 14px;
+          border: 1px solid rgba(212, 175, 55, 0.22);
+          box-shadow: 0 16px 34px rgba(0, 0, 0, 0.28);
+        }
+
+        .nav-link {
+          margin: 0;
+          padding: 10px 0;
+        }
+
+        .navbar-nav .nav-item.ms-3 {
+          margin-left: 0 !important;
+          margin-top: 8px;
+        }
+
+        .user-dropdown-menu {
+          position: relative;
+          top: auto;
+          right: auto;
+          width: 100%;
+          min-width: 0;
+          margin-top: 6px;
+          border-radius: 8px;
+        }
+      }
+
+      @media (max-width: 576px) {
+        :root { --navbar-h: 74px; }
+
+        #header > .container {
+          display: none;
+        }
+
+        body {
+          padding-top: 74px;
+        }
+
+        .navbar-brand {
+          font-size: 1.35rem;
+        }
+
+        .btn,
+        .book-btn,
+        .new-booking-btn,
+        .btn-modify,
+        .btn-cancel,
+        .btn-confirm,
+        .btn-close-modal {
+          width: 100%;
+          max-width: 100%;
+          justify-content: center;
+        }
+
+        .user-avatar-btn {
+          width: 100%;
+          justify-content: center;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .scroll-fade-card {
+          opacity: 1;
+          transform: none;
+          transition: none;
+        }
+      }
+
+      .dark .card,
+      .dark .booking-summary,
+      .dark .room-card {
+        background-color: var(--surface) !important;
+        color: var(--text-main) !important;
+        border-color: var(--outline) !important;
+      }
+
+      .dark .text-muted,
+      .dark .card-text,
+      .dark .booking-helper {
+        color: var(--text-soft) !important;
+      }
+
+      .dark .user-dropdown-menu {
+        background: var(--surface-elevated);
+      }
+
+      .top-social .text-dark {
+        color: var(--text-main) !important;
+      }
+
+      #rooms.bg-light {
+        background: var(--surface-elevated) !important;
+      }
+
+      #rooms > .container > h2,
+      .rooms-page > .rooms-hero + .filter-bar,
+      .bookings-page,
+      .booking-page {
+        transition:
+          background-color 0.35s ease,
+          color 0.35s ease;
+      }
+
+      .dark #rooms.bg-light {
+        background: transparent !important;
+      }
+
+      .dark #rooms > .container > h2 {
+        color: var(--text-main) !important;
+      }
+
+      .dark .rooms-page,
+      .dark .bookings-page,
+      .dark .booking-page {
+        background: transparent !important;
+        color: var(--text-main) !important;
+      }
+
+      .dark body > .rooms-page,
+      .dark body > .bookings-page,
+      .dark body > .booking-page {
+        background: transparent !important;
+      }
+
+      .dark .filter-bar {
+        background: var(--surface) !important;
+        border: 1px solid var(--outline);
+        border-radius: 14px;
+        margin-top: 14px;
+      }
+
+      .dark body > .rooms-page > .filter-bar {
+        background: var(--surface) !important;
+      }
+
+      .dark .bookings-page .bookings-container,
+      .dark .booking-page .booking-layout,
+      .dark .rooms-page .rooms-grid {
+        color: var(--text-main);
+      }
+
+      .dark .filter-bar label,
+      .dark .results-meta,
+      .dark .room-facility,
+      .dark .booking-meta,
+      .dark .msg.success,
+      .dark .msg.error,
+      .dark .empty-state p {
+        color: var(--text-soft) !important;
+      }
+
+      .dark .room-number,
+      .dark .booking-room-name,
+      .dark .section-title,
+      .dark .actions-row .title,
+      .dark .empty-state h3,
+      .dark .bookings-hero h1,
+      .dark .booking-hero h1,
+      .dark .rooms-hero h1 {
+        color: var(--text-main) !important;
+      }
+
+      .dark .filter-bar input,
+      .dark .filter-bar select,
+      .dark .booking-modal .form-group input,
+      .dark .booking-form-card input,
+      .dark .booking-form-card select,
+      .dark .booking-form-card textarea {
+        background: #101a25 !important;
+        border-color: var(--outline) !important;
+        color: var(--text-main) !important;
+      }
+
+      .dark .filter-bar input::placeholder,
+      .dark .booking-form-card input::placeholder,
+      .dark .booking-form-card textarea::placeholder {
+        color: #97a8b7;
+      }
+
+      .dark .date-box,
+      .dark .stat-card,
+      .dark .booking-card,
+      .dark .booking-form-card,
+      .dark .empty-state,
+      .dark .room-card,
+      .dark .bookings-container .booking-card {
+        background: var(--surface) !important;
+        color: var(--text-main) !important;
+        border: 1px solid var(--outline) !important;
+        box-shadow: 0 14px 32px rgba(0, 0, 0, 0.28) !important;
+      }
+
+      .dark .room-summary,
+      .dark .bookings-hero,
+      .dark .booking-hero,
+      .dark .rooms-hero,
+      .dark .cta-section {
+        background: #0f1722 !important;
+      }
+
+      .dark .new-booking-btn,
+      .dark .btn-modify,
+      .dark .book-btn,
+      .dark .btn-confirm {
+        background: linear-gradient(135deg, #143244, #1f5f70) !important;
+        color: #e8f7ff !important;
+        border-color: #2a7083 !important;
+      }
+
+      .dark .new-booking-btn:hover,
+      .dark .btn-modify:hover,
+      .dark .book-btn:hover,
+      .dark .btn-confirm:hover {
+        filter: brightness(1.1);
+      }
+
+      .dark .btn-cancel,
+      .dark .btn-close-modal {
+        border-color: #8f3d46 !important;
+        color: #f8b5be !important;
+        background: transparent !important;
+      }
+
+      .dark .btn-cancel:hover,
+      .dark .btn-close-modal:hover {
+        background: rgba(185, 28, 28, 0.16) !important;
+      }
+
+      .dark .type-tag,
+      .dark .booking-type-tag,
+      .dark .status-badge,
+      .dark .room-type-tag {
+        border: 1px solid var(--outline);
+      }
+
+      .dark .date-box .d-value,
+      .dark .stat-card .num,
+      .dark .room-price,
+      .dark .booking-price {
+        color: #5ad4c2 !important;
+      }
+
+      .dark .profile-page {
+        background: transparent !important;
+        color: var(--text-main) !important;
+      }
+
+      .dark .profile-card,
+      .dark .profile-container .profile-card {
+        background: var(--surface) !important;
+        border: 1px solid var(--outline) !important;
+        box-shadow: 0 14px 32px rgba(0, 0, 0, 0.28) !important;
+      }
+
+      .dark .profile-hero {
+        background: #0f1722 !important;
+      }
+
+      .dark .profile-hero h1,
+      .dark .card-header h2,
+      .dark .info-item .info-value,
+      .dark .pw-note,
+      .dark .danger-section p {
+        color: var(--text-main) !important;
+      }
+
+      .dark .profile-hero p,
+      .dark .info-item .info-label,
+      .dark .form-group label,
+      .dark .dropdown-user-info .d-email {
+        color: var(--text-soft) !important;
+      }
+
+      .dark .card-header {
+        border-bottom: 1px solid var(--outline) !important;
+      }
+
+      .dark .edit-toggle,
+      .dark .save-btn,
+      .dark .danger-btn,
+      .dark .profile-page .btn {
+        border-color: var(--outline) !important;
+      }
+
+      .dark .form-group input {
+        background: #101a25 !important;
+        border-color: var(--outline) !important;
+        color: var(--text-main) !important;
+      }
+
+      .dark .form-group input:focus {
+        background: #142334 !important;
+        border-color: #2a7083 !important;
+      }
+
+      .dark .danger-section {
+        background: rgba(185, 28, 28, 0.12) !important;
+        border-color: #8f3d46 !important;
+      }
+
+      .dark .danger-section h3 {
+        color: #f8b5be !important;
+      }
+    </style>
+</head>
+<body data-authenticated="false">
+<!-- Header -->
+<header id="header">
+<div class="container">
+<div class="row py-2 align-items-center">
+<div class="col-lg-7 d-flex flex-wrap gap-2 top-contact">
+<span><i class="fas fa-map-marker-alt"></i> 24, Gbagada Cresent,
+              Lagos</span>
+<span><i class="fas fa-phone-alt"></i> 08125063942</span>
+<span><i class="far fa-envelope"></i> enioladavid33@gmail.com</span>
+</div>
+<div class="col-lg-5 text-end top-social d-none d-lg-block">
+<a aria-label="Facebook" class="text-dark me-2" href="https://www.facebook.com/" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+<a aria-label="Twitter" class="text-dark me-2" href="https://twitter.com/" title="Twitter"><i class="fab fa-twitter"></i></a>
+<a aria-label="Google Plus" class="text-dark me-2" href="https://plus.google.com/" title="Google Plus"><i class="fab fa-google-plus-g"></i></a>
+<a aria-label="Instagram" class="text-dark me-2" href="https://www.instagram.com/" title="Instagram"><i class="fab fa-instagram"></i></a>
+</div>
+</div>
+</div>
+<nav class="navbar navbar-expand-lg modern-navbar">
+<div class="container">
+<a class="navbar-brand fw-bold text-white" href="http://127.0.0.1:8010/">RoseGold Hotel</a>
+<button aria-label="Toggle navigation" class="navbar-toggler" data-bs-target="#navbarNav" data-bs-toggle="collapse" title="Toggle navigation" type="button">
+<span class="navbar-toggler-icon"></span>
+</button>
+<div class="collapse navbar-collapse" id="navbarNav">
+<ul class="navbar-nav ms-auto align-items-center">
+<li class="nav-item">
+<a class="nav-link" href="http://127.0.0.1:8010/">Home</a>
+</li>
+<li class="nav-item">
+<a class="nav-link active" href="http://127.0.0.1:8010/rooms/">Rooms</a>
+</li>
+<li class="nav-item">
+<a class="nav-link" href="http://127.0.0.1:8010/online-booking/">Booking</a>
+</li>
+<li class="nav-item">
+<a class="nav-link" href="http://127.0.0.1:8010/contact/">Contact</a>
+</li>
+<li class="nav-item ms-3">
+<a class="btn btn-outline-light btn-sm" href="http://127.0.0.1:8010/login/">Login</a>
+</li>
+<li class="nav-item ms-3">
+<a class="btn btn-primary btn-md px-4 py-2 fw-bold" href="http://127.0.0.1:8010/online-booking/?new=1">Book Now</a>
+</li>
+<li class="nav-item ms-3">
+<button aria-label="Toggle dark mode" aria-pressed="false" class="theme-toggle" id="theme-toggle">
+<span class="theme-toggle-track">
+<span class="theme-toggle-knob" id="theme-toggle-knob">☀</span>
+</span>
+</button>
+</li>
+</ul>
+</div>
+</div>
+</nav>
+</header>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&amp;family=DM+Sans:wght@300;400;500&amp;display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --gold: #c9a84c;
+    --gold-light: #e8c97a;
+    --dark: #1a1410;
+    --dark-mid: #2c2218;
+    --cream: #f7f2ea;
+    --cream-dark: #ede4d3;
+    --text-muted: #8a7a65;
+    --card-bg: #ffffff;
+    --shadow: 0 8px 40px rgba(0, 0, 0, 0.1);
+    --shadow-hover: 0 20px 60px rgba(0, 0, 0, 0.18);
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  .rooms-page {
+    background: var(--cream);
+    min-height: 100vh;
+    font-family: "DM Sans", sans-serif;
+    padding-bottom: 80px;
+  }
+
+  /* HERO HEADER */
+  .rooms-hero {
+    background: var(--dark);
+    padding: 70px 40px 50px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .rooms-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      ellipse at 60% 0%,
+      rgba(201, 168, 76, 0.18) 0%,
+      transparent 70%
+    );
+  }
+  .rooms-hero h1 {
+    font-family: "Playfair Display", serif;
+    font-size: clamp(2.2rem, 5vw, 3.5rem);
+    color: var(--cream);
+    letter-spacing: 0.02em;
+    position: relative;
+  }
+  .rooms-hero h1 span {
+    color: var(--gold);
+  }
+  .rooms-hero p {
+    color: var(--text-muted);
+    margin-top: 12px;
+    font-size: 1rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    position: relative;
+  }
+  .gold-line {
+    width: 60px;
+    height: 2px;
+    background: var(--gold);
+    margin: 18px auto 0;
+    position: relative;
+  }
+
+  /* FILTER BAR */
+  .filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 40px 10px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .filter-bar input,
+  .filter-bar select {
+    padding: 11px 18px;
+    border: 1.5px solid var(--cream-dark);
+    border-radius: 8px;
+    font-family: "DM Sans", sans-serif;
+    font-size: 0.92rem;
+    background: #fff;
+    color: var(--dark);
+    outline: none;
+    transition: border-color 0.2s;
+    min-width: 160px;
+  }
+  .filter-bar input:focus,
+  .filter-bar select:focus {
+    border-color: var(--gold);
+  }
+  .filter-bar label {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    margin-right: -6px;
+  }
+  .filter-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .filter-reset {
+    padding: 11px 20px;
+    background: transparent;
+    border: 1.5px solid var(--gold);
+    color: var(--gold);
+    border-radius: 8px;
+    font-family: "DM Sans", sans-serif;
+    font-size: 0.88rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.05em;
+  }
+  .filter-reset:hover {
+    background: var(--gold);
+    color: #fff;
+  }
+
+  /* RESULTS COUNT */
+  .results-meta {
+    max-width: 1200px;
+    margin: 18px auto 0;
+    padding: 0 40px;
+    font-size: 0.88rem;
+    color: var(--text-muted);
+  }
+  .results-meta span {
+    color: var(--gold);
+    font-weight: 600;
+  }
+
+  /* GRID */
+  .rooms-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 32px;
+    max-width: 1200px;
+    margin: 28px auto 0;
+    padding: 0 40px;
+  }
+
+  /* CARD */
+  .room-card {
+    background: var(--card-bg);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition:
+      transform 0.3s ease,
+      box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+  }
+  .room-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-hover);
+  }
+
+  /* IMAGE GALLERY */
+  .card-image {
+    position: relative;
+    height: 220px;
+    overflow: hidden;
+    background: var(--cream-dark);
+    cursor: pointer;
+  }
+  .card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+  .room-card:hover .card-image img {
+    transform: scale(1.06);
+  }
+  .card-image .no-image {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: var(--text-muted);
+    background: linear-gradient(135deg, #ede4d3 0%, #d9cdb8 100%);
+  }
+  .card-image .no-image svg {
+    opacity: 0.4;
+  }
+  .status-badge {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .status-available {
+    background: #d4f5e2;
+    color: #1a7a45;
+  }
+  .status-occupied {
+    background: #fde8e8;
+    color: #b91c1c;
+  }
+  .status-maintenance {
+    background: #fef3c7;
+    color: #92400e;
+  }
+
+  .type-tag {
+    position: absolute;
+    bottom: 14px;
+    left: 14px;
+    background: rgba(26, 20, 16, 0.75);
+    color: var(--gold-light);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    backdrop-filter: blur(4px);
+  }
+
+  /* EXPAND OVERLAY */
+  .img-expand-btn {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    width: 32px;
+    height: 32px;
+    background: rgba(255, 255, 255, 0.85);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .room-card:hover .img-expand-btn {
+    opacity: 1;
+  }
+
+  /* CARD BODY */
+  .card-body {
+    padding: 22px 24px 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .card-header-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+  .room-number {
+    font-family: "Playfair Display", serif;
+    font-size: 1.3rem;
+    color: var(--dark);
+    font-weight: 600;
+  }
+  .room-price {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--gold);
+    white-space: nowrap;
+  }
+  .room-price span {
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: var(--text-muted);
+  }
+
+  .room-meta {
+    display: flex;
+    gap: 16px;
+    font-size: 0.83rem;
+    color: var(--text-muted);
+  }
+  .room-meta i {
+    margin-right: 4px;
+  }
+
+  .room-facility {
+    font-size: 0.87rem;
+    color: #6b5c48;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .card-footer {
+    padding: 0 24px 22px;
+  }
+  .book-btn {
+    display: block;
+    width: 100%;
+    padding: 13px;
+    background: var(--dark);
+    color: var(--gold-light);
+    text-align: center;
+    text-decoration: none;
+    border-radius: 10px;
+    font-family: "DM Sans", sans-serif;
+    font-size: 0.92rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    transition:
+      background 0.2s,
+      color 0.2s;
+    border: 1.5px solid transparent;
+  }
+  .book-btn:hover {
+    background: var(--gold);
+    color: var(--dark);
+  }
+  .book-btn.disabled {
+    background: var(--cream-dark);
+    color: var(--text-muted);
+    pointer-events: none;
+    border-color: var(--cream-dark);
+  }
+
+  /* EMPTY STATE */
+  .empty-state {
+    text-align: center;
+    padding: 80px 20px;
+    color: var(--text-muted);
+    grid-column: 1/-1;
+  }
+  .empty-state svg {
+    opacity: 0.25;
+    margin-bottom: 16px;
+  }
+  .empty-state h3 {
+    font-family: "Playfair Display", serif;
+    color: var(--dark);
+    margin-bottom: 8px;
+  }
+
+  /* LIGHTBOX */
+  .lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.92);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .lightbox.open {
+    display: flex;
+  }
+  .lightbox img {
+    max-width: 90vw;
+    max-height: 85vh;
+    border-radius: 12px;
+    object-fit: contain;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+  }
+  .lightbox-close {
+    position: absolute;
+    top: 24px;
+    right: 30px;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 2rem;
+    cursor: pointer;
+    line-height: 1;
+    opacity: 0.8;
+  }
+  .lightbox-close:hover {
+    opacity: 1;
+  }
+  .lightbox-caption {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #ccc;
+    font-size: 0.9rem;
+    font-family: "DM Sans", sans-serif;
+    letter-spacing: 0.05em;
+  }
+
+  @media (max-width: 700px) {
+    .rooms-hero {
+      padding: 50px 20px 36px;
+    }
+    .filter-bar {
+      padding: 24px 20px 8px;
+    }
+    .rooms-grid {
+      padding: 0 20px;
+      gap: 20px;
+    }
+    .results-meta {
+      padding: 0 20px;
+    }
+  }
+</style>
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+<button class="lightbox-close" onclick="document.getElementById('lightbox').classList.remove('open')">
+    ×
+  </button>
+<img alt="" id="lightbox-img" src=""/>
+<div class="lightbox-caption" id="lightbox-caption"></div>
+</div>
+<div class="rooms-page">
+<!-- HERO -->
+<div class="rooms-hero">
+<h1>Our <span>Rooms</span> &amp; Suites</h1>
+<p>Find your perfect stay</p>
+<div class="gold-line"></div>
+</div>
+<!-- FILTERS -->
+<div class="filter-bar">
+<div class="filter-group">
+<label>Type</label>
+<select id="filter-type" onchange="applyFilters()">
+<option value="">All Types</option>
+<option value="single">Single</option>
+<option value="double">Double</option>
+<option value="suite">Suite</option>
+</select>
+</div>
+<div class="filter-group">
+<label>Max Price (₦)</label>
+<input id="filter-price" min="0" oninput="applyFilters()" placeholder="e.g. 50000" type="number"/>
+</div>
+<div class="filter-group">
+<label>Status</label>
+<select id="filter-status" onchange="applyFilters()">
+<option value="">All</option>
+<option value="available">Available</option>
+<option value="occupied">Occupied</option>
+<option value="maintenance">Maintenance</option>
+</select>
+</div>
+<button class="filter-reset" onclick="resetFilters()">Reset</button>
+</div>
+<div class="results-meta">
+    Showing <span id="results-count">0</span> room(s)
+  </div>
+<!-- GRID -->
+<div class="rooms-grid" id="rooms-grid">
+<div class="room-card" data-price="15000.00" data-status="occupied" data-type="single">
+<!-- IMAGE -->
+<div class="card-image" onclick="openLightbox('/media/rooms/single1.jpg', 'Room 101')">
+<img alt="Room 101" src="http://127.0.0.1:8010/media/rooms/single1.jpg"/>
+<button class="img-expand-btn" title="View full image">
+<svg fill="none" height="14" stroke="#333" stroke-width="2.5" viewbox="0 0 24 24" width="14">
+<path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"></path>
+</svg>
+</button>
+<span class="status-badge status-occupied">Occupied</span>
+<span class="type-tag">Single</span>
+</div>
+<!-- BODY -->
+<div class="card-body">
+<div class="card-header-row">
+<div class="room-number">Room 101</div>
+<div class="room-price">₦15,000<span>/night</span></div>
+</div>
+<div class="room-meta">
+<span>
+<svg fill="none" height="13" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 3px" viewbox="0 0 24 24" width="13">
+<path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"></path>
+</svg>
+            Floor 1
+          </span>
+<span>
+<svg fill="none" height="13" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 3px" viewbox="0 0 24 24" width="13">
+<rect height="13" width="15" x="1" y="3"></rect>
+<path d="M16 8h4l3 3v5h-7V8z"></path>
+<circle cx="5.5" cy="18.5" r="2.5"></circle>
+<circle cx="18.5" cy="18.5" r="2.5"></circle>
+</svg>
+            Single
+          </span>
+</div>
+<p class="room-facility">WiFi, AC, TV, Work Desk</p>
+</div>
+<!-- FOOTER -->
+<div class="card-footer">
+<span class="book-btn disabled">Not Available</span>
+</div>
+</div>
+<div class="room-card" data-price="18000.00" data-status="occupied" data-type="single">
+<!-- IMAGE -->
+<div class="card-image" onclick="openLightbox('/media/rooms/single2.jpg', 'Room 102')">
+<img alt="Room 102" src="http://127.0.0.1:8010/media/rooms/single2.jpg"/>
+<button class="img-expand-btn" title="View full image">
+<svg fill="none" height="14" stroke="#333" stroke-width="2.5" viewbox="0 0 24 24" width="14">
+<path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"></path>
+</svg>
+</button>
+<span class="status-badge status-occupied">Occupied</span>
+<span class="type-tag">Single</span>
+</div>
+<!-- BODY -->
+<div class="card-body">
+<div class="card-header-row">
+<div class="room-number">Room 102</div>
+<div class="room-price">₦18,000<span>/night</span></div>
+</div>
+<div class="room-meta">
+<span>
+<svg fill="none" height="13" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 3px" viewbox="0 0 24 24" width="13">
+<path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"></path>
+</svg>
+            Floor 1
+          </span>
+<span>
+<svg fill="none" height="13" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 3px" viewbox="0 0 24 24" width="13">
+<rect height="13" width="15" x="1" y="3"></rect>
+<path d="M16 8h4l3 3v5h-7V8z"></path>
+<circle cx="5.5" cy="18.5" r="2.5"></circle>
+<circle cx="18.5" cy="18.5" r="2.5"></circle>
+</svg>
+            Single
+          </span>
+</div>
+<p class="room-facility">WiFi, AC, Smart TV, Breakfast</p>
+</div>
+<!-- FOOTER -->
+<div class="card-footer">
+<span class="book-btn disabled">Not Available</span>
+</div>
+</div>
+<div class="room-card" data-price="16000.00" data-status="available" data-type="single">
+<!-- IMAGE -->
+<div class="card-image" onclick="openLightbox('/media/rooms/double1.jpg', 'Room 103')">
+<img alt="Room 103" src="http://127.0.0.1:8010/media/rooms/double1.jpg"/>
+<button class="img-expand-btn" title="View full image">
+<svg fill="none" height="14" stroke="#333" stroke-width="2.5" viewbox="0 0 24 24" width="14">
+<path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"></path>
+</svg>
+</button>
+<span class="status-badge status-available">Available</span>
+<span class="type-tag">Single</span>
+</div>
+<!-- BODY -->
+<div class="card-body">
+<div class="card-header-row">
+<div class="room-number">Room 103</div>
+<div class="room-price">₦16,000<span>/night</span></div>
+</div>
+<div class="room-meta">
+<span>
+<svg fill="none" height="13" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 3px" viewbox="0 0 24 24" width="13">
+<path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"></path>
+</svg>
+            Floor 1
+          </span>
+<span>
+<svg fill="none" height="13" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 3px" viewbox="0 0 24 24" width="13">
+<rect height="13" width="15" x="1" y="3"></rect>
+<path d="M16 8h4l3 3v5h-7V8z"></path>
+<circle cx="5.5" cy="18.5" r="2.5"></circle>
+<circle cx="18.5" cy="18.5" r="2.5"></circle>
+</svg>
+            Single
+          </span>
+</div>
+<p class="room-facility">WiFi, AC, Garden View</p>
+</div>
+<!-- FOOTER -->
+<div class="card-footer">
+<a class="book-btn" href="http://127.0.0.1:8010/book/13/">Book This Room</a>
+</div>
+</div>
+<div class="room-card" data-price="20000.00" data-status="available" data-type="single">
+<!-- IMAGE -->
+<div class="card-image" onclick="openLightbox('/media/rooms/double2.jpg', 'Room 104')">
+<img alt="Room 104" src="http://127.0.0.1:8010/media/rooms/double2.jpg"/>
+<button class="img-expand-btn" title="View full image">
+<svg fill="none" height="14" stroke="#333" stroke-width="2.5" viewbox="0 0 24 24" width="14">
+<path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"></path>
+</svg>
+</button>
+<span class="status-badge status-available">Available</span>
+<span class="type-tag">Single</span>
+</div>
+<!-- BODY -->
+<div class="card-body">
+<div class="card-header-row">
+<div class="room-number">Room 104</div>
+<div class="room-price">₦20,000<span>/night</span></div>
+</div>
+<div class="room-meta">
+<span>
+<svg fill="none" height="13" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 3px" viewbox="0 0 24 24" width="13">
+<path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"></path>
+</svg>
+            Floor 1
+          </span>
+<span>
+<svg fill="none" height="13" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 3px" viewbox="0 0 24 24" width="13">
+<rect height="13" width="15" x="1" y="3"></rect>
+<path d="M16 8h4l3 3v5h-7V8z"></path>
+<circle cx="5.5" cy="18.5" r="2.5"></circle>
+<circle cx="18.5" cy="18.5" r="2.5"></circle>
+</svg>
+            Single
+          </span>
+</div>
+<p class="room-facility">WiFi, AC, Reading Desk</p>
+</div>
+<!-- FOOTER -->
+<div class="card-footer">
+<a class="book-btn" href="http://127.0.0.1:8010/book/14/">Book This Room</a>
+</div>
+</div>
+<div class="room-card" data-price="35000.00" data-status="occupied" data-type="double">
+<!-- IMAGE -->
+<div class="card-image" onclick="openLightbox('/media/rooms/suite1.jpg', 'Room 201')">
+<img alt="Room 201" src="http://127.0.0.1:8010/media/rooms/suite1.jpg"/>
+<button class="img-expand-btn" title="View full image">
+<svg fill="none" height="14" stroke="#333" stroke-width="2.5" viewbox="0 0 24 24" width="14">
+<path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"></path>
+</svg>
+</button>
+<span class="status-badge status-occupied">Occupied</span>
+<span class="type-tag">Double</span>
+</div>
+<!-- BODY -->
+<div class="card-body">
+<div class="card-header-row">
+<div class="room-number">Room 201</div>
+<div class="room-price">₦35,000<span>/night</span></div>
+</div>
+<div class="room-meta">
+<span>
+<svg fill="none" height="13" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 3px" viewbox="0 0 24 24" width="13">
+<path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"></path>
+</svg>
+            Floor 2
+          </span>
+<span>
+<svg fill="none" height="13" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 3px" viewbox="0 0 24 24" width="13">
+<rect height="13" width="15" x="1" y="3"></rect>
+<path d="M16 8h4l3 3v5h-7V8z"></path>
+<circle cx="5.5" cy="18.5" r="2.5"></circle>
+<circle cx="18.5" cy="18.5" r="2.5"></circle>
+</svg>
+            Double
+          </span>
+</div>
+<p class="room-facility">WiFi, AC, Mini Bar, Balcony</p>
+</div>
+<!-- FOOTER -->
+<div class="card-footer">
+<span class="book-btn disabled">Not Available</span>
+</div>
+</div>
+<div class="room-card" data-price="42000.00" data-status="occupied" data-type="double">
+<!-- IMAGE -->
+<div class="card-image" onclick="openLightbox('/media/rooms/suite2.jpg', 'Room 202')">
+<img alt="Room 202" src="http://127.0.0.1:8010/media/rooms/suite2.jpg"/>
+<button class="img-expand-btn" title="View full image">
+<svg fill="none" height="14" stroke="#333" stroke-width="2.5" viewbox="0 0 24 24" width="14">
+<path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"></path>
+</svg>
+</button>
+<span class="status-badge status-occupied">Occupied</span>
+<span class="type-tag">Double</span>
+</div>
+<!-- BODY -->
+<div class="card-body">
+<div class="card-header-row">
+<div class="room-number">Room 202</div>
+<div class="room-price">₦42,000<span>/night</span></div>
+</div>
+<div class="room-meta">
+<span>
+<svg fill="none" height="13" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 3px" viewbox="0 0 24 24" width="13">
+<path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"></path>
+</svg>
+            Floor 2
+          </span>
+<span>
+<svg fill="none" height="13" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 3px" viewbox="0 0 24 24" width="13">
+<rect height="13" width="15" x="1" y="3"></rect>
+<path d="M16 8h4l3 3v5h-7V8z"></path>
+<circle cx="5.5" cy="18.5" r="2.5"></circle>
+<circle cx="18.5" cy="18.5" r="2.5"></circle>
+</svg>
+            Double
+          </span>
+</div>
+<p class="room-facility">WiFi, AC, Twin Beds, Mini Fridge</p>
+</div>
+<!-- FOOTER -->
+<div class="card-footer">
+<span class="book-btn disabled">Not Available</span>
+</div>
+</div>
+<div class="room-card" data-price="60000.00" data-status="maintenance" data-type="double">
+<!-- IMAGE -->
+<div class="card-image" onclick="openLightbox('/media/rooms/single1.jpg', 'Room 203')">
+<img alt="Room 203" src="http://127.0.0.1:8010/media/rooms/single1.jpg"/>
+<button class="img-expand-btn" title="View full image">
+<svg fill="none" height="14" stroke="#333" stroke-width="2.5" viewbox="0 0 24 24" width="14">
+<path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"></path>
+</svg>
+</button>
+<span class="status-badge status-maintenance">Maintenance</span>
+<span class="type-tag">Double</span>
+</div>
+<!-- BODY -->
+<div class="card-body">
+<div class="card-header-row">
+<div class="room-number">Room 203</div>
+<div class="room-price">₦60,000<span>/night</span></div>
+</div>
+<div class="room-meta">
+<span>
+<svg fill="none" height="13" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 3px" viewbox="0 0 24 24" width="13">
+<path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"></path>
+</svg>
+            Floor 2
+          </span>
+<span>
+<svg fill="none" height="13" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 3px" viewbox="0 0 24 24" width="13">
+<rect height="13" width="15" x="1" y="3"></rect>
+<path d="M16 8h4l3 3v5h-7V8z"></path>
+<circle cx="5.5" cy="18.5" r="2.5"></circle>
+<circle cx="18.5" cy="18.5" r="2.5"></circle>
+</svg>
+            Double
+          </span>
+</div>
+<p class="room-facility">WiFi, AC, Smart Lock, Work Area</p>
+</div>
+<!-- FOOTER -->
+<div class="card-footer">
+<span class="book-btn disabled">Not Available</span>
+</div>
+</div>
+<div class="room-card" data-price="85000.00" data-status="available" data-type="suite">
+<!-- IMAGE -->
+<div class="card-image" onclick="openLightbox('/media/rooms/single2.jpg', 'Room 301')">
+<img alt="Room 301" src="http://127.0.0.1:8010/media/rooms/single2.jpg"/>
+<button class="img-expand-btn" title="View full image">
+<svg fill="none" height="14" stroke="#333" stroke-width="2.5" viewbox="0 0 24 24" width="14">
+<path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"></path>
+</svg>
+</button>
+<span class="status-badge status-available">Available</span>
+<span class="type-tag">Suite</span>
+</div>
+<!-- BODY -->
+<div class="card-body">
+<div class="card-header-row">
+<div class="room-number">Room 301</div>
+<div class="room-price">₦85,000<span>/night</span></div>
+</div>
+<div class="room-meta">
+<span>
+<svg fill="none" height="13" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 3px" viewbox="0 0 24 24" width="13">
+<path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"></path>
+</svg>
+            Floor 3
+          </span>
+<span>
+<svg fill="none" height="13" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 3px" viewbox="0 0 24 24" width="13">
+<rect height="13" width="15" x="1" y="3"></rect>
+<path d="M16 8h4l3 3v5h-7V8z"></path>
+<circle cx="5.5" cy="18.5" r="2.5"></circle>
+<circle cx="18.5" cy="18.5" r="2.5"></circle>
+</svg>
+            Suite
+          </span>
+</div>
+<p class="room-facility">WiFi, Jacuzzi, King Bed, Lounge</p>
+</div>
+<!-- FOOTER -->
+<div class="card-footer">
+<a class="book-btn" href="http://127.0.0.1:8010/book/18/">Book This Room</a>
+</div>
+</div>
+<div class="room-card" data-price="120000.00" data-status="occupied" data-type="suite">
+<!-- IMAGE -->
+<div class="card-image" onclick="openLightbox('/media/rooms/double1.jpg', 'Room 302')">
+<img alt="Room 302" src="http://127.0.0.1:8010/media/rooms/double1.jpg"/>
+<button class="img-expand-btn" title="View full image">
+<svg fill="none" height="14" stroke="#333" stroke-width="2.5" viewbox="0 0 24 24" width="14">
+<path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"></path>
+</svg>
+</button>
+<span class="status-badge status-occupied">Occupied</span>
+<span class="type-tag">Suite</span>
+</div>
+<!-- BODY -->
+<div class="card-body">
+<div class="card-header-row">
+<div class="room-number">Room 302</div>
+<div class="room-price">₦120,000<span>/night</span></div>
+</div>
+<div class="room-meta">
+<span>
+<svg fill="none" height="13" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 3px" viewbox="0 0 24 24" width="13">
+<path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"></path>
+</svg>
+            Floor 3
+          </span>
+<span>
+<svg fill="none" height="13" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 3px" viewbox="0 0 24 24" width="13">
+<rect height="13" width="15" x="1" y="3"></rect>
+<path d="M16 8h4l3 3v5h-7V8z"></path>
+<circle cx="5.5" cy="18.5" r="2.5"></circle>
+<circle cx="18.5" cy="18.5" r="2.5"></circle>
+</svg>
+            Suite
+          </span>
+</div>
+<p class="room-facility">WiFi, Ocean View, Butler Service</p>
+</div>
+<!-- FOOTER -->
+<div class="card-footer">
+<span class="book-btn disabled">Not Available</span>
+</div>
+</div>
+<div class="room-card" data-price="95000.00" data-status="available" data-type="suite">
+<!-- IMAGE -->
+<div class="card-image" onclick="openLightbox('/media/rooms/double2.jpg', 'Room 303')">
+<img alt="Room 303" src="http://127.0.0.1:8010/media/rooms/double2.jpg"/>
+<button class="img-expand-btn" title="View full image">
+<svg fill="none" height="14" stroke="#333" stroke-width="2.5" viewbox="0 0 24 24" width="14">
+<path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"></path>
+</svg>
+</button>
+<span class="status-badge status-available">Available</span>
+<span class="type-tag">Suite</span>
+</div>
+<!-- BODY -->
+<div class="card-body">
+<div class="card-header-row">
+<div class="room-number">Room 303</div>
+<div class="room-price">₦95,000<span>/night</span></div>
+</div>
+<div class="room-meta">
+<span>
+<svg fill="none" height="13" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 3px" viewbox="0 0 24 24" width="13">
+<path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"></path>
+</svg>
+            Floor 3
+          </span>
+<span>
+<svg fill="none" height="13" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 3px" viewbox="0 0 24 24" width="13">
+<rect height="13" width="15" x="1" y="3"></rect>
+<path d="M16 8h4l3 3v5h-7V8z"></path>
+<circle cx="5.5" cy="18.5" r="2.5"></circle>
+<circle cx="18.5" cy="18.5" r="2.5"></circle>
+</svg>
+            Suite
+          </span>
+</div>
+<p class="room-facility">WiFi, Private Lounge, Smart Lighting</p>
+</div>
+<!-- FOOTER -->
+<div class="card-footer">
+<a class="book-btn" href="http://127.0.0.1:8010/book/20/">Book This Room</a>
+</div>
+</div>
+</div>
+</div>
+<script>
+  const cards = document.querySelectorAll(".room-card");
+  const countEl = document.getElementById("results-count");
+
+  function applyFilters() {
+    const type = document.getElementById("filter-type").value;
+    const price =
+      parseFloat(document.getElementById("filter-price").value) || Infinity;
+    const status = document.getElementById("filter-status").value;
+    let visible = 0;
+
+    cards.forEach((card, i) => {
+      const matchType = !type || card.dataset.type === type;
+      const matchPrice = parseFloat(card.dataset.price) <= price;
+      const matchStatus = !status || card.dataset.status === status;
+      const show = matchType && matchPrice && matchStatus;
+
+      card.style.display = show ? "" : "none";
+      if (show) {
+        card.style.setProperty(
+          "--reveal-delay",
+          `${Math.min(visible * 90, 720)}ms`,
+        );
+        visible++;
+      }
+    });
+
+    countEl.textContent = visible;
+
+    // Show empty state if no results
+    let empty = document.querySelector(".empty-state");
+    if (!empty && visible === 0) {
+      const grid = document.getElementById("rooms-grid");
+      const div = document.createElement("div");
+      div.className = "empty-state filter-empty";
+      div.innerHTML = `<h3>No rooms match your filters</h3><p>Try adjusting your search criteria.</p>`;
+      grid.appendChild(div);
+    } else if (
+      empty &&
+      empty.classList.contains("filter-empty") &&
+      visible > 0
+    ) {
+      empty.remove();
+    }
+  }
+
+  function resetFilters() {
+    document.getElementById("filter-type").value = "";
+    document.getElementById("filter-price").value = "";
+    document.getElementById("filter-status").value = "";
+    applyFilters();
+  }
+
+  function openLightbox(url, caption) {
+    if (!url) return;
+    document.getElementById("lightbox-img").src = url;
+    document.getElementById("lightbox-caption").textContent = caption;
+    document.getElementById("lightbox").classList.add("open");
+  }
+
+  function closeLightbox(e) {
+    if (e.target.id === "lightbox") {
+      document.getElementById("lightbox").classList.remove("open");
+    }
+  }
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape")
+      document.getElementById("lightbox").classList.remove("open");
+  });
+
+  // Init count
+  applyFilters();
+</script>
+<!-- Footer -->
+<footer id="footer">
+<div class="container text-center">
+<p>©  RoseGold Hotels. All Rights Reserved.</p>
+</div>
+</footer>
+<!-- JS Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="http://127.0.0.1:8010/static/Allfiles/js/jquery-1.12.4.min.js"></script>
+<script src="http://127.0.0.1:8010/static/Allfiles/js/jquery.textillate.js"></script>
+<script src="http://127.0.0.1:8010/static/Allfiles/js/jquery.lettering.js"></script>
+<script src="http://127.0.0.1:8010/static/Allfiles/js/slick.min.js"></script>
+<script src="http://127.0.0.1:8010/static/Allfiles/js/jquery.datetimepicker.full.min.js"></script>
+<script src="http://127.0.0.1:8010/static/Allfiles/js/jquery-modal-video.min.js"></script>
+<script src="http://127.0.0.1:8010/static/Allfiles/js/jquery.magnific-popup.min.js"></script>
+<script src="http://127.0.0.1:8010/static/Allfiles/js/jquery.counterup.min.js"></script>
+<script src="http://127.0.0.1:8010/static/Allfiles/js/Script.js"></script>
+<script src="http://127.0.0.1:8010/static/dist/assets/index-BkDxWaGx.js" type="module"></script>
+<script>
+      (function () {
+        const html = document.documentElement;
+        const btn = document.getElementById("theme-toggle");
+        const knob = document.getElementById("theme-toggle-knob");
+        const canPersist = document.body.dataset.authenticated === "true";
+
+        function applyTheme(theme) {
+          const isDark = theme === "dark";
+          html.classList.toggle("dark", isDark);
+          btn?.setAttribute("aria-pressed", String(isDark));
+          if (knob) knob.textContent = isDark ? "☾" : "☀";
+          localStorage.setItem("theme", theme);
+          if (canPersist) {
+            fetch("/api/theme/", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken":
+                  (document.cookie.match(/csrftoken=([^;]+)/) || [])[1] || "",
+              },
+              credentials: "include",
+              body: JSON.stringify({ theme }),
+            }).catch(() => {});
+          }
+        }
+
+        function loadTheme() {
+          const local = localStorage.getItem("theme");
+          if (local) {
+            applyTheme(local);
+            return;
+          }
+          if (canPersist) {
+            fetch("/api/theme/", { credentials: "include" })
+              .then((r) => (r.ok ? r.json() : { theme: null }))
+              .then((d) => {
+                if (d.theme) {
+                  applyTheme(d.theme);
+                } else {
+                  applyTheme(
+                    window.matchMedia("(prefers-color-scheme: dark)").matches
+                      ? "dark"
+                      : "light",
+                  );
+                }
+              })
+              .catch(() => {});
+          } else {
+            applyTheme(
+              window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light",
+            );
+          }
+        }
+
+        btn?.addEventListener("click", () => {
+          const next = html.classList.contains("dark") ? "light" : "dark";
+          applyTheme(next);
+        });
+        loadTheme();
+
+        const revealTargets = document.querySelectorAll(
+          [
+            ".room-card",
+            ".booking-card",
+            ".stat-card",
+            ".booking-form-card",
+            ".contact-card",
+            ".feature-card",
+            ".container .card",
+            ".rooms-grid > div",
+            ".rooms-grid .empty-state",
+            ".booking-grid > div",
+            ".bookings-container > .section-title",
+            ".bookings-container .empty-state",
+            ".bookings-container .messages-list",
+            ".bookings-container .msg",
+            ".rooms-page .filter-bar",
+            ".rooms-page .results-meta",
+            ".cta-section",
+            ".booking-shell",
+            ".booking-summary",
+          ].join(","),
+        );
+
+        revealTargets.forEach((el, index) => {
+          el.classList.add("scroll-fade-card");
+          const staggerDelay = Math.min((index % 8) * 120, 840);
+          el.style.setProperty("--reveal-delay", `${staggerDelay}ms`);
+        });
+
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("is-visible");
+                observer.unobserve(entry.target);
+              }
+            });
+          },
+          {
+            threshold: 0.12,
+            rootMargin: "0px 0px -8% 0px",
+          },
+        );
+
+        revealTargets.forEach((el) => observer.observe(el));
+      })();
+
+      function toggleUserMenu(e) {
+        e.stopPropagation();
+        const menu = document.getElementById("user-dropdown-menu");
+        const chevron = document.getElementById("avatar-chevron");
+        const isOpen = menu.classList.contains("open");
+        menu.classList.toggle("open");
+        chevron.style.transform = isOpen ? "rotate(0deg)" : "rotate(180deg)";
+      }
+
+      // Close dropdown when clicking anywhere else
+      document.addEventListener("click", function () {
+        const menu = document.getElementById("user-dropdown-menu");
+        const chevron = document.getElementById("avatar-chevron");
+        if (menu) {
+          menu.classList.remove("open");
+          if (chevron) chevron.style.transform = "rotate(0deg)";
+        }
+      });
+    </script>
+</body>
+</html>
