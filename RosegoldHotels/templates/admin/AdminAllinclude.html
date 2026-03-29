@@ -512,7 +512,7 @@
 
             <div class="profile clearfix">
               <div class="profile_pic">
-                <img src="{% static 'Allfiles/Photo/eniadmin.jpg' %}" alt="..." class="img-circle profile_img">
+                <img src="{% static 'Allfiles/Photo/eniadmin.jpg' %}" alt="" class="img-circle profile_img">
               </div>
               <div class="profile_info">
                 <span>Signed in as</span>
@@ -621,7 +621,7 @@
               <ul class="nav navbar-right">
                 <li class="nav-item dropdown open" style="padding-left: 15px;">
                   <a href="javascript:;" class="user-profile dropdown-toggle" aria-haspopup="true" id="navbarDropdown" data-toggle="dropdown" aria-expanded="false">
-                    <img src="{% static 'Allfiles/Photo/eniadmin.jpg' %}" alt="">{{ request.user.get_full_name|default:request.user.email }}
+                    <img src="{% static 'Allfiles/Photo/eniadmin.jpg' %}" alt="" width="32" height="32" style="border-radius: 50%; object-fit: cover; margin-right: 8px;">{{ request.user.get_full_name|default:request.user.email }}
                   </a>
                   <div class="dropdown-menu dropdown-usermenu pull-right" aria-labelledby="navbarDropdown">
                     {% if request.user.is_staff %}
