@@ -42,82 +42,6 @@
         padding: 16px 18px 0;
       }
 
-      .admin-modern .profile.clearfix {
-        display: flex;
-        align-items: center;
-        gap: 14px;
-        padding: 18px;
-      }
-
-      .admin-modern .profile_pic {
-        width: auto;
-        float: none;
-        flex: 0 0 auto;
-      }
-
-      .admin-modern .profile_info {
-        width: auto;
-        float: none;
-        min-width: 0;
-        padding: 0;
-      }
-
-      .admin-modern .profile_info span,
-      .admin-modern .profile_info h2 {
-        display: block;
-        max-width: 100%;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-
-      .admin-modern .profile_info h2 {
-        font-weight: 600;
-      }
-
-      .admin-avatar {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-        border-radius: 999px;
-        color: #fff;
-        font-weight: 700;
-        letter-spacing: 0.04em;
-        text-transform: uppercase;
-        background: linear-gradient(135deg, #f59e0b 0%, #dc2626 100%);
-        box-shadow: 0 10px 20px rgba(15, 23, 42, 0.2);
-      }
-
-      .admin-avatar-lg {
-        width: 56px;
-        height: 56px;
-        border: 2px solid rgba(255, 255, 255, 0.18);
-        font-size: 20px;
-      }
-
-      .admin-avatar-sm {
-        width: 32px;
-        height: 32px;
-        margin-right: 10px;
-        font-size: 13px;
-        box-shadow: none;
-      }
-
-      .admin-modern .user-profile {
-        display: inline-flex;
-        align-items: center;
-        max-width: min(60vw, 360px);
-      }
-
-      .admin-modern .user-profile .admin-user-label {
-        display: inline-block;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        vertical-align: middle;
-      }
-
       .admin-modern .profile_info h2,
       .admin-modern .user-profile,
       .admin-modern .menu_section h3,
@@ -588,9 +512,7 @@
 
             <div class="profile clearfix">
               <div class="profile_pic">
-                <span class="admin-avatar admin-avatar-lg" aria-hidden="true">
-                  {{ request.user.get_full_name|default:request.user.email|slice:":1"|upper }}
-                </span>
+                <img src="{% static 'Allfiles/Photo/eniadmin.jpg' %}" alt="..." class="img-circle profile_img">
               </div>
               <div class="profile_info">
                 <span>Signed in as</span>
@@ -699,10 +621,7 @@
               <ul class="nav navbar-right">
                 <li class="nav-item dropdown open" style="padding-left: 15px;">
                   <a href="javascript:;" class="user-profile dropdown-toggle" aria-haspopup="true" id="navbarDropdown" data-toggle="dropdown" aria-expanded="false">
-                    <span class="admin-avatar admin-avatar-sm" aria-hidden="true">
-                      {{ request.user.get_full_name|default:request.user.email|slice:":1"|upper }}
-                    </span>
-                    <span class="admin-user-label">{{ request.user.get_full_name|default:request.user.email }}</span>
+                    <img src="{% static 'Allfiles/Photo/eniadmin.jpg' %}" alt="">{{ request.user.get_full_name|default:request.user.email }}
                   </a>
                   <div class="dropdown-menu dropdown-usermenu pull-right" aria-labelledby="navbarDropdown">
                     {% if request.user.is_staff %}
