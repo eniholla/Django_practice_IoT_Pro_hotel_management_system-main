@@ -416,7 +416,7 @@ class AdminDashboardRegressionTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Custom Admin Dashboard")
 
-    def test_admin_dashboard_uses_text_user_card_without_images(self):
+    def test_admin_dashboard_uses_constrained_avatar_instead_of_profile_photo(self):
         admin_user = get_user_model().objects.create_superuser(
             email="avatar-admin@example.com",
             password="AdminPass123!",
@@ -426,12 +426,11 @@ class AdminDashboardRegressionTests(TestCase):
         response = self.client.get(reverse("dashboard"))
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'class="admin-user-card"')
-        self.assertContains(response, 'class="fa fa-user-circle"')
-        self.assertNotContains(response, "<img")
-        self.assertNotContains(response, "eniadmin.jpg")
+        self.assertContains(response, 'class="admin-avatar admin-avatar-lg"')
+        self.assertContains(response, 'class="admin-avatar admin-avatar-sm"')
+        self.assertNotContains(response, 'class="img-circle profile_img"')
 
-    def test_receptionist_dashboard_uses_text_user_card_without_images(self):
+    def test_receptionist_dashboard_uses_constrained_avatar_instead_of_profile_photo(self):
         receptionist_user = get_user_model().objects.create_user(
             email="avatar-reception@example.com",
             password="ReceptionPass123!",
@@ -442,10 +441,9 @@ class AdminDashboardRegressionTests(TestCase):
         response = self.client.get(reverse("receptionist_dashboard"))
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'class="admin-user-card"')
-        self.assertContains(response, 'class="fa fa-user-circle"')
-        self.assertNotContains(response, "<img")
-        self.assertNotContains(response, "eniadmin.jpg")
+        self.assertContains(response, 'class="admin-avatar admin-avatar-lg"')
+        self.assertContains(response, 'class="admin-avatar admin-avatar-sm"')
+        self.assertNotContains(response, 'class="img-circle profile_img"')
 
 
 @override_settings(SECURE_SSL_REDIRECT=False)
