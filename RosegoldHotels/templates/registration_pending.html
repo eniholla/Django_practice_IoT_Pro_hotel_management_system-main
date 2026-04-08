@@ -1,0 +1,56 @@
+{% extends 'allinclude.html' %}
+
+{% block title %}
+Confirm Registration - RoseGold Hotel
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row justify-content-center align-items-center min-vh-100 py-5">
+    <div class="col-lg-7 col-md-9">
+      <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+        <div class="card-header text-center py-4" style="background: linear-gradient(135deg, var(--primary), #2a2a4a); color: white;">
+          <h3 class="mb-1 fw-bold">Confirm Your Account</h3>
+          <p class="mb-0 small">One last step before you can sign in</p>
+        </div>
+
+        <div class="card-body p-5">
+          {% if messages %}
+            {% for message in messages %}
+              <div class="alert alert-{{ message.tags }} alert-dismissible fade show mb-4" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            {% endfor %}
+          {% endif %}
+
+          <p class="mb-3">
+            Your registration for <strong>{{ pending_email }}</strong> was saved successfully.
+          </p>
+
+          {% if manual_confirmation_required %}
+            <div class="alert alert-warning" role="alert">
+              This environment is not configured to deliver real emails yet, so the secure confirmation link is shown below.
+            </div>
+
+            <div class="mb-3">
+              <a href="{{ activation_url }}" class="btn btn-primary btn-lg fw-bold">Confirm My Email</a>
+            </div>
+
+            <label for="activation-link" class="form-label fw-medium">Activation Link</label>
+            <textarea id="activation-link" class="form-control" rows="4" readonly>{{ activation_url }}</textarea>
+          {% else %}
+            <div class="alert alert-success" role="alert">
+              We sent a confirmation email to your inbox. Open that message and click the confirmation link to activate your account.
+            </div>
+          {% endif %}
+
+          <div class="mt-4">
+            <a href="{% url 'author_login' %}" class="btn btn-outline-primary">Back to Login</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

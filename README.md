@@ -1,57 +1,107 @@
- **Project Title: Hotel Booking Management System**
+# 🏨 RosegoldHotels
 
-**Project Overview:**
+A professional hotel booking management system built with Django, featuring modern security practices, payment integration (Paystack), IoT monitoring, and a responsive frontend.
 
-The Hotel Booking Management System is a web application designed to streamline the process of managing hotel bookings, reservations, and guest information. Built using Django, a high-level Python web framework, this system provides hotel administrators with a user-friendly interface to efficiently manage bookings and track guest details.
+## Features
 
-**Key Features:**
+- **User Authentication** - Secure registration, login, email verification
+- **Role-Based Access** - Admin, Receptionist, and Guest dashboards
+- **Booking Management** - Online & offline bookings with conflict detection
+- **Room Management** - Categories, pricing, availability tracking
+- **Payment Integration** - Paystack payment gateway (Nigerian Naira)
+- **Employee Management** - Staff records and salary tracking
+- **IoT Alerts** - Real-time room monitoring (temperature, occupancy, etc.)
+- **Activity Logging** - Comprehensive audit trail
+- **Responsive Design** - Works on desktop and mobile
 
-- User Authentication
-- Booking Management
-- Guest Management
-- Reservation Management
-- Room Inventory Management
-- Billing and Invoicing
-- Reporting and Analytics
+## Tech Stack
 
-**Technologies Used:**
+- **Backend**: Django 4.2, Python 3.11+
+- **Frontend**: HTML/CSS/JavaScript, Bootstrap, TailwindCSS (dashboard components)
+- **Database**: PostgreSQL (production) / SQLite (development)
+- **Payments**: Paystack API
+- **Deployment**: Render.com ready
 
-* Django : Backend web framework for building the application logic and handling HTTP requests.
-* HTML/CSS/JavaScript : Frontend technologies for designing the user interface and adding interactive elements.
-* Bootstrap : Frontend framework for creating responsive and mobile-friendly designs.
-* SQLite/PostgreSQL : Database management systems for storing and retrieving data efficiently.
-* Django REST Framework : Optional for creating RESTful APIs for mobile or external applications.
+## Quick Start
 
-**Target Audience:**
+```bash
+# Clone the repository
+git clone https://github.com/your-username/rosegoldHotels.git
+cd rosegoldHotels/RosegoldHotels
 
-The Hotel Booking Management System targets hotel owners, managers, receptionists, and staff responsible for managing bookings, reservations, and guest interactions. It provides a centralized platform to streamline operations, enhance guest experiences, and improve overall efficiency in hotel management.
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 
-**How to run:**
+# Install dependencies
+pip install -r requirements.txt
 
-- Download the project ZIP file from the repository.
-- Extract the downloaded ZIP file to a preferred location on your system.
-- Open the extracted folder in your preferred code editor (e.g., Visual Studio Code, Sublime Text, Atom).
-- Open a terminal or command prompt within the project directory.
-- Install the required dependencies by running the command:
-         ```
-         pip install -r requirements.txt.
-        ```
-- Apply migrations to set up the database schema by running:
-         ```
-         python manage.py migrate.
-         ```
-- Create a superuser account to access the admin panel:
-         ```
-         python manage.py createsuperuser.
-         ``` 
-- Start the development server by running:
-         ```
-         python manage.py runserver.
-        ```
-- Open a web browser and navigate to `http://127.0.0.1:8000/` to access the Hotel Booking Management System.
+# Set up environment variables
+cp .env.example .env
+# Edit .env with your configuration
 
-That's it! You've successfully set up and launched the Hotel Booking Management System on your local system.
+# Run migrations
+python manage.py migrate
 
-**Output Video:**
+# Create admin user
+python manage.py createsuperuser
 
-https://github.com/2200031797KavyaA/Django_practice_Pro_hotel_management_system-main/assets/140434642/8a66963e-96ec-4339-9869-b0a145ff2ba6
+# Start development server
+python manage.py runserver
+```
+
+Visit `http://127.0.0.1:8000/` to access the application.
+
+## Environment Variables
+
+Copy `.env.example` to `.env` and configure:
+
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `SECRET_KEY` | Django secret key | Yes (production) |
+| `DEBUG` | Enable debug mode | No (default: false) |
+| `DATABASE_URL` | Database connection string | No (uses SQLite) |
+| `PAYSTACK_PUBLIC_KEY` | Paystack public key | For payments |
+| `PAYSTACK_SECRET_KEY` | Paystack secret key | For payments |
+
+See `.env.example` for all available options.
+
+## Deployment (Render)
+
+This project includes `render.yaml` for easy Render.com deployment:
+
+1. Connect your GitHub repository to Render
+2. Render will automatically detect the `render.yaml` configuration
+3. Set required environment variables in the Render dashboard
+4. Deploy!
+
+## Project Structure
+
+```
+RosegoldHotels/
+├── HotelApp/           # Main Django app (views, models, forms)
+├── HotelManagementSystem/  # Django project settings
+├── alerts/             # IoT monitoring system
+├── frontend/           # React/Vite components
+├── templates/          # Django templates
+├── static/             # Static files source
+├── assets/             # Collected static files
+├── media/              # User uploads
+└── requirements.txt    # Python dependencies
+```
+
+## Security
+
+This application implements security best practices:
+
+- HTTPS enforcement in production
+- Secure session cookies
+- CSRF protection
+- HTTP security headers (HSTS, X-Frame-Options, etc.)
+- Password validation
+- Environment-based configuration
+
+## License
+
+MIT License - see [LICENSE](LICENSE) file.
+

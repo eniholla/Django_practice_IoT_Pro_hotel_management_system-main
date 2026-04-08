@@ -3,17 +3,87 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
+*.py[cod]
+*$py.class
 
 # Virtual Environment
 venv/
+.venv/
+env/
 .env/
+ENV/
+
+# Environment variables
+.env
+*.env
+!*.env.example
 
 # SQLite Database
 *.sqlite3
 db.sqlite3
+*.db
 
 # macOS
 .DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux
+*~
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*.sublime-workspace
+*.sublime-project
 
 # Static collected files
 staticfiles/
+static/dist/
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build artifacts (root-level only, to avoid catching vendored static asset dist/ and build/ dirs)
+/dist/
+/build/
+*.egg-info/
+.eggs/
+
+# Test artifacts
+.coverage
+htmlcov/
+.pytest_cache/
+.tox/
+.nox/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Logs
+*.log
+logs/
+
+# Media uploads (production)
+media/uploads/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+
+# Secrets (never commit)
+secrets/
+*.pem
+*.key
